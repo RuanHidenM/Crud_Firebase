@@ -12,9 +12,8 @@ void main() async {
   runApp(MyApp());
 }
 
-
+//TODO: CRUD Basico para testar o firebase, Imprimindo, criando, editando, excluindo.
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');

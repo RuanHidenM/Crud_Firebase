@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crud_firebase/views/createuserpage.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatelessWidget{
   static String tag = '/home';
+
+  var checkedValue = true;
 
   @override
   Widget build(BuildContext context) {
@@ -28,184 +31,77 @@ class HomePage extends StatelessWidget {
             return Center(child: Text('Nenhum usuario Cadastrado!!'));
           }
 
+          //TODO: Lista dos usuarios cadastrados.
           return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int i) {
                 var doc = snapshot.data.docs[i];
                 var user = doc.data();
-                return Container(
-                  decoration: BoxDecoration(
-
-                    color:Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  margin: const EdgeInsets.fromLTRB(8, 3, 8, 3),
-                  child:  ListTile(
-                    isThreeLine: true,
-                    leading: IconButton(
-                      icon: Icon(
-                        Icons.person,
-                        color: user['sexo'] == 'Masculino'
-                            ? Colors.blue
-                            : user['sexo'] == 'Feminino'
-                            ? Colors.pink
-                            : Colors.black,
-                        size: 32,
-                      ),
-                      onPressed: (){
-                       //user['sexo'] == 'Feminino' ? doc.reference.update({'sexo' : 'Masculino'}):
-                            if(user['sexo'] == 'Masculino'){
-                              doc.reference.update({'sexo' : 'Feminino'});
-                            }
-                            if(user['sexo'] == 'Feminino'){
-                              doc.reference.update({'sexo' : ''});
-                            }
-                            if(user['sexo'] == ''){
-                              doc.reference.update({'sexo' : 'Masculino'});
-                            }
-                      },
+                return GestureDetector(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color:Colors.white,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    title: Text(user['name']),
-                    subtitle: Text(user['idade'].toString()),
-                    trailing: CircleAvatar(
-                      backgroundColor: Colors.red[400],
-                      foregroundColor: Colors.white,
-                      child: IconButton(
+                    margin: const EdgeInsets.fromLTRB(8, 3, 8, 3),
+                    child:  ListTile(
+                      isThreeLine: true,
+                      leading: IconButton(
                         icon: Icon(
-                          Icons.delete,
-                          //color: Colors.red,
+                          Icons.person,
+                          color: user['sexo'] == 'Masculino'
+                              ? Colors.blue
+                              : user['sexo'] == 'Feminino'
+                              ? Colors.pink
+                              : Colors.black,
+                          size: 32,
                         ),
-                        onPressed: () {
-                          doc.reference.delete();
-                          //users.doc('aOPLvaEXftwFWIfzdziv').delete();
-                          //doc.reference.update('')
+                        onPressed: (){
+                         //user['sexo'] == 'Feminino' ? doc.reference.update({'sexo' : 'Masculino'}):
+                              if(user['sexo'] == 'Masculino'){//TODO; Se o selecionado é Masculino, vira Feminino
+                                doc.reference.update({'sexo' : 'Feminino'});
+                              }
+                              if(user['sexo'] == 'Feminino'){//TODO: Se o selecionado é Feminino, vira '', não informado
+                                doc.reference.update({'sexo' : ''});
+                              }
+                              if(user['sexo'] == ''){//TODO: Se o selecionado é '', vira Masculino.
+                                doc.reference.update({'sexo' : 'Masculino'});
+                              }
                         },
                       ),
-                    )
+                      title: Text(user['name']),
+                      subtitle: Text(user['idade'].toString()),
+                      trailing: CircleAvatar(
+                        backgroundColor: Colors.red[400],
+                        foregroundColor: Colors.white,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            //color: Colors.red,
+                          ),
+                          onPressed: () {
+                            doc.reference.delete();
+                            //users.doc('aOPLvaEXftwFWIfzdziv').delete();
+                            //doc.reference.update('')
+                          },
+                        ),
+                      )
+                    ),
                   ),
+                  onDoubleTap: (){
+                    print(user['data']);
+                  },
                 );
               });
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          modalCreate(context);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateUserPage()));//TODO: Navegando para a tela de criar usuario.
         },
         tooltip: 'Adicionar um novo usuario.',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-
-  modalCreate(BuildContext context){
-    GlobalKey<FormState> form = GlobalKey<FormState>();
-
-    var nome = TextEditingController();
-    var idade = TextEditingController();
-    var sexo = TextEditingController();
-
-    bool _isChecked = false;
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context){
-          return AlertDialog(
-            title: Text('Cadastro de usuario'),
-            content: Form(
-              key: form,
-
-              child:Container(
-                height: MediaQuery.of(context).size.height / 3,
-                child:Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(' Nome '),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Ex.: Mareia Juliana',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                      ),
-                      controller: nome,
-                      validator: (value){
-                        if(value.isEmpty){
-                          return 'Este campo não pode ser vazio !';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20),
-
-                    Text(' Idade '),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Sua idade',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                      ),
-                      keyboardType: TextInputType.number,
-                      controller: idade,
-                      validator: (value){
-                        if(value.isEmpty){
-                          return 'Este campo não pode ser vazio !';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    SizedBox(height: 20),
-                    // TextFormField(
-                    //   decoration: InputDecoration(
-                    //     hintText: 'Sua idade',
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(0),
-                    //     ),
-                    //   ),
-                    //   controller: sexo,
-                    //   // validator: (value){
-                    //   //   if(value.isEmpty){
-                    //   //     return 'Este campo não pode ser vazio !';
-                    //   //   }
-                    //   //   return null;
-                    //   // },
-                    // )
-                  ],
-                ),
-
-              ),
-
-
-            ),
-            actions: [
-              //TODO: Botão fechar AlertDialog.
-              FlatButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('Cancelar'),
-                  color: Colors.red
-              ),
-              //TODO: Botão salvar cadatro.
-              FlatButton(
-                onPressed: () async {
-                  if(form.currentState.validate()){
-                    await FirebaseFirestore.instance.collection('users').add({
-                      'name': nome.text,
-                      'idade':idade.text,
-                      'sexo':'',
-                      'data': Timestamp.now(),
-                    });
-
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Text('Salvar'),
-                color: Colors.green,
-              )
-            ],
-          );
-        }
-    );
-  }
-
 }
