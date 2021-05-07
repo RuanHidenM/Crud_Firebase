@@ -1,18 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crud_firebase/views/createuserpage.dart';
+import 'package:crud_firebase/firebase/firebase_authentication.dart';
+import 'package:crud_firebase/models/user.dart';
+import 'package:crud_firebase/views/createuser_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget{
   static String tag = '/home';
 
-  var checkedValue = true;
-
   @override
   Widget build(BuildContext context) {
-    var snapshots = FirebaseFirestore.instance.collection('users').orderBy('data').snapshots();
+    var snapshots = FirebaseFirestore.instance.collection('users').orderBy('data').snapshots();//TODO: Buscar a banco 'USERS' e ordenar com base na 'DATA'
     return Scaffold(
       appBar: AppBar(
-        title: Text('CRUD Firebase'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('CRUD Firebase'),
+            IconButton(
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.red,
+                ),
+                onPressed: (){
+                  context.read<AuthenticationService>().signOut();
+                })
+          ],
+        ),
       ),
       backgroundColor: Colors.grey[200],
       body: StreamBuilder(
@@ -36,7 +50,7 @@ class HomePage extends StatelessWidget{
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int i) {
                 var doc = snapshot.data.docs[i];
-                var user = doc.data();
+                var user = doc;
                 return GestureDetector(
                   child: Container(
                     decoration: BoxDecoration(
@@ -49,7 +63,7 @@ class HomePage extends StatelessWidget{
                       leading: IconButton(
                         icon: Icon(
                           Icons.person,
-                          color: user['sexo'] == 'Masculino'
+                            color: user['sexo'] == 'Masculino'
                               ? Colors.blue
                               : user['sexo'] == 'Feminino'
                               ? Colors.pink
@@ -89,7 +103,12 @@ class HomePage extends StatelessWidget{
                     ),
                   ),
                   onDoubleTap: (){
-                    print(user['data']);
+                    User DadosUsers = User(doc.id, user['name'],user['idade'], user['sexo']);
+                    //print(DadosUsers.toString());
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CreateUserPage(
+                      tipo: 'update',
+                      user: DadosUsers
+                    )));
                   },
                 );
               });
@@ -97,7 +116,7 @@ class HomePage extends StatelessWidget{
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateUserPage()));//TODO: Navegando para a tela de criar usuario.
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateUserPage(tipo: 'create')));//TODO: Navegando para a tela de criar usuario.
         },
         tooltip: 'Adicionar um novo usuario.',
         child: Icon(Icons.add),

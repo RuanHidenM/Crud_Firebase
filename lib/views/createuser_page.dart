@@ -1,8 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crud_firebase/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CreateUserPage extends StatefulWidget {
+  CreateUserPage({Key key, this.tipo,this.user}): super(key: key);
+  String tipo;
+  User user;
+
   @override
   _createUserPage createState() => _createUserPage();
 }
@@ -10,17 +15,38 @@ class CreateUserPage extends StatefulWidget {
 class _createUserPage extends State<CreateUserPage> {
   GlobalKey<FormState> form = GlobalKey<FormState>();
 
-  var nome = TextEditingController();
-  var idade = TextEditingController();
-
-  final List<String> items = <String>['Masculino', 'Feminino', 'Não Informado'];
+  var _nome = TextEditingController();
+  var _idade = TextEditingController();
+  List<String> items = <String>['Masculino', 'Feminino', 'Não Informado'];
   String selectedSexo = 'Não Informado';
+
+
+ void initState(){
+   startPage();
+ }
+
+  void startPage (){
+     if(widget.tipo == 'create'){
+        _nome = TextEditingController();
+        _idade = TextEditingController();
+        selectedSexo = 'Não Informado';
+     }
+     if(widget.tipo == 'update'){
+       _nome.text = widget.user.nome.toString();
+       _idade.text = widget.user.idade.toString();
+       selectedSexo = widget.user.sexo.toString() == ''
+           ? 'Não Informado'
+           : widget.user.sexo.toString();
+     }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cria usuario'),
+        title: Text(widget.tipo == 'create' ? 'Crair Usuario' : 'Alterar o Usuario'),
       ),
       body: Container(
         child: Padding(
@@ -52,7 +78,7 @@ class _createUserPage extends State<CreateUserPage> {
                             borderRadius: BorderRadius.circular(0),
                           ),
                         ),
-                        controller: nome,
+                        controller: _nome,
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Campo obrigatório';
@@ -76,7 +102,7 @@ class _createUserPage extends State<CreateUserPage> {
                           ),
                         ),
                         keyboardType: TextInputType.number,
-                        controller: idade,
+                        controller: _idade,
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Campo obrigatório';
@@ -143,21 +169,36 @@ class _createUserPage extends State<CreateUserPage> {
                               FlatButton(
                                 onPressed: () async {
                                   if (form.currentState.validate()) {
-                                    await FirebaseFirestore.instance
-                                        .collection('users')
-                                        .add({
-                                          'name': nome.text,
-                                          'idade': idade.text,
-                                          'sexo': selectedSexo,
-                                          'data': Timestamp.now(),
-                                        });
+                                    if(widget.tipo == 'create') {
+                                      await FirebaseFirestore.instance
+                                          .collection('users')
+                                          .add({
+                                        'name': _nome.text,
+                                        'idade': _idade.text,
+                                        'sexo': selectedSexo,
+                                        'data': Timestamp.now(),
+                                      });
+                                    }
+
+                                    if(widget.tipo == 'update') {//TODO: FALTA FAZER A PARTE DE ALTERAÇÃO DO USUARIO0
+                                      await FirebaseFirestore.instance.collection('users').doc(widget.user.id).update({
+                                        'name': _nome.text,
+                                        'idade': _idade.text,
+                                        'sexo': selectedSexo,
+                                        'data': Timestamp.now(),
+                                      });
+                                    }
+
                                     Navigator.of(context).pop();
                                   }
                                 },
-                                child: Text(
-                                  'Criar',
-                                  style: TextStyle(color: Colors.white),
-                                ),
+                                  child: Text(
+                                    widget.tipo == 'create'
+                                        ? 'Criar':
+                                    widget.tipo == 'update'
+                                        ?'Salvar': 'NULL',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 color: Colors.green,
                               )
                             ],
