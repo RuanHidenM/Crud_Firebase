@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crud_firebase/models/user.dart';
+import 'package:crud_firebase/models/peoplesData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CreateUserPage extends StatefulWidget {
-  CreateUserPage({Key key, this.tipo,this.user}): super(key: key);
+  CreateUserPage({Key key, this.tipo,this.data}): super(key: key);
   String tipo;
-  User user;
+  peoplesData data;
 
   @override
   _createUserPage createState() => _createUserPage();
@@ -32,11 +32,11 @@ class _createUserPage extends State<CreateUserPage> {
         selectedSexo = 'Não Informado';
      }
      if(widget.tipo == 'update'){
-       _nome.text = widget.user.nome.toString();
-       _idade.text = widget.user.idade.toString();
-       selectedSexo = widget.user.sexo.toString() == ''
+       _nome.text = widget.data.nome.toString();
+       _idade.text = widget.data.idade.toString();
+       selectedSexo = widget.data.sexo.toString() == ''
            ? 'Não Informado'
-           : widget.user.sexo.toString();
+           : widget.data.sexo.toString();
      }
   }
 
@@ -181,7 +181,7 @@ class _createUserPage extends State<CreateUserPage> {
                                     }
 
                                     if(widget.tipo == 'update') {//TODO: FALTA FAZER A PARTE DE ALTERAÇÃO DO USUARIO0
-                                      await FirebaseFirestore.instance.collection('users').doc(widget.user.id).update({
+                                      await FirebaseFirestore.instance.collection('users').doc(widget.data.id).update({
                                         'name': _nome.text,
                                         'idade': _idade.text,
                                         'sexo': selectedSexo,

@@ -1,10 +1,10 @@
-class User{
+class peoplesData {
    String id;
    String nome;
    String idade;
    String sexo;
 
-   User(
+   peoplesData (
       this.id,
       this.nome,
       this.idade,
@@ -13,6 +13,6 @@ class User{
 
   @override
   String toString(){
-    return 'User {id: $id, name: $nome, idade: $idade, sexo: $sexo}';
+    return 'peoplesData {id: $id, name: $nome, idade: $idade, sexo: $sexo}';
   }
 }
