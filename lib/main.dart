@@ -30,8 +30,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.orange,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          primarySwatch: Colors.orange
+          ,
         ),
         home: AuthenticationWrapper(),
       ),

@@ -37,7 +37,7 @@ class _homePage extends State<HomePage> {
         title: Text('CRUD Firebase', style: TextStyle(color: Colors.white)),
       ),
       backgroundColor: Colors.grey[200],
-        drawer:DrawerSide(),
+      drawer:DrawerSide(),
       body: Column(
         children: [
           Expanded(
@@ -45,9 +45,9 @@ class _homePage extends State<HomePage> {
             child: StreamBuilder(
               stream: snapshots,
               builder: (
-                BuildContext context,
-                AsyncSnapshot<QuerySnapshot> snapshot,
-              ) {
+                  BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot,
+                  ) {
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
@@ -78,8 +78,8 @@ class _homePage extends State<HomePage> {
                                   color: user['sexo'] == 'Masculino'
                                       ? Colors.blue
                                       : user['sexo'] == 'Feminino'
-                                          ? Colors.pink
-                                          : Colors.black,
+                                      ? Colors.pink
+                                      : Colors.black,
                                   size: 32,
                                 ),
                                 onPressed: () {
@@ -140,7 +140,7 @@ class _homePage extends State<HomePage> {
               MaterialPageRoute(
                   builder: (context) => CreateUserPage(
                       tipo:
-                          'create'))); //TODO: Navegando para a tela de criar usuario.
+                      'create'))); //TODO: Navegando para a tela de criar usuario.
         },
         tooltip: 'Adicionar um novo usuario.',
         child: Icon(Icons.add),
@@ -149,14 +149,16 @@ class _homePage extends State<HomePage> {
   }
 }
 
-FirebaseFiltrando([String nome]){
-
+FirebaseFiltrando([String nome, String idadeMax, String idadeMin, String selectedSexo]){
+  print('nome: $nome, IdadeMax: $idadeMin, IdadeMin: $idadeMax, Sexo: $selectedSexo');
   print('ta na funcão');
+
+
   if(nome != '' && nome != null){
-    print('Com filtro');
-    return FirebaseFirestore.instance.collection('users').where('name', isEqualTo: 'Ruan Heiden').snapshots();
+    print('Entro no filtro, nome informado : $nome');
+    return FirebaseFirestore.instance.collection('users').where('name', isEqualTo: nome).snapshots();
   }else{
     print('Sem fitlro');
-    return FirebaseFirestore.instance.collection('users').where('name', isEqualTo: 'Maria').snapshots();
+    return FirebaseFirestore.instance.collection('users').snapshots();
   }
 }

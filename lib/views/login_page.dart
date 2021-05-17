@@ -1,6 +1,4 @@
 import 'package:crud_firebase/firebase/firebase_authentication.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crud_firebase/canvas/canvas_screen-login.dart';
@@ -93,13 +91,9 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                         myTextField(
                                             titleName: 'E-mail',
-                                            descriptionName:
-                                                'Informe seu E-mail',
-                                            changeTypeName: (text) {
-                                              email = text;
-                                            },
-                                            typeKeyBoard:
-                                                TextInputType.emailAddress,
+                                            descriptionName: 'Informe seu E-mail',
+                                            changeTypeName: (text) {email = text;},
+                                            typeKeyBoard: TextInputType.emailAddress,
                                             nomeDoComtrolador: null,
                                             TextTipeMask: null,
                                             obscureText: false,

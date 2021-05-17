@@ -28,7 +28,7 @@ import 'package:flutter/material.dart';
                     padding: const EdgeInsets.only(left: 5.0),
                     child: Text(name,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         color: corDoIcon,
                       ),),
                   ),

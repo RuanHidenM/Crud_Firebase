@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 Widget myTextField
 ({
@@ -17,12 +16,16 @@ Widget myTextField
       padding: const EdgeInsets.all(4.0),
       child: Container(
         decoration: BoxDecoration(
+          boxShadow: [
+           // BoxShadow(color: Colors.grey, spreadRadius: 0.1)
+          ],
            // color: Color.fromRGBO(46, 76, 147, 230),
           color:colorTextField,
             borderRadius:
             BorderRadius.all(
               Radius.circular(100),
-            )),
+            ),
+        ),
         child: Padding(
           padding: const EdgeInsets.only(
             top: 1.0, bottom: 1.0, left: 25, right: 25),

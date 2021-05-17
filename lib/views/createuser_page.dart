@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crud_firebase/components/alert/alert_small_title_icon.dart';
 import 'package:crud_firebase/models/peoplesData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -188,8 +189,8 @@ class _createUserPage extends State<CreateUserPage> {
                                         'data': Timestamp.now(),
                                       });
                                     }
-
                                     Navigator.of(context).pop();
+                                    AlertaSuccess(context,'Cadastrado', 'Usuario Cadastrado com sucesso',Icons.check);//TODO: msg de usuario cadastrado
                                   }
                                 },
                                   child: Text(
