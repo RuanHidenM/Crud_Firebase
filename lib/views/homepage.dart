@@ -5,20 +5,33 @@ import 'package:crud_firebase/views/drawerside.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget{
+  @override
+  _homePage createState() => _homePage();
+}
+
+class _homePage extends State<HomePage> {
   static String tag = '/home';
 
   //var user = Firebase.auth().currentUser;
   var userLogado = FirebaseAuth.instance.currentUser;
+  var snapshots;
 
   @override
+
+  void initState(){
+    super.initState();
+    setState(() {
+      snapshots = FirebaseFiltrando();
+    });
+  }
   Widget build(BuildContext context) {
     //print(userLogado.email.toString()); //TODO:Pegando o usuario já logado
-
-    var snapshots = FirebaseFirestore.instance
-        .collection('users')
-        .orderBy('data')
-        .snapshots(); //TODO: Buscar a banco 'USERS' e ordenar com base na 'DATA'
+    // var snapshots = FirebaseFirestore.instance
+    //     .collection('users')
+    //     .orderBy('data')
+    //     .snapshots(); //TODO: Buscar a banco 'USERS' e ordenar com base na 'DATA'
+    //var snapshots = FirebaseFirestore.instance.collection('users').snapshots();//TODO: BUSCANDO UM USUARIO
     return Scaffold(
       appBar: AppBar(
         title: Text('CRUD Firebase', style: TextStyle(color: Colors.white)),
@@ -49,8 +62,7 @@ class HomePage extends StatelessWidget {
                 return ListView.builder(
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (BuildContext context, int i) {
-                      var doc = snapshot.data.docs[i];
-                      var user = doc;
+                      var user = snapshot.data.docs[i];
                       return GestureDetector(
                         child: Container(
                           decoration: BoxDecoration(
@@ -74,15 +86,15 @@ class HomePage extends StatelessWidget {
                                   //user['sexo'] == 'Feminino' ? doc.reference.update({'sexo' : 'Masculino'}):
                                   if (user['sexo'] == 'Masculino') {
                                     //TODO; Se o selecionado é Masculino, vira Feminino
-                                    doc.reference.update({'sexo': 'Feminino'});
+                                    user.reference.update({'sexo': 'Feminino'});
                                   }
                                   if (user['sexo'] == 'Feminino') {
                                     //TODO: Se o selecionado é Feminino, vira '', não informado
-                                    doc.reference.update({'sexo': ''});
+                                    user.reference.update({'sexo': ''});
                                   }
                                   if (user['sexo'] == '') {
                                     //TODO: Se o selecionado é '', vira Masculino.
-                                    doc.reference.update({'sexo': 'Masculino'});
+                                    user.reference.update({'sexo': 'Masculino'});
                                   }
                                 },
                               ),
@@ -97,7 +109,7 @@ class HomePage extends StatelessWidget {
                                     //color: Colors.red,
                                   ),
                                   onPressed: () {
-                                    doc.reference.delete();
+                                    user.reference.delete();
                                     //users.doc('aOPLvaEXftwFWIfzdziv').delete();
                                     //doc.reference.update('')
                                   },
@@ -105,7 +117,7 @@ class HomePage extends StatelessWidget {
                               )),
                         ),
                         onDoubleTap: () {
-                          peoplesData DadosUsers = peoplesData(doc.id,
+                          peoplesData DadosUsers = peoplesData(user.id,
                               user['name'], user['idade'], user['sexo']);
                           //print(DadosUsers.toString());
                           Navigator.push(
@@ -134,5 +146,17 @@ class HomePage extends StatelessWidget {
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+FirebaseFiltrando([String nome]){
+
+  print('ta na funcão');
+  if(nome != '' && nome != null){
+    print('Com filtro');
+    return FirebaseFirestore.instance.collection('users').where('name', isEqualTo: 'Ruan Heiden').snapshots();
+  }else{
+    print('Sem fitlro');
+    return FirebaseFirestore.instance.collection('users').where('name', isEqualTo: 'Maria').snapshots();
   }
 }

@@ -8,7 +8,7 @@ class peoplesData {
       this.id,
       this.nome,
       this.idade,
-      this.sexo
+      this.sexo,
       );
 
   @override

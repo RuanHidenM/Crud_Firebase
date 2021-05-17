@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
             padding: const EdgeInsets.all(8.0),
             child: Container(
               height: 55,
-              width: 200,
+              width: 180,
               decoration: BoxDecoration(
                 color: corDoBotao,
                 borderRadius: BorderRadius.all(
