@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
+import 'package:crud_firebase/components/alert/alert_small_title_icon.dart';
 import 'package:crud_firebase/firebase/firebase_authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +24,46 @@ class _LoginPageState extends State<LoginPage> {
   String senha;
   bool _loadding = false;
 
+  String _connectionStatus = 'UnkNown';
+  final Connectivity _connectivity = new Connectivity();
+  StreamSubscription<ConnectivityResult>_connectivitySubscription;
+
   @override
+  void initState() {
+    super.initState();
+
+    //TODO: Verifica o status da conecção
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+          setState(() => _connectionStatus = result.toString());
+          print('conectss: ${_connectionStatus}');
+          if(_connectionStatus == "ConnectivityResult.none"){
+            AlertaConectInternet();
+          }
+        },
+      );
+  }
+  //TODO: Verifica o status da conecção
+  Future<Null> initConnectivity() async {
+    String connectionStatus;
+    _connectionStatus = (await _connectivity.checkConnectivity().toString());
+    setState(() {
+      _connectionStatus = connectionStatus;
+    });
+  }
+
+  void AlertaConectInternet(){//TODO: Alerta de aviso que esta sem internet
+    AlertaSimples(
+        context,
+        'Conexão com a Internet',
+        'Para efetuar o login, o dispositivo deve estar conectado a uma internet',
+        Icons.wifi_off,
+        Colors.red
+    );
+  }
+
+
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -123,27 +166,46 @@ class _LoginPageState extends State<LoginPage> {
                                               corDoIcon: Colors.white,
                                               corDoTexto: Colors.white),
                                           onTap: () async {
-                                            if (
-                                                email == null ||
-                                                senha == null ||
-                                                email.isEmpty ||
-                                                senha.isEmpty
-                                            ) {
-                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:
-                                                Text('Todos os campos deven ser informados !'),));
-                                            } else {
-                                              setState(() => _loadding = true);//TODO: Ligando loadding
-                                              await Future.delayed(Duration(seconds: 5));
-                                                context.read<AuthenticationService>().signIn(
+                                            if(_connectionStatus == 'ConnectivityResult.none'){
+                                              AlertaConectInternet();
+                                            }else {
+                                              if (
+                                              email == null ||
+                                                  senha == null ||
+                                                  email.isEmpty ||
+                                                  senha.isEmpty
+                                              ) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                    SnackBar(content:
+                                                    Text(
+                                                        'Todos os campos deven ser informados !'),));
+                                              } else {
+                                                setState(() => _loadding =
+                                                true); //TODO: Ligando loadding
+                                                await Future.delayed(
+                                                    Duration(seconds: 5));
+                                                context.read<
+                                                    AuthenticationService>()
+                                                    .signIn(
                                                   email: email,
                                                   password: senha,
                                                 );
-                                              setState(() => _loadding = false);//TODO: Desligando loadding
-                                               var retornoSignIn = await context.read<AuthenticationService>().signIn(email: email,password: senha);
-                                              if(retornoSignIn != 'Signed in'){
-                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                  content: Text('E-mail ou senha esta incorreto !'),
-                                                ));
+                                                setState(() => _loadding =
+                                                false); //TODO: Desligando loadding
+                                                var retornoSignIn = await context
+                                                    .read<
+                                                    AuthenticationService>()
+                                                    .signIn(email: email,
+                                                    password: senha);
+                                                if (retornoSignIn !=
+                                                    'Signed in') {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        'E-mail ou senha esta incorreto !'),
+                                                  ));
+                                                }
                                               }
                                             }
                                           },

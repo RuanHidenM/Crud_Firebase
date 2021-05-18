@@ -212,7 +212,7 @@ class _showModalFiltro extends State<ShowModalFiltro> {
                           var idademin = _idadeMinController.text;
                           setState(() {
                             HomePage();
-                            FirebaseFiltrando(nome, idademax, idademin, selectedSexo);
+                            //FirebaseFiltrando(nome, idademax, idademin, selectedSexo);
                           });
                           Navigator.pop(context);
                         },

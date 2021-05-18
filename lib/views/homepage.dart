@@ -22,7 +22,7 @@ class _homePage extends State<HomePage> {
   void initState(){
     super.initState();
     setState(() {
-      snapshots = FirebaseFiltrando();
+      snapshots = FirebaseFirestore.instance.collection('users').snapshots();
     });
   }
   Widget build(BuildContext context) {
@@ -149,16 +149,16 @@ class _homePage extends State<HomePage> {
   }
 }
 
-FirebaseFiltrando([String nome, String idadeMax, String idadeMin, String selectedSexo]){
-  print('nome: $nome, IdadeMax: $idadeMin, IdadeMin: $idadeMax, Sexo: $selectedSexo');
-  print('ta na funcão');
-
-
-  if(nome != '' && nome != null){
-    print('Entro no filtro, nome informado : $nome');
-    return FirebaseFirestore.instance.collection('users').where('name', isEqualTo: nome).snapshots();
-  }else{
-    print('Sem fitlro');
-    return FirebaseFirestore.instance.collection('users').snapshots();
-  }
-}
+// FirebaseFiltrando([String nome, String idadeMax, String idadeMin, String selectedSexo]){
+//   print('nome: $nome, IdadeMax: $idadeMin, IdadeMin: $idadeMax, Sexo: $selectedSexo');
+//   print('ta na funcão');
+//
+//
+//   if(nome != '' && nome != null){
+//     print('Entro no filtro, nome informado : $nome');
+//     return FirebaseFirestore.instance.collection('users').where('name', isEqualTo: nome).snapshots();
+//   }else{
+//    print('Sem fitlro');
+//     return FirebaseFirestore.instance.collection('users').snapshots();
+//   }
+// }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 
 //TODO: Um alerta de tamanho pequeno, apenas para informa o usuario, sem função
-void AlertaSimples(context,String nameTitle, String message, IconData iconDeAlert) {
+void AlertaSimples(context,String nameTitle, String message, IconData iconDeAlert, Color coricon) {
 
   showDialog(
       context: context,
@@ -11,14 +11,17 @@ void AlertaSimples(context,String nameTitle, String message, IconData iconDeAler
         return AlertDialog(
           title: Text(nameTitle),
           content: IntrinsicHeight (
-            child: Column(
-              children: [
-                Icon(iconDeAlert, color: Colors.deepOrange, size: 55),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 10),
-                  child: Text(message),
-                ),
-              ],
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(iconDeAlert, color: coricon, size: 55),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 10),
+                    child: Text(message, textAlign:TextAlign.center),
+                  ),
+                ],
+              ),
             ),
           ),
           actions: [

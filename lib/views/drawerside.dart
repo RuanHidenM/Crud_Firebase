@@ -1,13 +1,11 @@
-import 'package:crud_firebase/components/button/circular_button_big_title_color_icon.dart';
+import 'dart:async';
+
 import 'package:crud_firebase/components/button/circular_button_big_title_color_icon_conect_state.dart';
 import 'package:crud_firebase/components/button/circular_button_small_title_color_icon.dart';
-import 'package:crud_firebase/components/centered_message.dart';
 import 'package:crud_firebase/firebase/firebase_authentication.dart';
-import 'package:crud_firebase/views/createuser_page.dart';
-import 'package:crud_firebase/views/showmodalfiltro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:provider/provider.dart';
 
 class DrawerSide extends StatefulWidget {
@@ -24,7 +22,35 @@ class _drawerSide extends State<DrawerSide> {
   ];
   String selectedEmpresa = 'Açucar Carioca Alimentos';
 
+  String _connectionStatus = 'UnkNown';
+  final Connectivity _connectivity = new Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
   @override
+  void initState() {
+    super.initState();
+
+    //TODO: Verifica o status da conecção
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+          setState(() => _connectionStatus = result.toString());
+          print('conectss: ${_connectionStatus}');
+          if(_connectionStatus == "ConnectivityResult.none"){
+            print('sem internet $_connectionStatus');
+        }
+      },
+    );
+  }
+  //TODO: Verifica o status da conecção
+  Future<Null> initConnectivity() async {
+    String connectionStatus;
+    _connectionStatus = (await _connectivity.checkConnectivity().toString());
+    setState(() {
+      _connectionStatus = connectionStatus;
+    });
+  }
+
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
@@ -41,50 +67,14 @@ class _drawerSide extends State<DrawerSide> {
                       Expanded(
                         flex: 3,
                         child: Container(
-                          // color: Colors.red,
+                          //color: Colors.red,
                           child: Column(
                             children: [
                               CircularButtonBiglTitleColorIconConectState(
                                 corDoIcon: Colors.black,
                                 corDobotao: Colors.white,
                                 iconDoBotao: Icons.person,
-                                ConectState: true, //TODO: Defini conect State
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  //TODO: CONECT
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 5),
-                                    child: Icon(
-                                      Icons.wifi,
-                                      size: 12,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Conectado',
-                                    style: TextStyle(
-                                        color: Colors.green, fontSize: 8),
-                                  ),
-
-                                  //TODO: DESCONECT
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(right: 5),
-                                  //   child: Icon(
-                                  //     Icons.wifi_off,
-                                  //     size: 12,
-                                  //     color: Colors.red,
-                                  //   ),
-                                  // ),
-                                  // Text(
-                                  //   'Desconect',
-                                  //   style: TextStyle(
-                                  //       color: Colors.red,
-                                  //       fontSize: 8
-                                  //   ),
-                                  // ),
-                                ],
+                                ConectState: _connectionStatus != 'ConnectivityResult.none' ? true : false, //TODO: Defini conect State
                               ),
                             ],
                           ),
@@ -109,6 +99,50 @@ class _drawerSide extends State<DrawerSide> {
                               Text(
                                 '205.111.049/21.22200',
                                 style: TextStyle(color: Colors.white),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  //TODO: CONECT
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: Icon(
+                                        _connectionStatus != 'ConnectivityResult.none'
+                                            ? Icons.wifi
+                                            : Icons.wifi_off,
+                                        size: 16,
+                                        color: _connectionStatus != 'ConnectivityResult.none'
+                                            ? Colors.lightGreen
+                                            : Colors.redAccent),
+                                  ),
+                                  Text(
+                                    _connectionStatus != 'ConnectivityResult.none'
+                                        ? 'Conectado'
+                                        : 'Desconectado',
+                                    style: TextStyle(
+                                        color:  _connectionStatus != 'ConnectivityResult.none'
+                                            ? Colors.lightGreen
+                                            : Colors.redAccent,
+                                        fontSize: 13),
+                                  ),
+
+                                  //TODO: DESCONECT
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(right: 5),
+                                  //   child: Icon(
+                                  //     Icons.wifi_off,
+                                  //     size: 16,
+                                  //     color: Colors.redAccent,
+                                  //   ),
+                                  // ),
+                                  // Text(
+                                  //   'Desconectado',
+                                  //   style: TextStyle(
+                                  //       color: Colors.redAccent,
+                                  //       fontSize: 13
+                                  //   ),
+                                  // ),
+                                ],
                               ),
                             ],
                           ),
@@ -200,6 +234,23 @@ class _drawerSide extends State<DrawerSide> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 10, right: 20),
+                  child: Icon(Icons.bar_chart_sharp,
+                      size: 35, color: Colors.black54),
+                ),
+                Text(
+                  'Relatórios e comissões',
+                  style: TextStyle(color: Colors.black54, fontSize: 17),
+                ),
+              ],
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            title: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 20),
                   child: Icon(Icons.settings, size: 32, color: Colors.black54),
                 ),
                 Text(
@@ -216,60 +267,54 @@ class _drawerSide extends State<DrawerSide> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 10, right: 20),
-                  child: Icon(Icons.bar_chart_sharp, size: 35, color: Colors.black54),
+                  child: Icon(Icons.logout, size: 32, color: Colors.black54),
                 ),
                 Text(
-                  'Relatórios e comissões',
+                  'Desconectar',
                   style: TextStyle(color: Colors.black54, fontSize: 17),
                 ),
               ],
             ),
-            onTap: () {},
+            onTap: () {
+              context.read<AuthenticationService>().signOut();
+            },
           ),
-          /*
-          Container(
-            color: Colors.red[400],
-            child: ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Desconectar',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                  CircularButtonSmallTitleColorIcon(
-                      iconDoBotao: Icons.logout,
-                      corDoIcon: Colors.red,
-                      corDobotao: Colors.white)
-                ],
-              ),
-              onTap: () {
-                context.read<AuthenticationService>().signOut();
-              },
-            ),
-          ),
-          */
           ListTile(
-            title: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 20),
-                  child: Icon(Icons.autorenew, size: 32, color: Colors.black54),
+            title: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top:BorderSide(
+                    color: Colors.black12,
+                    width: 1,
+                  ),
                 ),
-                Column(
+              ),
+              child:
+              Padding(
+                padding: EdgeInsets.only(top:10),
+                child:Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Ultima sincronização: ',
-                      style: TextStyle(color: Colors.black54, fontSize: 15),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 20),
+                      child:
+                      Icon(Icons.autorenew, size: 32, color: Colors.black26),
                     ),
-                    Text(
-                      '01/05/2021',
-                      style: TextStyle(color: Colors.black54, fontSize: 15),
+                    Column(
+                      children: [
+                        Text(
+                          'Ultima sincronização: ',
+                          style: TextStyle(color: Colors.black26, fontSize: 15),
+                        ),
+                        Text(
+                          '01/05/2021',
+                          style: TextStyle(color: Colors.black26, fontSize: 15),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
             onTap: () {},
           ),
