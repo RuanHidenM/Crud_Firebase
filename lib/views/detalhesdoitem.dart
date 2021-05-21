@@ -30,7 +30,7 @@ class _detalhesDoItem extends State<DetalhesDoItem>{
           ],
         ),
       ),
-        body: Center(child: Text('Detalhes do produto'),),
+        body: Center(child: Text('Detalhes do produtoss'),),
     );
   }
 }
