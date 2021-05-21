@@ -2,7 +2,7 @@ import 'package:crud_firebase/components/button/button_average_title_icon_color.
 import 'package:crud_firebase/components/button/button_small_title_icon_color.dart';
 import 'package:crud_firebase/components/mytextfield.dart';
 import 'package:crud_firebase/models/peoplesData.dart';
-import 'package:crud_firebase/views/homepage.dart';
+import 'package:crud_firebase/views/catalogo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -211,7 +211,7 @@ class _showModalFiltro extends State<ShowModalFiltro> {
                           var idademax = _idadeMaxController.text;
                           var idademin = _idadeMinController.text;
                           setState(() {
-                            HomePage();
+                            Catalogo();
                             //FirebaseFiltrando(nome, idademax, idademin, selectedSexo);
                           });
                           Navigator.pop(context);

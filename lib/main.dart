@@ -1,6 +1,7 @@
 
 import 'package:crud_firebase/firebase/firebase_authentication.dart';
-import 'package:crud_firebase/views/homepage.dart';
+import 'package:crud_firebase/views/catalogo.dart';
+import 'package:crud_firebase/views/home.dart';
 import 'package:crud_firebase/views/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

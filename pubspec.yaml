@@ -82,3 +82,8 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - pngwing.com.png
+    - Logo_Mestre_-_Completo.png
+    - Logo_Mestre_-_Icon.png
+    - nescal.png
+    - bolacha.png
+    - achocolatado.png

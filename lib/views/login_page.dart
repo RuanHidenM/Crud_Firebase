@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                               padding: const EdgeInsets.only(
                                   top: 50, bottom: 10, left: 70, right: 70),
                               child: Container(
-                                child: Image.asset('images/pngwing.com.png'),
+                                child: Image.asset('images/Logo_Mestre_-_Completo.png'),
                               ),
                             ),
                           ),
@@ -166,10 +166,10 @@ class _LoginPageState extends State<LoginPage> {
                                               corDoIcon: Colors.white,
                                               corDoTexto: Colors.white),
                                           onTap: () async {
-                                            if(_connectionStatus == 'ConnectivityResult.none'){
+                                            if(_connectionStatus == 'ConnectivityResult.none'){ //TODO; VERIFICA SE TEM INTERNET
                                               AlertaConectInternet();
                                             }else {
-                                              if (
+                                              if ( //TODO; VERIFICA SE TODOS OS CAMPOS ESTÃO PREECHIDOS
                                               email == null ||
                                                   senha == null ||
                                                   email.isEmpty ||
@@ -227,22 +227,22 @@ class _LoginPageState extends State<LoginPage> {
                                       children: [
                                         CircularButtonMediunTitleColorIcon(
                                             corDobotao:
-                                                Color.fromRGBO(3, 72, 102, 1),
+                                                Color.fromRGBO(36, 82, 108, 1),
                                             iconDoBotao: Icons.web,
                                             corDoIcon: Colors.white),
                                         CircularButtonMediunTitleColorIcon(
                                             corDobotao:
-                                                Color.fromRGBO(3, 72, 102, 1),
+                                                Color.fromRGBO(36, 82, 108, 1),
                                             iconDoBotao: Icons.message,
                                             corDoIcon: Colors.white),
                                         CircularButtonMediunTitleColorIcon(
                                             corDobotao:
-                                                Color.fromRGBO(3, 72, 102, 1),
+                                                Color.fromRGBO(36, 82, 108, 1),
                                             iconDoBotao: Icons.vpn_key_outlined,
                                             corDoIcon: Colors.white),
                                         CircularButtonMediunTitleColorIcon(
                                             corDobotao:
-                                                Color.fromRGBO(3, 72, 102, 1),
+                                                Color.fromRGBO(36, 82, 108, 1),
                                             iconDoBotao: Icons.create,
                                             corDoIcon: Colors.white),
                                       ],
@@ -263,8 +263,8 @@ class _LoginPageState extends State<LoginPage> {
           Visibility(
             child: Center(
               child: Container(
-                height: 150,
-                width: 150,
+                height: double.maxFinite,
+                width: double.maxFinite,
                 child: Progress(),
               ),
             ),

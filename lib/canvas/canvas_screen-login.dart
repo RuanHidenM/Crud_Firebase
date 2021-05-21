@@ -18,7 +18,7 @@ class BackgroundSignIn extends CustomPainter {
     //greyWave.cubicTo(sw*0.95, sh*0.15, sw*0.65, sh*0.15, sw*0.6, sh*0.38);
     orangeWave.cubicTo(sw * 1.50, sh * 0.75, sw * 0.4, sh * 0.20, 0, sh * 0.48);
     orangeWave.close();
-    paint.color = Color.fromRGBO(255, 102, 0, 1);
+    paint.color = Color.fromRGBO(245, 134, 52, 1);
     canvas.drawPath(orangeWave, paint);
 
     Path blueWave = Path();
@@ -27,7 +27,7 @@ class BackgroundSignIn extends CustomPainter {
     //greyWave.cubicTo(sw*0.95, sh*0.15, sw*0.65, sh*0.15, sw*0.6, sh*0.38);
     blueWave.cubicTo(sw * 1.40, sh * 0.65, sw * 0.3, sh * 0.25, 0, sh * 0.42);
     blueWave.close();
-    paint.color = Color.fromRGBO(33, 119, 180, 1);
+    paint.color = Color.fromRGBO(36, 82, 108, 1);
     canvas.drawPath(blueWave, paint);
 
     /// Color.fromRGBO(245, 134, 52, 1);

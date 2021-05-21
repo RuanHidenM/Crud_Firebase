@@ -15,7 +15,6 @@ class CreateUserPage extends StatefulWidget {
 
 class _createUserPage extends State<CreateUserPage> {
   GlobalKey<FormState> form = GlobalKey<FormState>();
-
   var _nome = TextEditingController();
   var _idade = TextEditingController();
   List<String> items = <String>['Masculino', 'Feminino', 'Não Informado'];
