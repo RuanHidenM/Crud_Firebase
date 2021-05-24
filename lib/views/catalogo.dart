@@ -167,7 +167,8 @@ class _catalogo extends State<Catalogo> {
                                             //color: Colors.yellow,
                                             child: Center(
                                               child: ClipRRect(
-                                                child: Image.asset('images/nescal.png'),
+                                                child: Image.asset(produtos['nome'] == 'Achocolatado Po Nescau 2.0' ? 'images/nescal.png' :
+                                                produtos['nome'] == 'Biscoito Recheado com creme' ? 'images/bolacha.png' : 'images/achocolatado.png'),
                                               ),
                                             ),
                                           )),
