@@ -71,6 +71,7 @@ class _catalogo extends State<Catalogo> {
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     children: [
+                      //TODO: SAFE
                       Expanded(
                         flex: 3,
                         child: Container(
@@ -107,7 +108,9 @@ class _catalogo extends State<Catalogo> {
                         ),
                       ),
                     ],
-                  ))),
+                  ),
+              ),
+          ),
           Expanded(
             flex: 9,
             child: StreamBuilder(
@@ -183,7 +186,17 @@ class _catalogo extends State<Catalogo> {
                                                 Container(
                                                     height: MediaQuery.of(context).size.height/ 11,
                                                     //color:Colors.red,
-                                                    child: Text('${produtos['nome']}', style: TextStyle(fontSize: MediaQuery.of(context).size.height/ 40,),)
+                                                    child: Column(
+                                                      children: [
+                                                        Flexible(
+                                                            child: Text(
+                                                              '${produtos['nome']}',
+                                                              overflow: TextOverflow.ellipsis,
+                                                              style: TextStyle(fontSize: MediaQuery.of(context).size.height/ 40,),
+                                                            ),
+                                                        ),
+                                                      ],
+                                                    )
                                                 ),
                                                 Container(
                                                     //color:Colors.blue,
@@ -213,7 +226,8 @@ class _catalogo extends State<Catalogo> {
                                                 ),
                                               ],
                                             ),
-                                          )),
+                                          ),
+                                      ),
                                     ],
                                   ),
                                 )
@@ -223,6 +237,10 @@ class _catalogo extends State<Catalogo> {
                         ),
                         onDoubleTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => DetalhesDoItem(
+                            nome: produtos['nome'],
+                            descricao: produtos['descicao'],
+                            un: produtos['un'],
+                            valor: produtos['valor'],
                           )));
                         },
                       );
