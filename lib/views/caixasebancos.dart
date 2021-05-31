@@ -18,7 +18,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
     super.initState();
     setState(() {
       snapshots =
-          FirebaseFirestore.instance.collection('CaixasBancos').snapshots();
+          FirebaseFirestore.instance.collection('CaixasBancos').where('Codigo', isEqualTo: 920).snapshots();
     });
   }
 
@@ -63,7 +63,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
                       return Center(child: CircularProgressIndicator());
                     }
                     if (snapshot.data.docs.length == 0) {
-                      return Center(child: Text('Nenhum usuario Cadastrado!!'));
+                      return Center(child: Text('Nenhum Caixas e Bancos Cadastrado!!'));
                     }
 
                     return ListView.builder(

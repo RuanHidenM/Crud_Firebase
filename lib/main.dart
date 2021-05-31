@@ -1,5 +1,7 @@
 
+import 'package:crud_firebase/components/alert/alert_small_title_icon.dart';
 import 'package:crud_firebase/firebase/firebase_authentication.dart';
+import 'package:crud_firebase/models/empresas.dart';
 import 'package:crud_firebase/views/catalogo.dart';
 import 'package:crud_firebase/views/home.dart';
 import 'package:crud_firebase/views/login_page.dart';
@@ -7,6 +9,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 
 void main() async {
@@ -17,6 +23,9 @@ void main() async {
 
 //TODO: CRUD Basico para testar o firebase, Imprimindo, criando, editando, excluindo.
 class MyApp extends StatelessWidget {
+  final Empresa empresa;
+  MyApp({this.empresa});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -25,29 +34,27 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthenticationService(FirebaseAuth.instance),
         ),
         StreamProvider(
-          create: (context) => context.read<AuthenticationService>().authStateChanges,
+          create: (context) => context.read<AuthenticationService>().authStateChanges, initialData: null,
         )
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          primarySwatch: Colors.orange
-          ,
-        ),
         home: AuthenticationWrapper(),
       ),
     );
   }
 }
+class AuthenticationWrapper extends StatefulWidget{
+  _authenticationWrapper createState() => _authenticationWrapper();
+}
 
-class AuthenticationWrapper extends StatelessWidget {
-  @override
+class _authenticationWrapper extends State<AuthenticationWrapper> {
+
+
+
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
-
     if (firebaseUser != null) {
-      return HomePage();
+        return HomePage();
     }
     return LoginPage();
   }

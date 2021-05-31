@@ -6,6 +6,7 @@ import 'package:crud_firebase/models/peoplesData.dart';
 import 'package:crud_firebase/views/createuser_page.dart';
 import 'package:crud_firebase/views/detalhesdoitem.dart';
 import 'package:crud_firebase/views/drawerside.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -21,6 +22,7 @@ class _catalogo extends State<Catalogo> {
   var userLogado = FirebaseAuth.instance.currentUser;
   var snapshots;
 
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +30,8 @@ class _catalogo extends State<Catalogo> {
       snapshots = FirebaseFirestore.instance.collection('produto').snapshots();
     });
   }
+
+
 
   Widget build(BuildContext context) {
     //print(userLogado.email.toString()); //TODO:Pegando o usuario já logado
@@ -37,6 +41,7 @@ class _catalogo extends State<Catalogo> {
     //     .snapshots(); //TODO: Buscar a banco 'USERS' e ordenar com base na 'DATA'
     //var snapshots = FirebaseFirestore.instance.collection('users').snapshots();//TODO: BUSCANDO UM USUARIO
 
+    testandoalgumacoisa();
     return Scaffold(
       //drawer:DrawerSide(),
       appBar: AppBar(
@@ -212,7 +217,7 @@ class _catalogo extends State<Catalogo> {
                                                               child: Icon(Icons.monetization_on, color: Colors.green, size: MediaQuery.of(context).size.height/ 40,),
                                                             ),
                                                             Text('R\$: ', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 50),),
-                                                            Text('${produtos['valor']}', style: TextStyle( fontSize: MediaQuery.of(context).size.height/ 40),),
+                                                            Text('${produtos['valor'].toStringAsFixed(2).toString().replaceAll('.', ',')}', style: TextStyle( fontSize: MediaQuery.of(context).size.height/ 40),),
                                                           ],
                                                         ),
                                                         Row(
@@ -264,6 +269,17 @@ class _catalogo extends State<Catalogo> {
       // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+Future<void> testandoalgumacoisa() async {
+  var db = FirebaseFirestore.instance;
+  QuerySnapshot resultado = await db.collection('Usuario').where('Email', isEqualTo: 'usuteste@emporiofloriano.com.br').get();
+  resultado.docs.forEach((d){
+    // print('Email :${d['Email']}');
+    // print('Empresas: ${d['Empresas']}');
+    // print('id: ${d['Id']}');
+    // print('Nome ${d['Nome']}');
+  });
 }
 
 // FirebaseFiltrando([String nome, String idadeMax, String idadeMin, String selectedSexo]){

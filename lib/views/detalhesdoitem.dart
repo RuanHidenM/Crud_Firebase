@@ -15,8 +15,10 @@ class DetalhesDoItem extends StatefulWidget{
 }
 class _detalhesDoItem extends State<DetalhesDoItem>{
 
+  void initState(){
+    super.initState();
+  }
   get MediaWidth => MediaQuery.of(context).size.width;
-
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
@@ -31,11 +33,6 @@ class _detalhesDoItem extends State<DetalhesDoItem>{
               'Detalhes do Item',
               style: TextStyle(color: Colors.white, fontSize: MediaWidth / 23),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: Icon(Icons.filter_list_rounded,
-                  color: Colors.white, size: 25),
-            ),
           ],
         ),
       ),
@@ -46,15 +43,15 @@ class _detalhesDoItem extends State<DetalhesDoItem>{
               color: Colors.white,
               borderRadius: BorderRadius.circular(0),
               boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  offset: const Offset(
-                    1.0,
-                    1.0,
-                  ),
-                  blurRadius: 10.0,
-                  spreadRadius: 5.0,
-                ),
+                // BoxShadow(
+                //   color: Colors.grey,
+                //   offset: const Offset(
+                //     1.0,
+                //     1.0,
+                //   ),
+                //   blurRadius: 10.0,
+                //   spreadRadius: 5.0,
+                // ),
               ],
             ),
             child: Column(
@@ -65,7 +62,7 @@ class _detalhesDoItem extends State<DetalhesDoItem>{
                     color:  Color.fromRGBO(36, 82, 108, 25),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                      child: Center(child: Text(widget.nome, style: TextStyle(fontSize: MediaWidth/ 23, color: Colors.white),)),
+                      child: Center(child: Text(widget.nome, style: TextStyle(fontSize: MediaWidth/ 22, color: Colors.white, fontWeight: FontWeight.bold),)),
                     ),
                   ),
                 ),
@@ -102,7 +99,7 @@ class _detalhesDoItem extends State<DetalhesDoItem>{
                                 child: Container(
                                   height: 1,
                                   width: double.infinity,
-                                  color: Color.fromRGBO(36, 82, 108, 25),
+                                  color: Colors.black12
                                 ),
                               ),
                               Padding(
@@ -146,7 +143,7 @@ class _detalhesDoItem extends State<DetalhesDoItem>{
                                 child: Row(
                                   children: [
                                     Text('Custo Fornecedor :',style: TextStyle(fontSize: MediaWidth/ 28, color: Colors.black54)),
-                                    Text(' R\$: ${widget.valor}', style: TextStyle(fontSize: MediaWidth/ 28, color: Colors.black87)),
+                                    Text(' R\$: ${widget.valor.toStringAsFixed(2).toString().replaceAll('.', ',')}', style: TextStyle(fontSize: MediaWidth/ 28, color: Colors.black87)),
                                   ],
                                 ),
                               ),

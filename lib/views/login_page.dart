@@ -20,18 +20,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   String email;
   String senha;
   bool _loadding = false;
-
   String _connectionStatus = 'UnkNown';
   final Connectivity _connectivity = new Connectivity();
   StreamSubscription<ConnectivityResult>_connectivitySubscription;
 
   @override
   void initState() {
-    super.initState();
 
+    super.initState();
     //TODO: Verifica o status da conecção
     initConnectivity();
     _connectivitySubscription =
