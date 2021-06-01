@@ -1,13 +1,12 @@
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crud_firebase/models/empresas.dart';
+import 'package:crud_firebase/complements/buscandoempresadousuario.dart';
 import 'package:crud_firebase/views/drawerside.dart';
-import 'package:crud_firebase/views/scree_erro_login.dart';
+import 'package:crud_firebase/views/screen_erro_login.dart';
+import 'package:crud_firebase/views/screen_mestre_loadding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 class HomePage extends StatefulWidget{
   _homePage createState() => _homePage();
@@ -16,69 +15,39 @@ class HomePage extends StatefulWidget{
 class _homePage extends State<HomePage>{
   get MediaWidth => MediaQuery.of(context).size.width;
   var snapshots;
-  var snapshots2;
-  bool EmailIdentificado;
+  String EmailIdentificado;
   var resultado;
-  var db = FirebaseFirestore.instance;
-  var x;
-  var empresas = new List<Empresa>();
+  var Empresas2;
+  //var empresas = new List<Empresa>();
+  final String userLogadoEmail = FirebaseAuth.instance.currentUser.email.toString();
+  var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
+
 
   void initState(){
     super.initState();
-
     setState(() {
-        var userLogadoEmail = FirebaseAuth.instance.currentUser == null ? '': FirebaseAuth.instance.currentUser.email;
         VerificaEmailLogadoComEmailCadastrado(userLogadoEmail);
-        snapshots = db.collection('Usuario').where('Email', isEqualTo: userLogadoEmail).snapshots();
-       BuscandoEmpresasDoUsuario();
+         //snapshots = dbUsuario.where('Email', isEqualTo: userLogadoEmail).snapshots();
+         snapshots = dbUsuario.snapshots();
+       // BuscandoEmpresasDoUsuario().then((empresas) => print('Lista de empresas $empresas'));
     });
   }
 
-  void BuscandoEmpresasDoUsuario(){
-
-    snapshots2 = db.collection('Usuario');
-      snapshots2.get().then((value) async {
-        value.docs.forEach((element) {
-         // print(element['Empresas']);
-            x = element['Empresas'];
-           // print(x);
-      });
-       //  x.then((response){
-       //   Iterable lista = json.decode(response.body);
-       //   empresas = lista.map((model) => Empresa.fromJson(model)).toList();
-       // });
-       //
-       //  final List<dynamic> decodeJson = jsonDecode(x.body);
-       //  final List<Empresa> empresa = List();
-       //
-       //
-       //  for(Map<String, dynamic> element in decodeJson){
-       //    final Empresa empresas = Empresa(
-       //      element['tenantId'],
-       //      element['cnpj'],
-       //      element['logada'],
-       //      element['id'],
-       //      element['fantasia'],
-       //    );
-       //    print('teste : ${empresas.toString()}');
-       //    empresa.add(empresas);
-       //  }
-
-      });
-}
 
   @override
   void VerificaEmailLogadoComEmailCadastrado(String userLogadoEmail) async {
-    resultado = await FirebaseFirestore.instance.collection('Usuario').where('Email', isEqualTo: userLogadoEmail).get();
-      resultado.docs.isEmpty ? EmailIdentificado = false: EmailIdentificado = true;
-      setState(() {
-        EmailIdentificado;
-      });
+    var resultado = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
+    resultado == null ? EmailIdentificado = 'invalido': EmailIdentificado = 'valido';
+    setState(() {
+      EmailIdentificado;
+    });
   }
 
-
   Widget build(BuildContext context) {
-    if(EmailIdentificado == true){//TODO: Se o usuario for verificado, ele ira se manter nessa tela !!
+    if(EmailIdentificado != 'valido' && EmailIdentificado != 'invalido'){//Todo: se não for processado ainda, mostrar tela de carregamento
+      return ScreenMestreLoadding();
+    }
+    if(EmailIdentificado == 'valido'){//TODO: Se o usuario for verificado, ele ira se manter nessa tela !!
       return Scaffold(
         drawer:DrawerSide(),
         appBar: AppBar(
@@ -117,7 +86,6 @@ class _homePage extends State<HomePage>{
                         var users = snapshot.data.docs[i];
                         return Column(
                           children: [
-                            Text(users['Email']),
                             //Text(users['Empresas'].toString()),
                             Text(users['Empresas'].toString()),
                           ],

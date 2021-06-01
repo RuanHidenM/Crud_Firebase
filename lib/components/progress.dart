@@ -7,16 +7,18 @@ class Progress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black26,
+      backgroundColor: Colors.white,
       body:Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            CircularProgressIndicator(),
+            CircularProgressIndicator(
+              backgroundColor: Colors.orange,
+            ),
             Text(message,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: MediaQuery.of(context).size.height / 40,
                 color: Colors.black54,
               ),)
           ],

@@ -6,6 +6,7 @@ import 'package:crud_firebase/firebase/firebase_authentication.dart';
 import 'package:crud_firebase/views/caixasebancos.dart';
 import 'package:crud_firebase/views/catalogo.dart';
 import 'package:crud_firebase/views/createuser_page.dart';
+import 'package:crud_firebase/views/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart';
@@ -228,7 +229,9 @@ class _drawerSide extends State<DrawerSide> {
                 ),
               ],
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+            },
           ),
           ListTile(
             title: Row(
