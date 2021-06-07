@@ -17,17 +17,17 @@ class _erroNoLogin extends State<ErroNoLogin>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        shadowColor: Color.fromRGBO(36, 82, 108, 250),
-        //Todo: cor da borda shadow, para ficar mesclado com o widget de filtro a baixo
-        backgroundColor: Color.fromRGBO(36, 82, 108, 25),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Problemas no login', style: TextStyle(color: Colors.white),),
-          ],
-        ),
-      ),
+      // appBar: AppBar(
+      //   shadowColor: Color.fromRGBO(36, 82, 108, 250),
+      //   //Todo: cor da borda shadow, para ficar mesclado com o widget de filtro a baixo
+      //   backgroundColor: Color.fromRGBO(36, 82, 108, 25),
+      //   title: Row(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       Text('Problemas no login', style: TextStyle(color: Colors.white),),
+      //     ],
+      //   ),
+      // ),
       body: Container(
         child: Center(
           child: Column(
@@ -51,7 +51,7 @@ class _erroNoLogin extends State<ErroNoLogin>{
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Text('    O E-mail informado foi cadastrado em nosso sistema,'
-                              ' mas não foi encontrado no banco de dados, para a segurança dos demais usuarios, '
+                              'porém não foi encontrado no banco de dados, para a segurança dos demais usuarios, '
                               'este E-mail esta suspenso temporariamente, por favor entre'
                               ' em contato com o suporte Mestre. ', style: TextStyle(fontSize: 19, color: Colors.black54),),
                         ),
@@ -60,6 +60,21 @@ class _erroNoLogin extends State<ErroNoLogin>{
                 ),
               ),
               ListTile(
+                hoverColor: Colors.orange,
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0, right: 10),
+                      child: Icon(Icons.attach_email_outlined, color: Colors.black54, size: 35),
+                    ),
+                    Text('Suporte MESTRE', style: TextStyle(color: Colors.black54, fontSize: 25),),
+                  ],
+                ),
+                onTap: () {
+                  //TODO: Link do suporte mestre
+                },
+              ),ListTile(
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
