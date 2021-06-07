@@ -60,7 +60,8 @@ class _caixasEBancos extends State<CaixaEBanco> {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     }
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.orange),));
                     }
                     if (snapshot.data.docs.length == 0) {
                       return Center(child: Text('Nenhum Caixas e Bancos Cadastrado!!'));

@@ -29,7 +29,8 @@ class _homePage extends State<HomePage>{
         VerificaEmailLogadoComEmailCadastrado(userLogadoEmail);
          //snapshots = dbUsuario.where('Email', isEqualTo: userLogadoEmail).snapshots();
          snapshots = dbUsuario.snapshots();
-       // BuscandoEmpresasDoUsuario().then((empresas) => print('Lista de empresas $empresas'));
+        //BuscandoEmpresaPadraoDoUsuario().then((empresas) => print('Lista de empresas $empresas'));
+       // BuscandoEmpresasDoUsuario().then((nomesEmpresas) => print('nomes de empresas $nomesEmpresas'));
     });
   }
 
@@ -75,7 +76,8 @@ class _homePage extends State<HomePage>{
                       return Center(child: Text('Error: ${snapshot.error}'));
                     }
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.orange),));
                     }
                     if (snapshot.data.docs.length == 0) {
                       return Center(child: Text('Nenhum Caixas e Bancos Cadastrado!!'));

@@ -1,12 +1,6 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud_firebase/components/mytextfield.dart';
-import 'package:crud_firebase/models/peoplesData.dart';
-import 'package:crud_firebase/views/createuser_page.dart';
 import 'package:crud_firebase/views/detalhesdoitem.dart';
-import 'package:crud_firebase/views/drawerside.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -19,19 +13,38 @@ class _catalogo extends State<Catalogo> {
   static String tag = '/catalogo';
 
   //var user = Firebase.auth().currentUser;
+
+  //var dbUsuario = FirebaseFirestore.instance.collection('Usuario').doc('Empresas');
   var userLogado = FirebaseAuth.instance.currentUser;
   var snapshots;
+  var snapshots2;
+  var empresasJson;
 
+  _catalogo() {
+    BuscandoProdutosDoUsuario();
+  }
 
   @override
   void initState() {
     super.initState();
     setState(() {
       snapshots = FirebaseFirestore.instance.collection('produto').snapshots();
+      //empresasJson = dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
     });
   }
 
+  Future<List<String>> BuscandoProdutosDoUsuario() async {
 
+    snapshots2 = await FirebaseFirestore.instance
+        .collection('Tenant')
+        .doc('4c0356cd-c4f7-4901-b247-63e400d56085')
+        .collection('Empresas')
+        .doc('01747426000176')
+        .collection('Produtos')
+        .doc('3b5f02d1-95d6-4671-94b8-0d1c63438838')
+        .get().then((value) => value.data());
+    print('retorno dos produtos : $snapshots2');
+  }
 
   Widget build(BuildContext context) {
     //print(userLogado.email.toString()); //TODO:Pegando o usuario já logado
@@ -128,7 +141,8 @@ class _catalogo extends State<Catalogo> {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.orange),));
                 }
                 if (snapshot.data.docs.length == 0) {
                   return Center(child: Text('Nenhum usuario Cadastrado!!'));
