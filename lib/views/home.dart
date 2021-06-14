@@ -20,6 +20,8 @@ class _homePage extends State<HomePage>{
   var Empresas2;
   //var empresas = new List<Empresa>();
   final String userLogadoEmail = FirebaseAuth.instance.currentUser.email.toString();
+
+
   var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
 
 

@@ -1,14 +1,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crud_firebase/models/produto/familia.dart';
-import 'package:crud_firebase/models/produto/grupo.dart';
-import 'package:crud_firebase/models/produto/marca.dart';
-import 'package:crud_firebase/models/produto/modelo.dart';
-import 'package:crud_firebase/models/produto/produto.dart';
-import 'package:crud_firebase/models/produto/subgrupo.dart';
-import 'package:crud_firebase/models/produto/tabeladepreco.dart';
-import 'package:crud_firebase/models/produto/unidadedemedida.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:crud_firebase/models/empresas.dart';
 import 'package:firebase_database/firebase_database.dart';

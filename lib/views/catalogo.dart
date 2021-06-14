@@ -1,3 +1,6 @@
+import 'dart:io' as Io;
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud_firebase/complements/selectfirebase.dart';
 import 'package:crud_firebase/components/mytextfield.dart';
@@ -6,7 +9,6 @@ import 'package:crud_firebase/models/produto/tabeladepreco.dart';
 import 'package:crud_firebase/views/detalhesdoitem.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class Catalogo extends StatefulWidget {
   @override
@@ -145,7 +147,9 @@ class _catalogo extends State<Catalogo> {
                       var tabelaDePrecoPadrao = produtos['TABELASDEPRECO'].where((element) =>
                           element['Padrao'] == 'S',
                       );
-                      final List<double> tabelaDePreco = List();
+
+                      var nomeTabeladePrecoQueForSim;
+                      final List<double> tabelaDePreco = List();  //TODO: Buscar apenas a tabela que estiver o padrão marcado como 'S'.
                       for(Map<String, dynamic> element in tabelaDePrecoPadrao){
                         final TabelaDePreco tabeladepreco = TabelaDePreco(
                           element['Preco'],
@@ -153,8 +157,27 @@ class _catalogo extends State<Catalogo> {
                           element['Nome'],
                         );
                         tabelaDePreco.add(tabeladepreco.Preco);
+                        nomeTabeladePrecoQueForSim = 'R\$:${tabeladepreco.Preco.toString()} - ${tabeladepreco.Nome}';
                       }
                       var valorDoProdutoQueForSim = tabelaDePreco.toString().replaceAll('[', '').replaceAll(']', '');
+
+                      final List<String> NomestabelaDePreco = List();//Todo: Nomes das tabelas de Preco.
+                      for(Map<String, dynamic> element in produtos['TABELASDEPRECO']){
+                        final TabelaDePreco tabeladepreco = TabelaDePreco(
+                          element['Preco'],
+                          element['Padrao'],
+                          element['Nome'],
+                        );
+                        NomestabelaDePreco.add('R\$:${tabeladepreco.Preco} - ${tabeladepreco.Nome}');
+                       // print('Formatação: ${tabeladepreco.Preco.toString()}');
+                      }
+
+                      //TODO: BASE64 IMG
+                      // print('img base64 String: ${produtos['IMAGEM'][0]['Imagem']}');
+                      // final decodedBytes = base64Decode(produtos['IMAGEM'][0]['Imagem'].toString());
+                      // print('Bytes: $decodedBytes');
+                      // var file = Io.File("decodedBytes.png");
+                      // print('File: ${file}');
 
                       return GestureDetector(
                         child: Padding(
@@ -284,7 +307,11 @@ class _catalogo extends State<Catalogo> {
                             un: produtos['ESTOQUE'].toString(),
                             valor: valorDoProdutoQueForSim,
                             nomeFamilia:produtos['FAMILIA']['Nome'],
-                            codReferencia:produtos['REFERENCIA']
+                            codReferencia:produtos['REFERENCIA'],
+                            codDoProduto: produtos['CODIGO'],
+                            codNCM: produtos['NCM'],
+                            nomesTabelaDePreco: NomestabelaDePreco,
+                              nomeTabeladePrecoQueForSim: nomeTabeladePrecoQueForSim
                           )));
                         },
                       );
