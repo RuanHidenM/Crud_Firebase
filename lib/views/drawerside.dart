@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:crud_firebase/complements/buscandoempresadousuario.dart';
+import 'package:crud_firebase/complements/selectfirebase.dart';
 import 'package:crud_firebase/firebase/firebase_authentication.dart';
 import 'package:crud_firebase/views/caixasebancos.dart';
 import 'package:crud_firebase/views/catalogo.dart';
@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:provider/provider.dart';
 import 'package:crud_firebase/models/empresas.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class DrawerSide extends StatefulWidget {
   _drawerSide createState() => _drawerSide();
@@ -18,6 +19,7 @@ class DrawerSide extends StatefulWidget {
 
 class _drawerSide extends State<DrawerSide> {
   get MediaHeight => MediaQuery.of(context).size.height;
+
   var userLogado = FirebaseAuth.instance.currentUser;
 
   String _connectionStatus = 'UnkNown';
@@ -114,6 +116,12 @@ class _drawerSide extends State<DrawerSide> {
                                       itemCount: snapshot.data.length,
                                       itemBuilder: (context, index) {
                                         final Empresa empresa = empresas[index];
+
+                                        var maskCNPJ = new MaskTextInputFormatter(mask: '##.###.###/####-##', filter:  { "#": RegExp(r'[0-9]') });
+
+                                        // print(empresa.cnpj);
+                                        // var empresaCnpjAplicadoMascara = maskCNPJ.maskText(empresa.cnpj) ;
+                                        // print('CNPJ: ${empresaCnpjAplicadoMascara}');
                                         return Padding(
                                           padding: const EdgeInsets.only(
                                               top: 20, left: 7),
@@ -136,7 +144,7 @@ class _drawerSide extends State<DrawerSide> {
                                                     fontSize: MediaHeight / 65),
                                               ),
                                               Text(
-                                                '${empresa.cnpj.toString()}',
+                                                '${maskCNPJ.maskText(empresa.cnpj)}',
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: MediaHeight / 65),

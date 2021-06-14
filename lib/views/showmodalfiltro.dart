@@ -1,7 +1,6 @@
 import 'package:crud_firebase/components/button/button_average_title_icon_color.dart';
 import 'package:crud_firebase/components/button/button_small_title_icon_color.dart';
 import 'package:crud_firebase/components/mytextfield.dart';
-import 'package:crud_firebase/models/peoplesData.dart';
 import 'package:crud_firebase/views/catalogo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

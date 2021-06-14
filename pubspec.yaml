@@ -29,7 +29,7 @@ dependencies:
   firebase_auth:
   provider:
   connectivity: ^3.0.3
-
+  mask_text_input_formatter: ^1.2.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -82,10 +82,10 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
-    - pngwing.com.png
+    - logo_emporiofloriano.png
     - Logo_Mestre_-_Completo.png
     - Logo_Mestre_-_Icon.png
-    - nescal.png
-    - bolacha.png
-    - achocolatado.png
-    - logo_emporiofloriano.png
+    - note-acer.png
+    - comp-live.png
+    - cap.png
+    - note-lenovo.png

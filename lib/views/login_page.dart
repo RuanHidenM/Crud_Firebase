@@ -183,8 +183,6 @@ class _LoginPageState extends State<LoginPage> {
                                               } else {
                                                 setState(() => _loadding =
                                                 true); //TODO: Ligando loadding
-                                                await Future.delayed(
-                                                    Duration(seconds: 5));
                                                 context.read<
                                                     AuthenticationService>()
                                                     .signIn(

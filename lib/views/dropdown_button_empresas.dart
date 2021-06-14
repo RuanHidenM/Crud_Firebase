@@ -1,16 +1,15 @@
-import 'package:crud_firebase/complements/buscandoempresadousuario.dart';
+import 'package:crud_firebase/complements/selectfirebase.dart';
 import 'package:crud_firebase/components/alert/alert_small_title_icon.dart';
 import 'package:crud_firebase/components/alert/alert_small_troca_empresa.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 class DropdownButtonEmpresas extends StatefulWidget{
   _dropdownButtonEmpresas createState() => _dropdownButtonEmpresas();
 }
 
 class _dropdownButtonEmpresas extends State<DropdownButtonEmpresas>{
   get MediaHeight => MediaQuery.of(context).size.height;
-  List<String> items = <String>[];
+  List<String> items = <String>[];  //TODO: Nome da empresa logada
   String selectedEmpresa = ''; //TODO: items do dropdown das empresas
 
 
@@ -69,12 +68,9 @@ class _dropdownButtonEmpresas extends State<DropdownButtonEmpresas>{
          child: Column(
            children: [
              Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               mainAxisAlignment: MainAxisAlignment.center,
                children: [
-                 Text('$item', style: TextStyle(fontSize: MediaHeight / 55),),
-                 item.toString() == selectedEmpresa ?
-                 Icon(Icons.check_box, color:Colors.green) :
-                 Icon(Icons.check_box_outline_blank, color:Colors.grey)
+                 Text('$item', style: TextStyle(fontSize: MediaHeight / 55,  fontWeight: item.toString() == selectedEmpresa ? FontWeight.bold : FontWeight.normal ),),
                ],
              ),
              Padding(
