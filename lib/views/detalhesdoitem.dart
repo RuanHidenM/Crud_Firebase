@@ -15,12 +15,15 @@ class DetalhesDoItem extends StatefulWidget {
       this.nomesTabelaDePreco,
       this.codDoProduto,
       this.nomeTabeladePrecoQueForSim,
-      this.codNCM
+      this.codNCM,
+      this.unidadeDeMedida,
+      this.custoLiquido,
+        this.cadastroData
       });
 
   final String nome;
   final String descricao;
-  final String un;
+  final double un;
   final String valor;
   final String nomeFamilia;
   final String codReferencia;
@@ -28,6 +31,10 @@ class DetalhesDoItem extends StatefulWidget {
   final int codDoProduto;
   final String nomeTabeladePrecoQueForSim;
   final String codNCM;
+  final String unidadeDeMedida;
+  final double custoLiquido;
+  final String cadastroData;
+
 
 
   @override
@@ -84,7 +91,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                                             'COMPUTADOR LIVA ZE INTEL WINDOWS ULN3350430W DUAL CORE N3350 4GB SSD 30GB HDMI USB REDE WINDOWS 10'
                                         ? Image.asset('comp-live.png')
                                         : widget.nome ==
-                                                'NOTEBOOK LENOVO 33015IKB I37020U4GB SSD 120GB'
+                                                'NOTEBOOK LENOVO B330-15IKBR INTEL CORE I3 7020U 4GB SSD 240GB 15.6 WINDOWS 10 HOME PRETO'
                                             ? Image.asset('note-lenovo.png')
                                             : widget.nome ==
                                                     'NOTE ACER A315 I3 15.6 8GB SSD 240GB  W10'
@@ -103,7 +110,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                   ),
                 )),
             Padding(
-              padding: const EdgeInsets.only(left: 5, right: 5),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 children: [
                   Container(
@@ -135,7 +142,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                                 size: MediaWidth / 14,
                               ),
                               Text(
-                                '${widget.valor}',
+                                '${widget.valor.replaceAll('.', ',')}',
                                 style: TextStyle(
                                     color: Colors.green,
                                     fontSize: MediaWidth / 18),
@@ -144,14 +151,20 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                           ),
                           Row(
                             children: [
-                              Icon(
-                                  Icons.code,
-                                  color: Colors.black45, size: MediaWidth / 13),
-                              Text(
-                                ' ${widget.codDoProduto}',
+                              Padding(
+                                padding: const EdgeInsets.only(right: 3),
+                                child: Icon(
+                                    Icons.code,
+                                    color: Colors.black45, size: MediaWidth / 13),
+                              ),
+                              SelectableText(
+                                '${widget.codDoProduto}',
                                  style: TextStyle(
                                     color: Colors.black45,
                                     fontSize: MediaWidth / 18),
+                                onTap:(){
+                                  print('teste');
+                                },
                               ),
                             ],
                           )
@@ -173,6 +186,54 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 20),
+                          child:  Row(
+                            children: [
+                              Text('Ref: ',
+                                  style: TextStyle(
+                                      fontSize: MediaWidth / 22,
+                                      color: Colors.black45)),
+                              SelectableText(
+                                '${widget.codReferencia}',
+                                style: TextStyle(
+                                    fontSize: MediaWidth / 22,
+                                    color: Colors.black87),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10,top: 3),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Row(
+                            children: [
+                              Text('Estoque:',
+                                  style: TextStyle(
+                                      fontSize: MediaWidth / 22,
+                                      color: Colors.black45)),
+                              Text(
+                                ' ${widget.un.round()} ',
+                                style: TextStyle(
+                                    fontSize: MediaWidth / 22,
+                                    color: Colors.black87),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
                           child: Row(
                             children: [
                               Text('Familia: ',
@@ -198,30 +259,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10,top: 3),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Row(
-                            children: [
-                              Text('Estoque:',
-                                  style: TextStyle(
-                                      fontSize: MediaWidth / 22,
-                                      color: Colors.black45)),
-                              Text(
-                                ' ${widget.un} ',
-                                style: TextStyle(
-                                    fontSize: MediaWidth / 22,
-                                    color: Colors.black87),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10,top: 3),
                     child: Column(
@@ -246,6 +284,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                       ],
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10,top: 3),
                     child: Column(
@@ -254,12 +293,12 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                           padding: const EdgeInsets.only(top: 5),
                           child: Row(
                             children: [
-                              Text('Cód. Ref:',
+                              Text('Unid. Medida: ',
                                   style: TextStyle(
                                       fontSize: MediaWidth / 22,
                                       color: Colors.black45)),
                               Text(
-                                ' ${widget.codReferencia}',
+                                '${widget.unidadeDeMedida}',
                                 style: TextStyle(
                                     fontSize: MediaWidth / 22,
                                     color: Colors.black87),
@@ -271,98 +310,139 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                        bottom: BorderSide( //                   <--- left side
-                        color: Colors.black38,
-                        width: 1.0,
+                    padding: const EdgeInsets.only(left: 10, right: 10,top: 3),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Row(
+                            children: [
+                              Text('Líquido: ',
+                                  style: TextStyle(
+                                      fontSize: MediaWidth / 22,
+                                      color: Colors.black45)),
+                              Text(
+                                ' ${widget.custoLiquido.toStringAsFixed(2).toString().replaceAll('.', ',')}',
+                                style: TextStyle(
+                                    fontSize: MediaWidth / 22,
+                                    color: Colors.black87),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                     ),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 0),
-                            child: Row(
+                      ],
+                    ),
+                  ),Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10,top: 3),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Row(
+                            children: [
+                              Text('Cadastro: ',
+                                  style: TextStyle(
+                                      fontSize: MediaWidth / 22,
+                                      color: Colors.black45)),
+                              Text(
+                                ' ${widget.cadastroData}',
+                                style: TextStyle(
+                                    fontSize: MediaWidth / 22,
+                                    color: Colors.black87),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                              bottom: BorderSide( //                   <--- left side
+                              color: Colors.black26,
+                              width: 1.0,
+                              ),
+                            ),
+                           ),
+                            child: Column(
                               children: [
-                                Text('Tabela preço:',
-                                    style: TextStyle(
-                                        fontSize: MediaWidth / 22,
-                                        color: Colors.black45,
-                                    ),
-                                ),
-                                DropdownButton<String>(
-                                  icon: Padding(
-                                    padding: const EdgeInsets.only(left: 0),
-                                    child: const Icon(
-                                      Icons.arrow_drop_down_circle_outlined,
-                                      size: 20,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  underline: Container(
-                                    height: 0,
-                                  ),
-                                  value: widget.nomeTabeladePrecoQueForSim,
-                                  onChanged: (String string) => setState(() {}),
-                                  selectedItemBuilder: (BuildContext context) {
-                                    return widget.nomesTabelaDePreco
-                                        .map<Widget>((String item) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(left: 10),
-                                        child: Center(
-                                            child: Text(
-                                          item,
-                                          style: TextStyle(
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 0),
+                                  child: DropdownButton<String>(
+                                        icon: Padding(
+                                          padding: const EdgeInsets.only(left: 0),
+                                          child: const Icon(
+                                            Icons.arrow_drop_down_circle_outlined,
+                                            size: 20,
                                             color: Colors.black87,
-                                            fontSize: MediaWidth / 22,
                                           ),
-                                        )),
-                                      );
-                                    }).toList();
-                                  },
-                                  items: widget.nomesTabelaDePreco.map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                '$item',
+                                        ),
+                                        underline: Container(
+                                          height: 0,
+                                        ),
+                                        value: widget.nomeTabeladePrecoQueForSim,
+                                        onChanged: (String string) => setState(() {}),
+                                        selectedItemBuilder: (BuildContext context) {
+                                          return widget.nomesTabelaDePreco
+                                              .map<Widget>((String item) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(left: 10),
+                                              child: Center(
+                                                  child: Text(
+                                                item,
                                                 style: TextStyle(
-                                                    fontSize: MediaWidth / 22,
-                                                    fontWeight: FontWeight.normal,
+                                                  color: Colors.black87,
+                                                  fontSize: MediaWidth / 22,
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 5,
-                                                bottom: 5,
+                                              )),
+                                            );
+                                          }).toList();
+                                        },
+                                        items: widget.nomesTabelaDePreco.map((String item) {
+                                          return DropdownMenuItem<String>(
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text('$item', style: TextStyle(
+                                                          fontSize: MediaWidth / 22,
+                                                          fontWeight: FontWeight.normal,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      top: 5,
+                                                      bottom: 5,
+                                                  ),
+                                                  child: Container(
+                                                    height: 1,
+                                                    width: double.infinity,
+                                                    color: Colors.black12,
+                                                  ),
+                                                )
+                                              ],
                                             ),
-                                            child: Container(
-                                              height: 1,
-                                              width: double.infinity,
-                                              color: Colors.black12,
-                                            ),
-                                          )
-                                        ],
+                                            value: item,
+                                          );
+                                        }).toList(),
                                       ),
-                                      value: item,
-                                    );
-                                  }).toList(),
                                 ),
                               ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),

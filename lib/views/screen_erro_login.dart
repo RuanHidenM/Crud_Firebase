@@ -45,7 +45,7 @@ class _erroNoLogin extends State<ErroNoLogin>{
                         Column(
                           children: [
                             Icon(Icons.warning_amber_outlined, color: Colors.red, size: MediaWidth / 5,),
-                            Text('Problema no login', style: TextStyle(fontSize: 30),),
+                            Text('Problema no login', style: TextStyle(fontSize: MediaWidth /25),),
                           ],
                         ),
                         Padding(
@@ -53,7 +53,7 @@ class _erroNoLogin extends State<ErroNoLogin>{
                           child: Text('    O E-mail informado foi cadastrado em nosso sistema,'
                               'porém não foi encontrado no banco de dados, para a segurança dos demais usuarios, '
                               'este E-mail esta suspenso temporariamente, por favor entre'
-                              ' em contato com o suporte Mestre. ', style: TextStyle(fontSize: 19, color: Colors.black54),),
+                              ' em contato com o suporte Mestre. ', style: TextStyle(fontSize: MediaWidth / 25, color: Colors.black54),),
                         ),
                       ],
                     )
@@ -66,9 +66,9 @@ class _erroNoLogin extends State<ErroNoLogin>{
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 0, right: 10),
-                      child: Icon(Icons.attach_email_outlined, color: Colors.black54, size: 35),
+                      child: Icon(Icons.attach_email_outlined, color: Colors.black54, size: MediaWidth / 12),
                     ),
-                    Text('Suporte MESTRE', style: TextStyle(color: Colors.black54, fontSize: 25),),
+                    Text('Suporte Mestre', style: TextStyle(color: Colors.black54, fontSize: MediaWidth / 18),),
                   ],
                 ),
                 onTap: () {
@@ -80,9 +80,9 @@ class _erroNoLogin extends State<ErroNoLogin>{
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 0, right: 10),
-                      child: Icon(Icons.logout, color: Colors.black54, size: 35),
+                      child: Icon(Icons.logout, color: Colors.black54, size: MediaWidth / 12),
                     ),
-                    Text('Voltar para o login', style: TextStyle(color: Colors.black54, fontSize: 25),),
+                    Text('Voltar para o login', style: TextStyle(color: Colors.black54, fontSize: MediaWidth / 18),),
                   ],
                 ),
                 onTap: () {

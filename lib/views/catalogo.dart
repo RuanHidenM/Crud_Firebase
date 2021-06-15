@@ -17,7 +17,7 @@ class Catalogo extends StatefulWidget {
 
 class _catalogo extends State<Catalogo> {
   static String tag = '/catalogo';
-  get MediaHeiden => MediaQuery.of(context).size.height;
+  get MediaWdth => MediaQuery.of(context).size.width;
   var userLogado = FirebaseAuth.instance.currentUser;
   var snapshots;
   var empresasJson;
@@ -136,28 +136,26 @@ class _catalogo extends State<Catalogo> {
                 }
                 if (snapshot.data.docs.length == 0) {
                   return Center(child: Text('Nenhum Produtos Cadastrado!!'));
-                }
-
+                } ;
                 //TODO: Lista dos usuarios cadastrados.
                 return ListView.builder(
                     itemCount: snapshot.data.docs.length,
-                    itemBuilder: (BuildContext context, int i) {
+                    itemBuilder: (BuildContext context, int i) {//TODO: Busca apenas tabela de preco que for marcado com sim
                       var produtos = snapshot.data.docs[i];
-
                       var tabelaDePrecoPadrao = produtos['TABELASDEPRECO'].where((element) =>
                           element['Padrao'] == 'S',
                       );
 
                       var nomeTabeladePrecoQueForSim;
-                      final List<double> tabelaDePreco = List();  //TODO: Buscar apenas a tabela que estiver o padrão marcado como 'S'.
+                      final List<String> tabelaDePreco = List();  //TODO: Defini em um modelo 'TabelaDePreco', a tabela que foi buscado como sim.
                       for(Map<String, dynamic> element in tabelaDePrecoPadrao){
                         final TabelaDePreco tabeladepreco = TabelaDePreco(
                           element['Preco'],
                           element['Padrao'],
                           element['Nome'],
                         );
-                        tabelaDePreco.add(tabeladepreco.Preco);
-                        nomeTabeladePrecoQueForSim = 'R\$:${tabeladepreco.Preco.toString()} - ${tabeladepreco.Nome}';
+                        tabelaDePreco.add(tabeladepreco.Preco.toStringAsFixed(2));
+                        nomeTabeladePrecoQueForSim = '${tabeladepreco.Nome}: R\$ ${tabeladepreco.Preco.toStringAsFixed(2)}';
                       }
                       var valorDoProdutoQueForSim = tabelaDePreco.toString().replaceAll('[', '').replaceAll(']', '');
 
@@ -168,10 +166,9 @@ class _catalogo extends State<Catalogo> {
                           element['Padrao'],
                           element['Nome'],
                         );
-                        NomestabelaDePreco.add('R\$:${tabeladepreco.Preco} - ${tabeladepreco.Nome}');
+                        NomestabelaDePreco.add('${tabeladepreco.Nome}: R\$ ${tabeladepreco.Preco.toStringAsFixed(2)}');
                        // print('Formatação: ${tabeladepreco.Preco.toString()}');
                       }
-
                       //TODO: BASE64 IMG
                       // print('img base64 String: ${produtos['IMAGEM'][0]['Imagem']}');
                       // final decodedBytes = base64Decode(produtos['IMAGEM'][0]['Imagem'].toString());
@@ -219,7 +216,7 @@ class _catalogo extends State<Catalogo> {
                                                     Image.asset('cap.png'):
                                                     produtos['NOME'] == 'COMPUTADOR LIVA ZE INTEL WINDOWS ULN3350430W DUAL CORE N3350 4GB SSD 30GB HDMI USB REDE WINDOWS 10' ?
                                                     Image.asset('comp-live.png'):
-                                                    produtos['NOME'] == 'NOTEBOOK LENOVO 33015IKB I37020U4GB SSD 120GB' ?
+                                                    produtos['NOME'] == 'NOTEBOOK LENOVO B330-15IKBR INTEL CORE I3 7020U 4GB SSD 240GB 15.6 WINDOWS 10 HOME PRETO' ?
                                                     Image.asset('note-lenovo.png'):
                                                     produtos['NOME'] == 'NOTE ACER A315 I3 15.6 8GB SSD 240GB  W10' ?
                                                     Image.asset('note-acer.png') :
@@ -227,7 +224,7 @@ class _catalogo extends State<Catalogo> {
                                                       Icons.image_outlined,
                                                       //Icons.image_not_supported_outlined,
                                                       color: Colors.black12,
-                                                      size: MediaHeiden / 8,
+                                                      size: MediaWdth / 8,
                                                     ),
                                                 // TODO: Se a não tiver img, esse icon ser mostrado.
                                               ),
@@ -273,13 +270,13 @@ class _catalogo extends State<Catalogo> {
                                                               child: Icon(Icons.monetization_on, color: Colors.green, size: MediaQuery.of(context).size.height/ 40,),
                                                             ),
                                                             Text('R\$: ', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 50),),
-                                                            Text('${valorDoProdutoQueForSim}', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 45),),
+                                                            Text('${valorDoProdutoQueForSim.replaceAll('.', ',')}', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 45),),
                                                           ],
                                                         ),
                                                         Row(
                                                           children: [
                                                             Text('Estoque: ', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 50),),
-                                                            Text('${produtos['ESTOQUE'].toString()}',
+                                                            Text('${produtos['ESTOQUE'].round()}',
                                                               style: TextStyle(
                                                                color: Colors.black54
                                                               ),
@@ -304,14 +301,17 @@ class _catalogo extends State<Catalogo> {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => DetalhesDoItem(
                             nome: produtos['NOME'],
                             descricao: produtos['NOME'],
-                            un: produtos['ESTOQUE'].toString(),
+                            un: produtos['ESTOQUE'],
                             valor: valorDoProdutoQueForSim,
                             nomeFamilia:produtos['FAMILIA']['Nome'],
                             codReferencia:produtos['REFERENCIA'],
                             codDoProduto: produtos['CODIGO'],
                             codNCM: produtos['NCM'],
                             nomesTabelaDePreco: NomestabelaDePreco,
-                              nomeTabeladePrecoQueForSim: nomeTabeladePrecoQueForSim
+                            nomeTabeladePrecoQueForSim: nomeTabeladePrecoQueForSim,
+                            unidadeDeMedida : produtos['UNIDADEDEMEDIDA']['Nome'],
+                            custoLiquido: produtos['CUSTOLIQUIDO'],
+                            cadastroData: produtos['CADASTRODATA'],
                           )));
                         },
                       );

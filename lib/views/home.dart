@@ -91,7 +91,9 @@ class _homePage extends State<HomePage>{
                         return Column(
                           children: [
                             //Text(users['Empresas'].toString()),
-                            Text(users['Empresas'].toString()),
+                            Container(
+
+                            ),
                           ],
                         );
                       },

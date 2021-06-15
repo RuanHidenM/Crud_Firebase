@@ -27,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   String _connectionStatus = 'UnkNown';
   final Connectivity _connectivity = new Connectivity();
   StreamSubscription<ConnectivityResult>_connectivitySubscription;
+  get MediaWidth => MediaQuery.of(context).size.width;
 
   @override
   void initState() {
@@ -124,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                               child: Text(
                                                 'Login',
                                                 style: TextStyle(
-                                                    fontSize: 25,
+                                                    fontSize: MediaWidth / 18,
                                                     fontWeight: FontWeight.w500,
                                                     color: Color.fromRGBO(
                                                         3, 72, 102, 1)),
@@ -214,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               Expanded(
-                                flex: 2,
+                                flex: 1,
                                 child: Container(
                                   //color: Colors.green,
                                   child: Padding(
