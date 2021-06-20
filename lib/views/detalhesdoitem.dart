@@ -2,6 +2,7 @@ import 'package:crud_firebase/canvas/canvas_screen-login.dart';
 import 'package:crud_firebase/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DetalhesDoItem extends StatefulWidget {
   DetalhesDoItem(
@@ -49,6 +50,9 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
   get MediaWidth => MediaQuery.of(context).size.width;
 
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(

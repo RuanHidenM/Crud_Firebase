@@ -9,6 +9,7 @@ import 'package:crud_firebase/models/produto/tabeladepreco.dart';
 import 'package:crud_firebase/views/detalhesdoitem.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 class Catalogo extends StatefulWidget {
   @override
@@ -23,8 +24,15 @@ class _catalogo extends State<Catalogo> {
   var empresasJson;
   var CNPJDaEmpresaLogada = '';
   var varValordoProduto;
+  final _nomeProdutoFiltro = TextEditingController();
 
-  Future <List<String>> BuscandoProdutosDoUsuario() async {
+  @override
+  void initState(){
+    super.initState();
+    _nomeProdutoFiltro;
+  }
+
+  Future <List<String>> BuscandoProdutosDaEmpresa() async {
     await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
       CNPJDaEmpresaLogada = value;
     }));
@@ -39,13 +47,18 @@ class _catalogo extends State<Catalogo> {
   }
 
   _catalogo() {
-    BuscandoProdutosDoUsuario().then((value) => setState((){
+    BuscandoProdutosDaEmpresa().then((value) => setState((){
       snapshots = value;
     }));
   }
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    print(_nomeProdutoFiltro.text);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       //drawer:DrawerSide(),
       appBar: AppBar(
         shadowColor: Color.fromRGBO(36, 82, 108, 250),
@@ -89,18 +102,22 @@ class _catalogo extends State<Catalogo> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
                                 Row(
                                   children: [
-                                    Icon(
-                                      Icons.search,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
                                     Container(
                                       width: 250,
                                       height: 55,
                                       child: myTextField(
                                         titleName: 'Buscar Produtos',
+                                        descriptionName: '',
+                                        tamanhodoEdgeInsert: const EdgeInsets.all(1.0),
+                                        tamanhoDasLetrasImput: const TextStyle(fontSize: 14),
+                                        nomeDoComtrolador: _nomeProdutoFiltro
                                       ),
                                     ),
                                   ],
@@ -135,7 +152,7 @@ class _catalogo extends State<Catalogo> {
                   ));
                 }
                 if (snapshot.data.docs.length == 0) {
-                  return Center(child: Text('Nenhum Produtos Cadastrado!!'));
+                  return Center(child: Text('Nenhum Produto Cadastrado!'));
                 } ;
                 //TODO: Lista dos usuarios cadastrados.
                 return ListView.builder(
@@ -155,7 +172,7 @@ class _catalogo extends State<Catalogo> {
                           element['Nome'],
                         );
                         tabelaDePreco.add(tabeladepreco.Preco.toStringAsFixed(2));
-                        nomeTabeladePrecoQueForSim = '${tabeladepreco.Nome}: R\$ ${tabeladepreco.Preco.toStringAsFixed(2)}';
+                        nomeTabeladePrecoQueForSim = '${tabeladepreco.Nome}: R\$ ${tabeladepreco.Preco.toStringAsFixed(2).replaceAll('.', ',')}';
                       }
                       var valorDoProdutoQueForSim = tabelaDePreco.toString().replaceAll('[', '').replaceAll(']', '');
 
@@ -166,7 +183,7 @@ class _catalogo extends State<Catalogo> {
                           element['Padrao'],
                           element['Nome'],
                         );
-                        NomestabelaDePreco.add('${tabeladepreco.Nome}: R\$ ${tabeladepreco.Preco.toStringAsFixed(2)}');
+                        NomestabelaDePreco.add('${tabeladepreco.Nome}: R\$ ${tabeladepreco.Preco.toStringAsFixed(2).replaceAll('.', ',')}');
                        // print('Formatação: ${tabeladepreco.Preco.toString()}');
                       }
                       //TODO: BASE64 IMG

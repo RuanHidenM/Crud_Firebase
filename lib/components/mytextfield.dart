@@ -1,19 +1,23 @@
+
 import 'package:flutter/material.dart';
 
 Widget myTextField
 ({
-  @required String titleName,                 //TODO:Nome do campo.                                                         //TODO:titleName: 'name',
-  @required String descriptionName,           //TODO:Descrição do campo.                                                    //TODO:descriptionName: 'Enter with your name',
-  Function changeTypeName,                    //TODO:(text){buscaUser.name = text;},                                        //TODO:changeTypeName: (text){buscaUser.name = text;},
-  TextInputType typeKeyBoard,                 //TODO:TextInputType.emailAddress,:Tipo do teclado do campo.                                              //TODO:typeKeyBoard: TextInputType.name,
-  TextEditingController nomeDoComtrolador,    //TODO:Nome do comtrolador.                                                   //TODO:nomeDoComtrolador: _nameController,
-  TextTipeMask,                               //TODO:Mascara que deve ser printada no textfield, pode ser passada com null  //TODO:TextTipeMask: null,
+  @required String titleName,                                                     //TODO:Nome do campo.                                                         //TODO:titleName: 'name',
+  @required String descriptionName,                                               //TODO:Descrição do campo.                                                    //TODO:descriptionName: 'Enter with your name',
+  Function changeTypeName,                                                        //TODO:(text){buscaUser.name = text;},                                        //TODO:changeTypeName: (text){buscaUser.name = text;},
+  TextInputType typeKeyBoard,                                                     //TODO:TextInputType.emailAddress,:Tipo do teclado do campo.                                              //TODO:typeKeyBoard: TextInputType.name,
+  TextEditingController nomeDoComtrolador,                                        //TODO:Nome do comtrolador.                                                   //TODO:nomeDoComtrolador: _nameController,
+  TextTipeMask,                                                                   //TODO:Mascara que deve ser printada no textfield, pode ser passada com null  //TODO:TextTipeMask: null,
   Color colorTextField = Colors.white,
-  bool obscureText = false,                   //TODO:Usado em campos de senha
+  bool obscureText = false,                                                       //TODO:Usado em campos de senha
+  EdgeInsets tamanhodoEdgeInsert = const EdgeInsets.all(4.0),
+  TextStyle tamanhoDasLetrasImput = const TextStyle(fontSize: 16),//Todo:Tamanho do padding interno do imput
+
 }) {
   return Container(
     child: Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: tamanhodoEdgeInsert,
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -32,10 +36,14 @@ Widget myTextField
           child: TextField(
             cursorColor: Color.fromRGBO(74, 184, 239, 1),
             onChanged: changeTypeName,
+
+            style: tamanhoDasLetrasImput,
+
             inputFormatters: TextTipeMask,
             keyboardType: typeKeyBoard,
             controller: nomeDoComtrolador,
             obscureText: obscureText,
+
             decoration: InputDecoration(
               border: InputBorder.none,//TODO:Remove a borda padrão do textField.
               labelStyle: TextStyle(

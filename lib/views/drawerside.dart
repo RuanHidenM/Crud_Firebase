@@ -19,21 +19,23 @@ class DrawerSide extends StatefulWidget {
 
 class _drawerSide extends State<DrawerSide> {
   get MediaHeight => MediaQuery.of(context).size.height;
-
   var userLogado = FirebaseAuth.instance.currentUser;
-
   String _connectionStatus = 'UnkNown';
-
   final Connectivity _connectivity = new Connectivity();
+  var nomeEmpresa;
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
+  _drawerSide() {
+    BuscandoNomeDoUsuario().then((valor) => setState(() {
+      nomeEmpresa = valor;
+    }));
+  }
 
   Future<Null> initConnectivity() async {
     String connectionStatus;
     _connectionStatus = (await _connectivity.checkConnectivity().toString());
     setState(() {_connectionStatus = connectionStatus;});
   }
-
   void initState() {
     super.initState();
     //TODO: Verifica o status da conecção
@@ -119,9 +121,6 @@ class _drawerSide extends State<DrawerSide> {
 
                                         var maskCNPJ = new MaskTextInputFormatter(mask: '##.###.###/####-##', filter:  { "#": RegExp(r'[0-9]') });
 
-                                        // print(empresa.cnpj);
-                                        // var empresaCnpjAplicadoMascara = maskCNPJ.maskText(empresa.cnpj) ;
-                                        // print('CNPJ: ${empresaCnpjAplicadoMascara}');
                                         return Padding(
                                           padding: const EdgeInsets.only(
                                               top: 20, left: 7),
@@ -138,16 +137,17 @@ class _drawerSide extends State<DrawerSide> {
                                                     fontSize: MediaHeight / 62),
                                               ),
                                               Text(
-                                                '${userLogado.email.toString()}',
+                                                //'${userLogado.email.toString()}',
+                                                '${nomeEmpresa.toString()}',
                                                 style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: MediaHeight / 65),
+                                                    fontSize: MediaHeight / 62),
                                               ),
                                               Text(
                                                 '${maskCNPJ.maskText(empresa.cnpj)}',
                                                 style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: MediaHeight / 65),
+                                                    fontSize: MediaHeight / 62),
                                               ),
                                               Row(
                                                 mainAxisAlignment:

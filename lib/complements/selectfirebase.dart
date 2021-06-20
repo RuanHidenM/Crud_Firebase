@@ -8,11 +8,14 @@ import 'package:firebase_database/firebase_database.dart';
 final String userLogadoEmail = FirebaseAuth.instance.currentUser.email.toString();
 var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
 var empresasJson;
+var caixaEBancoJson;
+var caixaEBancoJsonLength;
 var prod;
 var produtosDoUsuario;
 var valorPadraoDoProduto;
 final double valorDoProdutoQueForSim = 0;
 var tabelaPrecoJsonlength;
+var CNPJDaEmpresaLogada = '';
 
 Future<List<Empresa>> BuscandoEmpresaPadraoDoUsuario() async {
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
@@ -30,6 +33,11 @@ Future<List<Empresa>> BuscandoEmpresaPadraoDoUsuario() async {
   List<Empresa> EmpresaQueForTrue = empresas.where((element) => element.logada == true).toList();
 
   return EmpresaQueForTrue;
+}
+
+Future<String> BuscandoNomeDoUsuario() async {
+  empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
+  return empresasJson['Nome'];
 }
 
 Future<List<String>> BuscandoEmpresasDoUsuario() async {
@@ -84,6 +92,32 @@ Future<String> BuscandoCNPJdaEmpresaLogada () async{
     }
   }
   return nomesEmpresas.toString().replaceAll("[", "").replaceAll("]", "");
+}
+
+Future<double> BuscandoValorTotalCaixaEBanco () async{
+  await BuscandoCNPJdaEmpresaLogada().then((value) =>
+    CNPJDaEmpresaLogada = value,
+  );
+
+  caixaEBancoJsonLength = await FirebaseFirestore.instance
+      .collection('Tenant')
+      .doc('4c0356cd-c4f7-4901-b247-63e400d56085')
+      .collection('Empresas')
+      .doc(CNPJDaEmpresaLogada.toString())
+      .collection('CaixaBanco').get().then((value) => value);
+
+  caixaEBancoJson = await FirebaseFirestore.instance
+      .collection('Tenant')
+      .doc('4c0356cd-c4f7-4901-b247-63e400d56085')
+      .collection('Empresas')
+      .doc(CNPJDaEmpresaLogada.toString())
+      .collection('CaixaBanco').get().then((value) => value.docs);
+
+  double valortotal = 0;
+  for(int i = 0; caixaEBancoJsonLength.docs.length > i; i++){
+    valortotal = valortotal + caixaEBancoJson[i]['SALDO'];
+  }
+  return valortotal;
 }
 
 
