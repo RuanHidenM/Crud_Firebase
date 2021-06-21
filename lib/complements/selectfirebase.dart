@@ -16,6 +16,7 @@ var valorPadraoDoProduto;
 final double valorDoProdutoQueForSim = 0;
 var tabelaPrecoJsonlength;
 var CNPJDaEmpresaLogada = '';
+var tenanteIDDoUsuarioLogado = '';
 
 Future<List<Empresa>> BuscandoEmpresaPadraoDoUsuario() async {
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
@@ -33,6 +34,28 @@ Future<List<Empresa>> BuscandoEmpresaPadraoDoUsuario() async {
   List<Empresa> EmpresaQueForTrue = empresas.where((element) => element.logada == true).toList();
 
   return EmpresaQueForTrue;
+}
+
+Future<String> BuscandoTenantIdDoUsuarioLogado() async {
+  empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
+ // final List<Empresa> empresas = List();
+  var tenanteDaEmpresaLogada;
+  for(Map<String, dynamic> element in empresasJson['Empresas']){
+    final Empresa empresa = Empresa(
+      element['TenantId'],
+      element['Cnpj'],
+      element['Logada'],
+      element['Fantasia'],
+    );
+    //print(empresa.tenantId);
+    if(empresa.logada == true){
+        tenanteDaEmpresaLogada = empresa.tenantId;
+    }
+  }
+  //TODO: Buscando apenas os valores que tem tipo do do valor informado.
+  //List<Empresa> EmpresaQueForTrue = empresas.where((element) => element.logada == true).toList();
+  return tenanteDaEmpresaLogada;
+
 }
 
 Future<String> BuscandoNomeDoUsuario() async {
@@ -98,17 +121,19 @@ Future<double> BuscandoValorTotalCaixaEBanco () async{
   await BuscandoCNPJdaEmpresaLogada().then((value) =>
     CNPJDaEmpresaLogada = value,
   );
-
+ await BuscandoTenantIdDoUsuarioLogado().then((value) =>
+ tenanteIDDoUsuarioLogado = value
+ );
   caixaEBancoJsonLength = await FirebaseFirestore.instance
       .collection('Tenant')
-      .doc('4c0356cd-c4f7-4901-b247-63e400d56085')
+      .doc(tenanteIDDoUsuarioLogado)
       .collection('Empresas')
       .doc(CNPJDaEmpresaLogada.toString())
       .collection('CaixaBanco').get().then((value) => value);
 
   caixaEBancoJson = await FirebaseFirestore.instance
       .collection('Tenant')
-      .doc('4c0356cd-c4f7-4901-b247-63e400d56085')
+      .doc(tenanteIDDoUsuarioLogado)
       .collection('Empresas')
       .doc(CNPJDaEmpresaLogada.toString())
       .collection('CaixaBanco').get().then((value) => value.docs);

@@ -55,9 +55,12 @@ class _caixasEBancos extends State<CaixaEBanco> {
     await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
           CNPJDaEmpresaLogada = value;
         }));
+    await BuscandoTenantIdDoUsuarioLogado().then((value) => setState((){
+      tenanteIDDoUsuarioLogado = value;
+    }));
     snapshotsCaixaEBanco = await FirebaseFirestore.instance
           .collection('Tenant')
-          .doc('4c0356cd-c4f7-4901-b247-63e400d56085')
+          .doc(tenanteIDDoUsuarioLogado.toString())
           .collection('Empresas')
           .doc(CNPJDaEmpresaLogada.toString())
           .collection('CaixaBanco')
@@ -69,9 +72,12 @@ class _caixasEBancos extends State<CaixaEBanco> {
     await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
       CNPJDaEmpresaLogada = value;
     }));
+    await BuscandoTenantIdDoUsuarioLogado().then((value) => setState((){
+      tenanteIDDoUsuarioLogado = value;
+    }));
     snapshotsCaixa = await FirebaseFirestore.instance
         .collection('Tenant')
-        .doc('4c0356cd-c4f7-4901-b247-63e400d56085')
+        .doc(tenanteIDDoUsuarioLogado.toString())
         .collection('Empresas')
         .doc(CNPJDaEmpresaLogada.toString())
         .collection('CaixaBanco').where('TIPO', isEqualTo: 1)
@@ -83,9 +89,12 @@ class _caixasEBancos extends State<CaixaEBanco> {
     await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
       CNPJDaEmpresaLogada = value;
     }));
+    await BuscandoTenantIdDoUsuarioLogado().then((value) => setState((){
+      tenanteIDDoUsuarioLogado = value;
+    }));
     snapshotsBanco = await FirebaseFirestore.instance
         .collection('Tenant')
-        .doc('4c0356cd-c4f7-4901-b247-63e400d56085')
+        .doc(tenanteIDDoUsuarioLogado.toString())
         .collection('Empresas')
         .doc(CNPJDaEmpresaLogada.toString())
         .collection('CaixaBanco').where('TIPO', isEqualTo: 2)
@@ -153,7 +162,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Total Investido',
+                                  'Total Investidoss',
                                   style: TextStyle(
                                       color: Colors.black45,
                                       fontSize: MediaWidth / 24),
@@ -215,61 +224,64 @@ class _caixasEBancos extends State<CaixaEBanco> {
                   )),
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                          child: BottonTitleIconTipoFiltroCaixaeBanxo(
-                              'Caixa',
-                              Icons.move_to_inbox_outlined,
-                              selectedCaixa
-                          ),
-                        onTap:(){
-                            //Todo: CAIXA
-                          if(selectedCaixa == false){
-                            setState(() {
-                              selectedCaixa = true;
-                              selectedBanco = false;
-                              _caixasEBancos();
-                            });
-                          }else{
-                            setState(() {
-                              selectedCaixa = false;
-                              _caixasEBancos();
-                            });
-                          }
-                        } ,
-                      ),
-                      GestureDetector(
-                          child: BottonTitleIconTipoFiltroCaixaeBanxo(
-                              'Banco',
-                              Icons.account_balance_outlined,
-                              selectedBanco
-                          ),
-                        onTap: (){
-                           if(selectedBanco == false){
-                             setState(() {
-                               selectedBanco = true;
-                               selectedCaixa = false;
-                               _caixasEBancos();
-                             });
-                           }else{
-                             setState(() {
-                               selectedBanco = false;
-                               _caixasEBancos();
-                             });
-                           }
-                        },
-                      ),
-                    ],
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                            child: BottonTitleIconTipoFiltroCaixaeBanxo(
+                                'Caixa',
+                                Icons.move_to_inbox_outlined,
+                                selectedCaixa
+                            ),
+                          onTap:(){
+                              //Todo: CAIXA
+                            if(selectedCaixa == false){
+                              setState(() {
+                                selectedCaixa = true;
+                                selectedBanco = false;
+                                _caixasEBancos();
+                              });
+                            }else{
+                              setState(() {
+                                selectedCaixa = false;
+                                _caixasEBancos();
+                              });
+                            }
+                          } ,
+                        ),
+                        GestureDetector(
+                            child: BottonTitleIconTipoFiltroCaixaeBanxo(
+                                'Banco',
+                                Icons.account_balance_outlined,
+                                selectedBanco
+                            ),
+                          onTap: (){
+                             if(selectedBanco == false){
+                               setState(() {
+                                 selectedBanco = true;
+                                 selectedCaixa = false;
+                                 _caixasEBancos();
+                               });
+                             }else{
+                               setState(() {
+                                 selectedBanco = false;
+                                 _caixasEBancos();
+                               });
+                             }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -363,8 +375,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
                                                 //color:Colors.red,
                                                 child: Text(
                                                   '${caixasebancos['NOME']}',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                  overflow: TextOverflow.fade,
                                                   style: TextStyle(
                                                     fontSize:
                                                         MediaQuery.of(context)

@@ -2,6 +2,7 @@ import 'dart:io' as Io;
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crud_firebase/complements/convertereais.dart';
 import 'package:crud_firebase/complements/selectfirebase.dart';
 import 'package:crud_firebase/components/mytextfield.dart';
 import 'package:crud_firebase/models/produto/familia.dart';
@@ -10,6 +11,7 @@ import 'package:crud_firebase/views/detalhesdoitem.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'dart:typed_data';
 
 class Catalogo extends StatefulWidget {
   @override
@@ -18,9 +20,10 @@ class Catalogo extends StatefulWidget {
 
 class _catalogo extends State<Catalogo> {
   static String tag = '/catalogo';
-  get MediaWdth => MediaQuery.of(context).size.width;
+  get MediaWidth => MediaQuery.of(context).size.width;
   var userLogado = FirebaseAuth.instance.currentUser;
   var snapshots;
+  var tenanteIDDoUsuarioLogado;
   var empresasJson;
   var CNPJDaEmpresaLogada = '';
   var varValordoProduto;
@@ -32,31 +35,38 @@ class _catalogo extends State<Catalogo> {
     _nomeProdutoFiltro;
   }
 
+  _catalogo() {
+    BuscandoProdutosDaEmpresa().then((value) => setState((){
+      snapshots = value;
+    }));
+
+    // BuscandoTenantIdDoUsuarioLogado().then((value) => setState((){
+    //   tenanteIDDoUsuarioLogado = value;
+    // }));
+  }
+
   Future <List<String>> BuscandoProdutosDaEmpresa() async {
+    await BuscandoTenantIdDoUsuarioLogado().then((value) => tenanteIDDoUsuarioLogado = value);
+
     await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
       CNPJDaEmpresaLogada = value;
     }));
 
     snapshots = await FirebaseFirestore.instance
         .collection('Tenant')
-        .doc('4c0356cd-c4f7-4901-b247-63e400d56085')
+        .doc(tenanteIDDoUsuarioLogado.toString())
         .collection('Empresas')
         .doc(CNPJDaEmpresaLogada.toString())
         .collection('Produtos').snapshots();
     return snapshots;
   }
 
-  _catalogo() {
-    BuscandoProdutosDaEmpresa().then((value) => setState((){
-      snapshots = value;
-    }));
-  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    print(_nomeProdutoFiltro.text);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       //drawer:DrawerSide(),
@@ -172,7 +182,7 @@ class _catalogo extends State<Catalogo> {
                           element['Nome'],
                         );
                         tabelaDePreco.add(tabeladepreco.Preco.toStringAsFixed(2));
-                        nomeTabeladePrecoQueForSim = '${tabeladepreco.Nome}: R\$ ${tabeladepreco.Preco.toStringAsFixed(2).replaceAll('.', ',')}';
+                        nomeTabeladePrecoQueForSim = '${tabeladepreco.Nome}: R\$ ${ConverteReais(tabeladepreco.Preco)}';
                       }
                       var valorDoProdutoQueForSim = tabelaDePreco.toString().replaceAll('[', '').replaceAll(']', '');
 
@@ -183,21 +193,17 @@ class _catalogo extends State<Catalogo> {
                           element['Padrao'],
                           element['Nome'],
                         );
-                        NomestabelaDePreco.add('${tabeladepreco.Nome}: R\$ ${tabeladepreco.Preco.toStringAsFixed(2).replaceAll('.', ',')}');
+                        NomestabelaDePreco.add('${tabeladepreco.Nome}: R\$ ${ConverteReais(tabeladepreco.Preco)}');
                        // print('Formatação: ${tabeladepreco.Preco.toString()}');
                       }
                       //TODO: BASE64 IMG
-                      // print('img base64 String: ${produtos['IMAGEM'][0]['Imagem']}');
-                      // final decodedBytes = base64Decode(produtos['IMAGEM'][0]['Imagem'].toString());
-                      // print('Bytes: $decodedBytes');
-                      // var file = Io.File("decodedBytes.png");
-                      // print('File: ${file}');
-
+                      Uint8List bytesImg = base64Decode(produtos['IMAGEM'].toString().replaceAll('[', '').replaceAll(']', ''));
+                      print('tipo $i, valor:$bytesImg');
                       return GestureDetector(
                         child: Padding(
                           padding: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
                           child: Container(
-                            height: 120,
+                            height: MediaWidth / 3,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
@@ -223,30 +229,26 @@ class _catalogo extends State<Catalogo> {
                                     children: [
                                       Expanded(
                                           flex: 3,
-                                          child: Container(
-                                            height: 100,
-                                            //color: Colors.yellow,
-                                            child: Center(
-                                              child: ClipRRect(
-                                                child:
-                                                    produtos['NOME'] == 'CAPAC. ELET. IMPORT. -  1.000 MF  X   16 V - RADIAL' ?
-                                                    Image.asset('cap.png'):
-                                                    produtos['NOME'] == 'COMPUTADOR LIVA ZE INTEL WINDOWS ULN3350430W DUAL CORE N3350 4GB SSD 30GB HDMI USB REDE WINDOWS 10' ?
-                                                    Image.asset('comp-live.png'):
-                                                    produtos['NOME'] == 'NOTEBOOK LENOVO B330-15IKBR INTEL CORE I3 7020U 4GB SSD 240GB 15.6 WINDOWS 10 HOME PRETO' ?
-                                                    Image.asset('note-lenovo.png'):
-                                                    produtos['NOME'] == 'NOTE ACER A315 I3 15.6 8GB SSD 240GB  W10' ?
-                                                    Image.asset('note-acer.png') :
-                                                    Icon(
-                                                      Icons.image_outlined,
-                                                      //Icons.image_not_supported_outlined,
-                                                      color: Colors.black12,
-                                                      size: MediaWdth / 8,
-                                                    ),
-                                                // TODO: Se a não tiver img, esse icon ser mostrado.
-                                              ),
-                                            ),
-                                          )),
+                                          child:
+                                              bytesImg.toString() != '[]'
+                                                  ?
+                                                    Container(
+                                                      height: 100,
+                                                        decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                                image: MemoryImage(bytesImg)
+                                                            )
+                                                        )
+                                                    )
+                                                  :
+                                              Icon(
+                                                  Icons.image_not_supported_outlined,
+                                                  //Icons.image_not_supported_outlined,
+                                                  color: Colors.black12,
+                                                  size: MediaWidth / 5,
+                                                ),
+
+                                      ),
                                       Expanded(
                                           flex: 7,
                                           child: Padding(
@@ -287,11 +289,15 @@ class _catalogo extends State<Catalogo> {
                                                               child: Icon(Icons.monetization_on, color: Colors.green, size: MediaQuery.of(context).size.height/ 40,),
                                                             ),
                                                             Text('R\$: ', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 50),),
-                                                            Text('${valorDoProdutoQueForSim.replaceAll('.', ',')}', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 45),),
+                                                            Text('${ConverteReais(valorDoProdutoQueForSim)}', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 45),),
                                                           ],
                                                         ),
                                                         Row(
                                                           children: [
+                                                            Padding(
+                                                            padding: const EdgeInsets.only(right: 5),
+                                                            child: Icon(Icons.widgets, color: Color.fromRGBO(36, 82, 108, 60), size: MediaQuery.of(context).size.height/ 42,),
+                                                          ),
                                                             Text('Estoque: ', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 50),),
                                                             Text('${produtos['ESTOQUE'].round()}',
                                                               style: TextStyle(
@@ -316,6 +322,7 @@ class _catalogo extends State<Catalogo> {
                         ),
                         onDoubleTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => DetalhesDoItem(
+                            imgProduto: bytesImg,
                             nome: produtos['NOME'],
                             descricao: produtos['NOME'],
                             un: produtos['ESTOQUE'],

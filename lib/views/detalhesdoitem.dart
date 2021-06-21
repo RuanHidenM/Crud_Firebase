@@ -1,8 +1,14 @@
+import 'dart:ffi';
+import 'dart:typed_data';
+
 import 'package:crud_firebase/canvas/canvas_screen-login.dart';
+import 'package:crud_firebase/complements/convertedata.dart';
+import 'package:crud_firebase/complements/convertereais.dart';
 import 'package:crud_firebase/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class DetalhesDoItem extends StatefulWidget {
   DetalhesDoItem(
@@ -19,7 +25,8 @@ class DetalhesDoItem extends StatefulWidget {
       this.codNCM,
       this.unidadeDeMedida,
       this.custoLiquido,
-        this.cadastroData
+        this.cadastroData,
+        this.imgProduto
       });
 
   final String nome;
@@ -35,6 +42,7 @@ class DetalhesDoItem extends StatefulWidget {
   final String unidadeDeMedida;
   final double custoLiquido;
   final String cadastroData;
+  final Uint8List imgProduto;
 
 
 
@@ -54,6 +62,10 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
       DeviceOrientation.portraitUp,
     ]);
     // TODO: implement build
+
+    //Todo Ruan
+
+
     return Scaffold(
         appBar: AppBar(
           shadowColor: Color.fromRGBO(36, 82, 108, 250),
@@ -88,24 +100,23 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                             child: Container(
                               //color: Colors.blue,
                               child: ClipRRect(
-                                child: widget.nome ==
-                                        'CAPAC. ELET. IMPORT. -  1.000 MF  X   16 V - RADIAL'
-                                    ? Image.asset('cap.png')
-                                    : widget.nome ==
-                                            'COMPUTADOR LIVA ZE INTEL WINDOWS ULN3350430W DUAL CORE N3350 4GB SSD 30GB HDMI USB REDE WINDOWS 10'
-                                        ? Image.asset('comp-live.png')
-                                        : widget.nome ==
-                                                'NOTEBOOK LENOVO B330-15IKBR INTEL CORE I3 7020U 4GB SSD 240GB 15.6 WINDOWS 10 HOME PRETO'
-                                            ? Image.asset('note-lenovo.png')
-                                            : widget.nome ==
-                                                    'NOTE ACER A315 I3 15.6 8GB SSD 240GB  W10'
-                                                ? Image.asset('note-acer.png')
-                                                : Icon(
-                                                    Icons.image_outlined,
-                                                    //Icons.image_not_supported_outlined,
-                                                    color: Colors.black12,
-                                                    size: MediaWidth / 2,
-                                                  ),
+                                child:  widget.imgProduto.toString() != '[]'
+                                    ?
+                                Container(
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: MemoryImage(widget.imgProduto)
+                                        )
+                                    )
+                                )
+                                    :
+                                Icon(
+                                  Icons.image_not_supported_outlined,
+                                  //Icons.image_not_supported_outlined,
+                                  color: Colors.black12,
+                                  size: MediaWidth / 2,
+                                ),
                                 // TODO: Se a não tiver img, esse icon ser mostrado.
                               ),
                             ),
@@ -146,7 +157,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                                 size: MediaWidth / 14,
                               ),
                               Text(
-                                '${widget.valor.replaceAll('.', ',')}',
+                                '${ConverteReais(widget.valor)}',
                                 style: TextStyle(
                                     color: Colors.green,
                                     fontSize: MediaWidth / 18),
@@ -213,7 +224,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 5),
+                          padding: const EdgeInsets.only(top: 7),
                           child: Row(
                             children: [
                               Text('Estoque:',
@@ -237,7 +248,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 5),
+                          padding: const EdgeInsets.only(top: 7),
                           child: Row(
                             children: [
                               Text('Familia: ',
@@ -269,7 +280,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 5),
+                          padding: const EdgeInsets.only(top: 7),
                           child: Row(
                             children: [
                               Text('NCM :',
@@ -294,7 +305,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 5),
+                          padding: const EdgeInsets.only(top: 7),
                           child: Row(
                             children: [
                               Text('Unid. Medida: ',
@@ -318,7 +329,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 5),
+                          padding: const EdgeInsets.only(top: 7),
                           child: Row(
                             children: [
                               Text('Líquido: ',
@@ -326,7 +337,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                                       fontSize: MediaWidth / 22,
                                       color: Colors.black45)),
                               Text(
-                                ' ${widget.custoLiquido.toStringAsFixed(2).toString().replaceAll('.', ',')}',
+                                ' ${ConverteReais(widget.custoLiquido)}',
                                 style: TextStyle(
                                     fontSize: MediaWidth / 22,
                                     color: Colors.black87),
@@ -336,23 +347,27 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                         ),
                       ],
                     ),
-                  ),Padding(
+                  ),
+                  Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10,top: 3),
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 5),
+                          padding: const EdgeInsets.only(top: 7),
                           child: Row(
                             children: [
                               Text('Cadastro: ',
                                   style: TextStyle(
                                       fontSize: MediaWidth / 22,
-                                      color: Colors.black45)),
+                                      color: Colors.black45
+                                  ),
+                              ),
                               Text(
-                                ' ${widget.cadastroData}',
+                                ' ${ConverteData(widget.cadastroData)}',
                                 style: TextStyle(
                                     fontSize: MediaWidth / 22,
-                                    color: Colors.black87),
+                                    color: Colors.black87,
+                                ),
                               ),
                             ],
                           ),
