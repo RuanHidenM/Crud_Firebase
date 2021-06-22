@@ -151,13 +151,8 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                           //Text('R\$:', style: TextStyle(color: Colors.green, fontSize: MediaWidth/18),),
                           Row(
                             children: [
-                              Icon(
-                                Icons.attach_money,
-                                color: Colors.green,
-                                size: MediaWidth / 14,
-                              ),
                               Text(
-                                '${ConverteReais(widget.valor)}',
+                                'R\$: ${ConverteReais(widget.valor)}',
                                 style: TextStyle(
                                     color: Colors.green,
                                     fontSize: MediaWidth / 18),
@@ -166,23 +161,15 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                           ),
                           Row(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 3),
-                                child: Icon(
-                                    Icons.code,
-                                    color: Colors.black45, size: MediaWidth / 13),
-                              ),
-                              SelectableText(
-                                '${widget.codDoProduto}',
-                                 style: TextStyle(
-                                    color: Colors.black45,
-                                    fontSize: MediaWidth / 18),
-                                onTap:(){
-                                  print('teste');
-                                },
+                              Text('Estoque: ', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 50),),
+                              Text('${widget.un.round()}',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                  fontSize: MediaWidth / 18
+                                ),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -227,12 +214,12 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                           padding: const EdgeInsets.only(top: 7),
                           child: Row(
                             children: [
-                              Text('Estoque:',
+                              Text('Cód Prod:',
                                   style: TextStyle(
                                       fontSize: MediaWidth / 22,
                                       color: Colors.black45)),
                               Text(
-                                ' ${widget.un.round()} ',
+                                ' ${widget.codDoProduto} ',
                                 style: TextStyle(
                                     fontSize: MediaWidth / 22,
                                     color: Colors.black87),
@@ -308,7 +295,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                           padding: const EdgeInsets.only(top: 7),
                           child: Row(
                             children: [
-                              Text('Unid. Medida: ',
+                              Text('Un Medida: ',
                                   style: TextStyle(
                                       fontSize: MediaWidth / 22,
                                       color: Colors.black45)),

@@ -1,8 +1,6 @@
 
-import 'package:crud_firebase/components/alert/alert_small_title_icon.dart';
 import 'package:crud_firebase/firebase/firebase_authentication.dart';
 import 'package:crud_firebase/models/empresas.dart';
-import 'package:crud_firebase/views/catalogo.dart';
 import 'package:crud_firebase/views/home.dart';
 import 'package:crud_firebase/views/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,12 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(
+      MyApp()
+  );
 }
 
 //TODO: CRUD Basico para testar o firebase, Imprimindo, criando, editando, excluindo.
@@ -46,13 +45,13 @@ class AuthenticationWrapper extends StatefulWidget{
 
 class _authenticationWrapper extends State<AuthenticationWrapper> {
 
-
-
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
     if (firebaseUser != null) {
+      print('--HomePage: $firebaseUser');
         return HomePage();
     }
+    print('-- LoginPage: $firebaseUser');
     return LoginPage();
   }
 }

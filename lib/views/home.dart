@@ -19,8 +19,7 @@ class _homePage extends State<HomePage>{
   var resultado;
   var Empresas2;
   //var empresas = new List<Empresa>();
-  final String userLogadoEmail = FirebaseAuth.instance.currentUser.email.toString();
-
+  var userLogadoEmail;
 
   var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
 
@@ -28,7 +27,8 @@ class _homePage extends State<HomePage>{
   void initState(){
     super.initState();
     setState(() {
-        VerificaEmailLogadoComEmailCadastrado(userLogadoEmail);
+      userLogadoEmail = FirebaseAuth.instance.currentUser.email.toString();
+         VerificaEmailLogadoComEmailCadastrado(userLogadoEmail);
          //snapshots = dbUsuario.where('Email', isEqualTo: userLogadoEmail).snapshots();
          snapshots = dbUsuario.snapshots();
         //BuscandoEmpresaPadraoDoUsuario().then((empresas) => print('Lista de empresas $empresas'));
@@ -68,37 +68,28 @@ class _homePage extends State<HomePage>{
           children: [
             Expanded(
               flex: 1,
-                child: StreamBuilder(
-                  stream:  snapshots,
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot,
-                  ){
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator(
-                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.orange),));
-                    }
-                    if (snapshot.data.docs.length == 0) {
-                      return Center(child: Text('Nenhum Caixas e Bancos Cadastrado!!'));
-                    }
-                    return ListView.builder(
-                      itemCount: snapshot.data.docs.length,
-                      itemBuilder: (BuildContext context, int i) {
-                        var users = snapshot.data.docs[i];
-                        return Column(
-                          children: [
-                            //Text(users['Empresas'].toString()),
-                            Container(
-
+                child: Container(
+                  child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'DASHBOARD',
+                            style: TextStyle(
+                              color: Colors.black12,
+                              fontSize: MediaWidth / 10
                             ),
-                          ],
-                        );
-                      },
-                    );
-                  },
+                          ),
+                          Text(
+                            'O dashboard esta vazio',
+                            style: TextStyle(
+                              color: Colors.black12,
+                              fontSize: MediaWidth / 25
+                            ),
+                          ),
+                        ],
+                      ),
+                  ),
                 )
             )
           ],

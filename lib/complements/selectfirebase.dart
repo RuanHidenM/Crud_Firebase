@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:crud_firebase/models/empresas.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-final String userLogadoEmail = FirebaseAuth.instance.currentUser.email.toString();
+String userLogadoEmail;
 var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
 var empresasJson;
 var caixaEBancoJson;
@@ -18,7 +18,15 @@ var tabelaPrecoJsonlength;
 var CNPJDaEmpresaLogada = '';
 var tenanteIDDoUsuarioLogado = '';
 
+
+Future<String> BuscandoEmailDoUsuarioLogado() async {
+  //Todo: Buscando o E-MAIL do usuario logado atual
+  var retornoDoEmailLogado = await FirebaseAuth.instance.currentUser.email.toString();
+  return retornoDoEmailLogado;
+}
+
 Future<List<Empresa>> BuscandoEmpresaPadraoDoUsuario() async {
+  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
   final List<Empresa> empresas = List();
   for(Map<String, dynamic> element in empresasJson['Empresas']){
@@ -37,6 +45,7 @@ Future<List<Empresa>> BuscandoEmpresaPadraoDoUsuario() async {
 }
 
 Future<String> BuscandoTenantIdDoUsuarioLogado() async {
+  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
  // final List<Empresa> empresas = List();
   var tenanteDaEmpresaLogada;
@@ -59,11 +68,13 @@ Future<String> BuscandoTenantIdDoUsuarioLogado() async {
 }
 
 Future<String> BuscandoNomeDoUsuario() async {
+  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
   return empresasJson['Nome'];
 }
 
 Future<List<String>> BuscandoEmpresasDoUsuario() async {
+  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
   //final List<Empresa> empresas = List();
   final List<String> nomesEmpresas = List();
@@ -80,6 +91,7 @@ Future<List<String>> BuscandoEmpresasDoUsuario() async {
 }
 
 Future<String> BuscandoNomeEmpresaPadraoDoUsuario() async {
+  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
 
   final List<String> nomesEmpresas = List();
@@ -101,6 +113,7 @@ Future<String> BuscandoNomeEmpresaPadraoDoUsuario() async {
 }
 
 Future<String> BuscandoCNPJdaEmpresaLogada () async{
+  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
   final List<String> nomesEmpresas = List();
   for(Map<String, dynamic> element in empresasJson['Empresas']){

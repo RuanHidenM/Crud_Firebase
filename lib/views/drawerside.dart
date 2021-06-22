@@ -23,9 +23,14 @@ class _drawerSide extends State<DrawerSide> {
   String _connectionStatus = 'UnkNown';
   final Connectivity _connectivity = new Connectivity();
   var nomeEmpresa;
+  var x;
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   _drawerSide() {
+    BuscandoEmailDoUsuarioLogado().then((value) => setState((){
+      x = value;
+      print(' BuscandoEmailDoUsuarioLogado: ${x.toString()}');
+    }));
     BuscandoNomeDoUsuario().then((valor) => setState(() {
       nomeEmpresa = valor;
     }));
