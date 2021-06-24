@@ -27,10 +27,6 @@ class _drawerSide extends State<DrawerSide> {
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   _drawerSide() {
-    BuscandoEmailDoUsuarioLogado().then((value) => setState((){
-      x = value;
-      print(' BuscandoEmailDoUsuarioLogado: ${x.toString()}');
-    }));
     BuscandoNomeDoUsuario().then((valor) => setState(() {
       nomeEmpresa = valor;
     }));
@@ -68,168 +64,168 @@ class _drawerSide extends State<DrawerSide> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 6,
-                    child: Container(
-                        child: Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            //color: Colors.red,
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 100,
-                                  width: 100,
-                                  margin: const EdgeInsets.all(0.0),
-                                  decoration: BoxDecoration(
-                                  //  color: Colors.white,
+            Container(
+              height: MediaHeight / 3.4,
+              child: DrawerHeader(
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: Container(
+                          child: Row(
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: Container(
+                              //color: Colors.red,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: MediaHeight / 7,
+                                    margin: const EdgeInsets.all(0.0),
+                                    decoration: BoxDecoration(
+                                     //color: Colors.white,
+                                    ),
+                                    child: ClipRRect(
+                                      child: Image.asset(
+                                          'logo_emporiofloriano.png'),
+                                    ),
                                   ),
-                                  child: ClipRRect(
-                                    child: Image.asset(
-                                        'logo_emporiofloriano.png'),
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                            flex: 5,
-                            child: FutureBuilder<List<Empresa>>(
-                              future: BuscandoEmpresaPadraoDoUsuario(),
-                              builder: (context, snapshot) {
-                                switch (snapshot.connectionState) {
-                                  case ConnectionState.none:
-                                    break;
-                                  case ConnectionState.waiting:
-                                    return Center(
-                                      child: Container(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            valueColor: new AlwaysStoppedAnimation<Color>(Colors.orange),
-                                            strokeWidth: 1,
-                                          )),
-                                    );
-                                    break;
-                                  case ConnectionState.active:
-                                    break;
-                                  case ConnectionState.done:
-                                    final List<Empresa> empresas = snapshot.data;
-                                    return ListView.builder(
-                                        itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) {
-                                          final Empresa empresa = empresas[index];
+                          Expanded(
+                              flex: 5,
+                              child: FutureBuilder<List<Empresa>>(
+                                future: BuscandoEmpresaPadraoDoUsuario(),
+                                builder: (context, snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.none:
+                                      break;
+                                    case ConnectionState.waiting:
+                                      return Center(
+                                        child: Container(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator(
+                                              valueColor: new AlwaysStoppedAnimation<Color>(Colors.orange),
+                                              strokeWidth: 1,
+                                            )),
+                                      );
+                                      break;
+                                    case ConnectionState.active:
+                                      break;
+                                    case ConnectionState.done:
+                                      final List<Empresa> empresas = snapshot.data;
+                                      return ListView.builder(
+                                          itemCount: snapshot.data.length,
+                                          itemBuilder: (context, index) {
+                                            final Empresa empresa = empresas[index];
+                                            var maskCNPJ = new MaskTextInputFormatter(mask: '##.###.###/####-##', filter:  { "#": RegExp(r'[0-9]') });
 
-                                          var maskCNPJ = new MaskTextInputFormatter(mask: '##.###.###/####-##', filter:  { "#": RegExp(r'[0-9]') });
-
-                                          return Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 20, left: 7),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '${empresa.fantasia.toString()}',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: MediaHeight / 62),
-                                                ),
-                                                Text(
-                                                  //'${userLogado.email.toString()}',
-                                                  '${nomeEmpresa.toString()}',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: MediaHeight / 62),
-                                                ),
-                                                Text(
-                                                  '${maskCNPJ.maskText(empresa.cnpj)}',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: MediaHeight / 62),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    //TODO: CONECT
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              right: 5),
-                                                      child: Icon(
-                                                          _connectionStatus !=
-                                                                  'ConnectivityResult.none'
-                                                              ? Icons.wifi
-                                                              : Icons.wifi_off,
-                                                          size: MediaHeight / 65,
-                                                          color: _connectionStatus !=
-                                                                  'ConnectivityResult.none'
-                                                              ? Colors.lightGreen
-                                                              : Colors.redAccent),
-                                                    ),
-                                                    Text(
-                                                      _connectionStatus !=
-                                                              'ConnectivityResult.none'
-                                                          ? 'Conectado'
-                                                          : 'Desconectado',
-                                                      style: TextStyle(
-                                                          color: _connectionStatus !=
-                                                                  'ConnectivityResult.none'
-                                                              ? Colors.lightGreen
-                                                              : Colors.redAccent,
-                                                          fontSize:
-                                                          MediaHeight / 65),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        });
-                                    break;
-                                }
-                                return Text('UnkNow error');
-                              },
-                            )),
-                      ],
-                    )),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          child: DropdownButtonEmpresas(),
-                        ),
-                      ),
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 20, left: 1),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  // Text(
+                                                  //   '${empresa.fantasia.toString()}',
+                                                  //   style: TextStyle(
+                                                  //       color: Colors.white,
+                                                  //       fontSize: MediaHeight / 62),
+                                                  // ),
+                                                  Text(
+                                                    //'${userLogado.email.toString()}',
+                                                    '${nomeEmpresa.toString()}',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: MediaHeight / 50),
+                                                  ),
+                                                  Text(
+                                                    '${maskCNPJ.maskText(empresa.cnpj)}',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: MediaHeight / 55),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      //TODO: CONECT
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                                right: 5),
+                                                        child: Icon(
+                                                            _connectionStatus !=
+                                                                    'ConnectivityResult.none'
+                                                                ? Icons.wifi
+                                                                : Icons.wifi_off,
+                                                            size: MediaHeight / 55,
+                                                            color: _connectionStatus !=
+                                                                    'ConnectivityResult.none'
+                                                                ? Colors.lightGreen
+                                                                : Colors.redAccent,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        _connectionStatus !=
+                                                                'ConnectivityResult.none'
+                                                            ? 'Conectado'
+                                                            : 'Desconectado',
+                                                        style: TextStyle(
+                                                            color: _connectionStatus !=
+                                                                    'ConnectivityResult.none'
+                                                                ? Colors.lightGreen
+                                                                : Colors.redAccent,
+                                                            fontSize:
+                                                            MediaHeight / 58),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          });
+                                      break;
+                                  }
+                                  return Text('UnkNow error');
+                                },
+                              )),
+                        ],
+                      )),
                     ),
-                  )
-                ],
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        //color: Colors.red,
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        child:Container(
+                            child: DropdownButtonEmpresas(),
+                          ),
+                      ),
+                    )
+                  ],
+                ),
+                decoration: BoxDecoration(
+                    //color: Color.fromRGBO(3, 41, 102, 20),
+                    gradient: LinearGradient(
+                  // begin: Alignment.topRight,
+                  // end: Alignment.bottomLeft,
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    Color.fromRGBO(36, 82, 108, 1),
+                    Color.fromRGBO(36, 82, 108, 100),
+                  ],
+                )),
               ),
-              decoration: BoxDecoration(
-                  //color: Color.fromRGBO(3, 41, 102, 20),
-                  gradient: LinearGradient(
-                // begin: Alignment.topRight,
-                // end: Alignment.bottomLeft,
-                begin: Alignment.topCenter,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color.fromRGBO(36, 82, 108, 1),
-                  Color.fromRGBO(36, 82, 108, 100),
-                ],
-              )),
             ),
             ListTile(
               title: Row(

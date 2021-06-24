@@ -24,21 +24,21 @@ class _bottonTitleIconTipoFiltroCaixaeBanxo extends State<BottonTitleIconTipoFil
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(2),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey,
+                color: Colors.white,
                 offset: const Offset(
                   1.0,
                   1.0,
                 ),
-                blurRadius: 5.0,
-                spreadRadius: 1.0,
+                blurRadius: 2.0,
+                spreadRadius: 0.2,
               ),
             ],
           ),
           width: MediaWidth / 4,
-          height: MediaWidth / 4.5,
+          height: MediaWidth / 5.5,
           child: Column(
             children: [
               Container(
@@ -61,7 +61,7 @@ class _bottonTitleIconTipoFiltroCaixaeBanxo extends State<BottonTitleIconTipoFil
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.only(top: 3),
                 child: Container(
                   width: double.infinity,
                   child: Center(

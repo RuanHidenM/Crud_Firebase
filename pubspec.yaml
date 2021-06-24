@@ -30,6 +30,7 @@ dependencies:
   provider:
   connectivity: ^3.0.3
   mask_text_input_formatter: ^1.2.1
+  charts_flutter: ^0.10.0
 
 
   # The following adds the Cupertino Icons font to your application.

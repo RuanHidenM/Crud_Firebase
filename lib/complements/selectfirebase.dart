@@ -153,7 +153,95 @@ Future<double> BuscandoValorTotalCaixaEBanco () async{
 
   double valortotal = 0;
   for(int i = 0; caixaEBancoJsonLength.docs.length > i; i++){
-    valortotal = valortotal + caixaEBancoJson[i]['SALDO'];
+      valortotal = valortotal + caixaEBancoJson[i]['SALDO'];
+
+  }
+  return valortotal;
+}
+
+Future<double> BuscandoValorTotalCaixa () async{
+  await BuscandoCNPJdaEmpresaLogada().then((value) =>
+    CNPJDaEmpresaLogada = value,
+  );
+ await BuscandoTenantIdDoUsuarioLogado().then((value) =>
+ tenanteIDDoUsuarioLogado = value
+ );
+  caixaEBancoJsonLength = await FirebaseFirestore.instance
+      .collection('Tenant')
+      .doc(tenanteIDDoUsuarioLogado)
+      .collection('Empresas')
+      .doc(CNPJDaEmpresaLogada.toString())
+      .collection('CaixaBanco').get().then((value) => value);
+
+  caixaEBancoJson = await FirebaseFirestore.instance
+      .collection('Tenant')
+      .doc(tenanteIDDoUsuarioLogado)
+      .collection('Empresas')
+      .doc(CNPJDaEmpresaLogada.toString())
+      .collection('CaixaBanco').get().then((value) => value.docs);
+
+  double valortotal = 0;
+  for(int i = 0; caixaEBancoJsonLength.docs.length > i; i++){
+    if(caixaEBancoJson[i]['TIPO'] == 1){
+      valortotal = valortotal + caixaEBancoJson[i]['SALDO'];
+    }
+  }
+  return valortotal;
+}
+Future<double> BuscandoValorTotalBanco () async{
+  await BuscandoCNPJdaEmpresaLogada().then((value) =>
+    CNPJDaEmpresaLogada = value,
+  );
+ await BuscandoTenantIdDoUsuarioLogado().then((value) =>
+ tenanteIDDoUsuarioLogado = value
+ );
+  caixaEBancoJsonLength = await FirebaseFirestore.instance
+      .collection('Tenant')
+      .doc(tenanteIDDoUsuarioLogado)
+      .collection('Empresas')
+      .doc(CNPJDaEmpresaLogada.toString())
+      .collection('CaixaBanco').get().then((value) => value);
+
+  caixaEBancoJson = await FirebaseFirestore.instance
+      .collection('Tenant')
+      .doc(tenanteIDDoUsuarioLogado)
+      .collection('Empresas')
+      .doc(CNPJDaEmpresaLogada.toString())
+      .collection('CaixaBanco').get().then((value) => value.docs);
+
+  double valortotal = 0;
+  for(int i = 0; caixaEBancoJsonLength.docs.length > i; i++){
+    if(caixaEBancoJson[i]['TIPO'] == 2){
+      valortotal = valortotal + caixaEBancoJson[i]['SALDO'];
+    }
+  }
+  return valortotal;
+}
+Future<double> BuscandoValorTotalSaldoNegativo () async{
+  await BuscandoCNPJdaEmpresaLogada().then((value) =>
+    CNPJDaEmpresaLogada = value,
+  );
+ await BuscandoTenantIdDoUsuarioLogado().then((value) =>
+ tenanteIDDoUsuarioLogado = value
+ );
+  caixaEBancoJsonLength = await FirebaseFirestore.instance
+      .collection('Tenant')
+      .doc(tenanteIDDoUsuarioLogado)
+      .collection('Empresas')
+      .doc(CNPJDaEmpresaLogada.toString())
+      .collection('CaixaBanco').get().then((value) => value);
+
+  caixaEBancoJson = await FirebaseFirestore.instance
+      .collection('Tenant')
+      .doc(tenanteIDDoUsuarioLogado)
+      .collection('Empresas')
+      .doc(CNPJDaEmpresaLogada.toString())
+      .collection('CaixaBanco').get().then((value) => value.docs);
+
+  double valortotal = 0;
+  for(int i = 0; caixaEBancoJsonLength.docs.length > i; i++){
+    if(caixaEBancoJson[i]['SALDO'] < 0 ){
+      valortotal = valortotal + caixaEBancoJson[i]['SALDO'];}
   }
   return valortotal;
 }

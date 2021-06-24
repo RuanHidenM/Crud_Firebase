@@ -34,6 +34,8 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+
+        debugShowCheckedModeBanner: false,
         home: AuthenticationWrapper(),
       ),
     );
@@ -48,10 +50,8 @@ class _authenticationWrapper extends State<AuthenticationWrapper> {
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
     if (firebaseUser != null) {
-      print('--HomePage: $firebaseUser');
         return HomePage();
     }
-    print('-- LoginPage: $firebaseUser');
     return LoginPage();
   }
 }
