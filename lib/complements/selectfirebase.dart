@@ -153,7 +153,9 @@ Future<double> BuscandoValorTotalCaixaEBanco () async{
 
   double valortotal = 0;
   for(int i = 0; caixaEBancoJsonLength.docs.length > i; i++){
+    if(caixaEBancoJson[i]['SALDO'] >= 0){
       valortotal = valortotal + caixaEBancoJson[i]['SALDO'];
+    }
 
   }
   return valortotal;
@@ -182,7 +184,7 @@ Future<double> BuscandoValorTotalCaixa () async{
 
   double valortotal = 0;
   for(int i = 0; caixaEBancoJsonLength.docs.length > i; i++){
-    if(caixaEBancoJson[i]['TIPO'] == 1){
+    if(caixaEBancoJson[i]['TIPO'] == 1 && caixaEBancoJson[i]['SALDO'] >= 0){
       valortotal = valortotal + caixaEBancoJson[i]['SALDO'];
     }
   }
@@ -211,8 +213,9 @@ Future<double> BuscandoValorTotalBanco () async{
 
   double valortotal = 0;
   for(int i = 0; caixaEBancoJsonLength.docs.length > i; i++){
-    if(caixaEBancoJson[i]['TIPO'] == 2){
+    if(caixaEBancoJson[i]['TIPO'] == 2 && caixaEBancoJson[i]['SALDO'] >= 0){
       valortotal = valortotal + caixaEBancoJson[i]['SALDO'];
+      print(' $i valortotal :$valortotal');
     }
   }
   return valortotal;

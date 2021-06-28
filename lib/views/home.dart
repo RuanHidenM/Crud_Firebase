@@ -7,6 +7,7 @@ import 'package:crud_firebase/views/screen_mestre_loadding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class HomePage extends StatefulWidget{
   _homePage createState() => _homePage();
@@ -20,12 +21,31 @@ class _homePage extends State<HomePage>{
   var Empresas2;
   //var empresas = new List<Empresa>();
   var userLogadoEmail;
-
   var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
+  List<charts.Series<GraficoCaixaEBanco, String>> _seriesPieData;
 
+  _generateDate(){
+    var pieData = [
+      new GraficoCaixaEBanco('Total', 357827.34 , Colors.blue),
+      new GraficoCaixaEBanco('Eat', 23968.51, Colors.orange),
+    ];
+
+    _seriesPieData.add(
+      charts.Series(
+        data:pieData,
+        domainFn: (GraficoCaixaEBanco nomeCaixaEBanco,_)=> nomeCaixaEBanco.nomeCaixaEBanco,
+        measureFn: (GraficoCaixaEBanco nomeCaixaEBanco,_)=> nomeCaixaEBanco.taskvalue,
+        colorFn: (GraficoCaixaEBanco nomeCaixaEBanco,_)=> charts.ColorUtil.fromDartColor(nomeCaixaEBanco.colorva1),
+        id: 'Daily task',
+        labelAccessorFn: (GraficoCaixaEBanco row,_)=> '${row.taskvalue}'
+      ),
+    );
+  }
 
   void initState(){
     super.initState();
+    _seriesPieData = List<charts.Series<GraficoCaixaEBanco, String>>();
+    _generateDate();
     setState(() {
       userLogadoEmail = FirebaseAuth.instance.currentUser.email.toString();
          VerificaEmailLogadoComEmailCadastrado(userLogadoEmail);
@@ -35,7 +55,6 @@ class _homePage extends State<HomePage>{
        // BuscandoEmpresasDoUsuario().then((nomesEmpresas) => print('nomes de empresas $nomesEmpresas'));
     });
   }
-
 
   @override
   void VerificaEmailLogadoComEmailCadastrado(String userLogadoEmail) async {
@@ -69,24 +88,93 @@ class _homePage extends State<HomePage>{
             Expanded(
               flex: 1,
                 child: Container(
+                  height: 350,
+                  width: 350,
                   child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'DASHBOARD',
-                            style: TextStyle(
-                              color: Colors.black12,
-                              fontSize: MediaWidth / 10
-                            ),
+
+                          Stack(
+                            children: <Widget>[
+
+
+
+                            ],
                           ),
-                          Text(
-                            'O dashboard esta vazio',
-                            style: TextStyle(
-                              color: Colors.black12,
-                              fontSize: MediaWidth / 25
+
+
+
+                          Expanded(
+                            child: charts.PieChart(
+                              _seriesPieData,
+                              animate: true,
+                              animationDuration: Duration(seconds: 1),
+
+                              behaviors: [
+                                new charts.DatumLegend(
+                                  outsideJustification: charts.OutsideJustification.endDrawArea,
+                                  horizontalFirst: true,
+                                  desiredMaxRows: 2,
+                                  cellPadding: new EdgeInsets.only(right: 5.0, bottom: 4.0),
+                                  entryTextStyle: charts.TextStyleSpec(
+                                    color:charts.MaterialPalette.purple.shadeDefault,
+                                    fontFamily: 'Georgia',
+                                    fontSize: 11
+                                  ),
+                                ),
+                              ],
+
+                              defaultRenderer: new charts.ArcRendererConfig(
+                                arcWidth: 50,//TODO: rosca
+                                arcRendererDecorators: [
+                                  new charts.ArcLabelDecorator(
+                                    labelPosition: charts.ArcLabelPosition.outside,
+                                    insideLabelStyleSpec: charts.TextStyleSpec(
+                                      fontSize: 60,
+                                    )
+                                  )
+                                ]
+                              ),
                             ),
-                          ),
+                          )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                          // Text(
+                          //   'DASHBOARD',
+                          //   style: TextStyle(
+                          //     color: Colors.black12,
+                          //     fontSize: MediaWidth / 10
+                          //   ),
+                          // ),
+                          // Text(
+                          //   'O dashboard esta vazio',
+                          //   style: TextStyle(
+                          //     color: Colors.black12,
+                          //     fontSize: MediaWidth / 25
+                          //   ),
+                          // ),
                         ],
                       ),
                   ),
@@ -101,4 +189,10 @@ class _homePage extends State<HomePage>{
   }
 }
 
+class GraficoCaixaEBanco{
+  String nomeCaixaEBanco;
+  double taskvalue;
+  Color colorva1;
 
+  GraficoCaixaEBanco(this.nomeCaixaEBanco, this.taskvalue, this.colorva1);
+}

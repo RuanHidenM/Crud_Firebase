@@ -12,7 +12,6 @@ import 'package:charts_flutter/flutter.dart' as charts;
 class CaixaEBanco extends StatefulWidget {
   @override
   _caixasEBancos createState() => _caixasEBancos();
-
 }
 
 class _caixasEBancos extends State<CaixaEBanco> {
@@ -20,6 +19,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
   var snapshotsCaixaEBanco;
   var snapshotsCaixa;
   var snapshotsBanco;
+  var snapshotsCaixaEBancoNegativo;
   var valorTotalCaixaEBanco;
 
   var valorTotalCaixa;
@@ -27,10 +27,38 @@ class _caixasEBancos extends State<CaixaEBanco> {
   var valorTotalNegativo;
 
   var CNPJDaEmpresaLogada = '';
+
   bool mostrarValorTotal;
   bool selectedCaixa; //TODO: FILTROS
   bool selectedBanco; //TODO: FILTROS
   bool selectNegativo; //TODO: NEGATIVO
+  List<charts.Series<GraficoCaixaEBanco, String>> _seriesPieData;
+
+  _generateData({
+    String variNome,
+    double variValor,
+    Color variColorgraf,
+    String totalNome,
+    double totalValor,
+    Color totalColorgraf,
+  }) {
+    var pieData = [
+      new GraficoCaixaEBanco('$variNome', variValor, variColorgraf),
+      new GraficoCaixaEBanco('$totalNome', totalValor, totalColorgraf),
+    ];
+    _seriesPieData.add(
+      charts.Series(
+          data: pieData,
+          domainFn: (GraficoCaixaEBanco nomeCaixaEBanco, _) =>
+              nomeCaixaEBanco.nomeCaixaEBanco,
+          measureFn: (GraficoCaixaEBanco nomeCaixaEBanco, _) =>
+              nomeCaixaEBanco.graficValue,
+          colorFn: (GraficoCaixaEBanco nomeCaixaEBanco, _) =>
+              charts.ColorUtil.fromDartColor(nomeCaixaEBanco.graficColor),
+          id: 'Grafigo Caixa e Banco',
+          labelAccessorFn: (GraficoCaixaEBanco row, _) => '${row.graficValue}'),
+    );
+  }
 
   _caixasEBancos() {
     BuscandoCaixaEBancoDaEmpresa().then((value) => setState(() {
@@ -54,18 +82,24 @@ class _caixasEBancos extends State<CaixaEBanco> {
     BuscandoValorTotalSaldoNegativo().then((value) => setState(() {
           valorTotalNegativo = value;
         }));
+    BuscandoCaixaEBancoNegativoDaEmpresa().then((value) => setState(() {
+          valorTotalNegativo = value;
+        }));
   }
 
   @override
   void initState() {
     super.initState();
+    //_seriesPieData = List<charts.Series<GraficoCaixaEBanco, String>>();
+    //_generateData(nome: 'dale', valor: 500.0);
+
     mostrarValorTotal = true;
     setState(() {
+      //_generateData();
       selectedCaixa = false;
       selectedBanco = false;
     });
   }
-
 
   Future<List<String>> BuscandoCaixaEBancoDaEmpresa() async {
     await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
@@ -80,6 +114,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
         .collection('Empresas')
         .doc(CNPJDaEmpresaLogada.toString())
         .collection('CaixaBanco')
+        .orderBy('SALDO', descending: true)
         .snapshots();
     return snapshotsCaixaEBanco;
   }
@@ -98,6 +133,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
         .doc(CNPJDaEmpresaLogada.toString())
         .collection('CaixaBanco')
         .where('TIPO', isEqualTo: 1)
+        .orderBy('SALDO', descending: true)
         .snapshots();
     return snapshotsCaixa;
   }
@@ -116,8 +152,28 @@ class _caixasEBancos extends State<CaixaEBanco> {
         .doc(CNPJDaEmpresaLogada.toString())
         .collection('CaixaBanco')
         .where('TIPO', isEqualTo: 2)
+        .orderBy('SALDO', descending: true)
         .snapshots();
     return snapshotsBanco;
+  }
+
+  Future<List<String>> BuscandoCaixaEBancoNegativoDaEmpresa() async {
+    await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
+          CNPJDaEmpresaLogada = value;
+        }));
+    await BuscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
+          tenanteIDDoUsuarioLogado = value;
+        }));
+    snapshotsCaixaEBancoNegativo = await FirebaseFirestore.instance
+        .collection('Tenant')
+        .doc(tenanteIDDoUsuarioLogado.toString())
+        .collection('Empresas')
+        .doc(CNPJDaEmpresaLogada.toString())
+        .collection('CaixaBanco')
+        .where('SALDO', isLessThanOrEqualTo: 0)
+        .orderBy('SALDO', descending: true)
+        .snapshots();
+    return snapshotsCaixaEBancoNegativo;
   }
 
   Widget build(BuildContext context) {
@@ -138,334 +194,6 @@ class _caixasEBancos extends State<CaixaEBanco> {
           ),
           // Text('Produtos', style: TextStyle(color: Colors.white)),
         ),
-        // body: Container(
-        //   child: Column(
-        //     children: [
-        //       Padding(
-        //           padding: const EdgeInsets.all(8.0),
-        //           child: Container(
-        //               decoration: BoxDecoration(
-        //                 color: Colors.white,
-        //                 borderRadius: BorderRadius.circular(10),
-        //                 boxShadow: [
-        //                   BoxShadow(
-        //                     color: Colors.grey,
-        //                     offset: const Offset(
-        //                       1.0,
-        //                       1.0,
-        //                     ),
-        //                     blurRadius: 5.0,
-        //                     spreadRadius: 1.0,
-        //                   ),
-        //                 ],
-        //               ),
-        //               width: double.maxFinite,
-        //               child: Column(
-        //                 children: [
-        //                       Container(
-        //                       decoration: BoxDecoration(
-        //                           border: Border(
-        //                             bottom: BorderSide(width: 0.2, color: Colors.black54),
-        //                           )
-        //                       ),
-        //                       width: double.maxFinite,
-        //                       child: Padding(
-        //                         padding: const EdgeInsets.all(8.0),
-        //                         child: Row(
-        //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //                           children: [
-        //                             Text(
-        //                               'Total Investidoss',
-        //                               style: TextStyle(
-        //                                   color: Colors.black45,
-        //                                   fontSize: MediaWidth / 24),
-        //                             ),
-        //                             GestureDetector(
-        //                               child: Icon(
-        //                                 mostrarValorTotal == true
-        //                                     ? Icons.visibility_off_outlined
-        //                                     : Icons.visibility_outlined,
-        //                                 color: Colors.black45,
-        //                               ),
-        //                               onTap: () {
-        //                                 if (mostrarValorTotal == true) {
-        //                                   setState(() {
-        //                                     mostrarValorTotal = false;
-        //                                   });
-        //                                 } else {
-        //                                   setState(() {
-        //                                     mostrarValorTotal = true;
-        //                                   });
-        //                                 }
-        //                               },
-        //                             )
-        //                           ],
-        //                         ),
-        //                       ),
-        //                     ),
-        //                   Container(
-        //                       child: Row(
-        //                         mainAxisAlignment: MainAxisAlignment.center,
-        //                         children: [
-        //                           Padding(
-        //                             padding: const EdgeInsets.only(bottom: 5),
-        //                             child:
-        //
-        //                             valorTotalBaixaEBanco == null ?  CircularProgressIndicator(
-        //                                 valueColor: new AlwaysStoppedAnimation<Color>(Colors.orange)) :
-        //                             mostrarValorTotal == true
-        //                                 ? Text('R\$: ${ConverteReais(valorTotalBaixaEBanco).toString()}',
-        //                               style: TextStyle(
-        //                                   fontSize: MediaWidth / 13,
-        //                                   color: Colors.green,
-        //                                   fontWeight: FontWeight.bold
-        //                               ),
-        //                             ) : Icon(
-        //                               Icons.visibility_off_outlined,
-        //                               color: Colors.black38,
-        //                               size: MediaWidth / 10,
-        //                             ),
-        //                           ),
-        //                         ],
-        //                       ),
-        //                     ),
-        //                 ],
-        //               ),
-        //           ),
-        //         ),
-        //       Padding(
-        //         padding: const EdgeInsets.only(bottom: 10),
-        //         child: Column(
-        //             children: [
-        //               Padding(
-        //                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-        //                 child: Row(
-        //                   children: [
-        //                     GestureDetector(
-        //                       child: BottonTitleIconTipoFiltroCaixaeBanxo(
-        //                           'Caixa',
-        //                           Icons.move_to_inbox_outlined,
-        //                           selectedCaixa
-        //                       ),
-        //                       onTap:(){
-        //                         //Todo: CAIXA
-        //                         if(selectedCaixa == false){
-        //                           setState(() {
-        //                             selectedCaixa = true;
-        //                             selectedBanco = false;
-        //                             _caixasEBancos();
-        //                           });
-        //                         }else{
-        //                           setState(() {
-        //                             selectedCaixa = false;
-        //                             _caixasEBancos();
-        //                           });
-        //                         }
-        //                       } ,
-        //                     ),
-        //                     GestureDetector(
-        //                       child: BottonTitleIconTipoFiltroCaixaeBanxo(
-        //                           'Banco',
-        //                           Icons.account_balance_outlined,
-        //                           selectedBanco
-        //                       ),
-        //                       onTap: (){
-        //                         if(selectedBanco == false){
-        //                           setState(() {
-        //                             selectedBanco = true;
-        //                             selectedCaixa = false;
-        //                             _caixasEBancos();
-        //                           });
-        //                         }else{
-        //                           setState(() {
-        //                             selectedBanco = false;
-        //                             _caixasEBancos();
-        //                           });
-        //                         }
-        //                       },
-        //                     ),
-        //                   ],
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       Expanded(
-        //         child: StreamBuilder(
-        //           stream: selectedCaixa == true ? snapshotsCaixa :selectedBanco == true ? snapshotsBanco  : snapshotsCaixaEBanco,
-        //           builder: (
-        //               BuildContext context,
-        //               AsyncSnapshot<QuerySnapshot> snapshot,
-        //               ) {
-        //             if (snapshot.hasError) {
-        //               return Center(child: Text('Error: ${snapshot.error}'));
-        //             }
-        //             if (snapshot.connectionState == ConnectionState.waiting ||
-        //                 snapshotsCaixaEBanco == null) {
-        //               return Center(
-        //                   child: CircularProgressIndicator(
-        //                     valueColor: new AlwaysStoppedAnimation<Color>(Colors.orange),
-        //                   ));
-        //             }
-        //             if (snapshot.data.docs.length == 0) {
-        //               return Center(
-        //                   child: Text('Nenhum Caixas e Bancos Cadastrado!!'));
-        //             }
-        //
-        //             return ListView.builder(
-        //               itemCount: snapshot.data.docs.length,
-        //               itemBuilder: (BuildContext context, int i) {
-        //                 var caixasebancos = snapshot.data.docs[i];
-        //                 return GestureDetector(
-        //                   child: Padding(
-        //                     padding: const EdgeInsets.only(
-        //                         top: 5, bottom: 5, right: 5, left: 5),
-        //                     child: Container(
-        //                       height: MediaWidth / 4,
-        //                       decoration: BoxDecoration(
-        //                         color: Colors.white,
-        //                         borderRadius: BorderRadius.circular(10),
-        //                         boxShadow: [
-        //                           BoxShadow(
-        //                             color: Colors.grey,
-        //                             offset: const Offset(
-        //                               1.0,
-        //                               1.0,
-        //                             ),
-        //                             blurRadius: 5.0,
-        //                             spreadRadius: 1.0,
-        //                           ),
-        //                         ],
-        //                       ),
-        //                       child: Column(
-        //                         mainAxisAlignment: MainAxisAlignment.center,
-        //                         crossAxisAlignment: CrossAxisAlignment.center,
-        //                         children: [
-        //                           Padding(
-        //                             padding:
-        //                             const EdgeInsets.only(left: 5, right: 5),
-        //                             child: Row(
-        //                               children: [
-        //                                 Expanded(
-        //                                     flex: 2,
-        //                                     child: Container(
-        //                                       height: 90,
-        //                                       // color: Colors.yellow,
-        //                                       child: Center(
-        //                                         // child: Icon(Icons.apartment),//banco
-        //                                         child: Icon(
-        //                                           caixasebancos['TIPO'] == 1
-        //                                               ? Icons.move_to_inbox_outlined
-        //                                               : Icons.account_balance_outlined,
-        //                                           size: MediaWidth / 10,
-        //                                           color: Colors.orange,
-        //                                         ),
-        //                                       ),
-        //                                     ),
-        //                                 ),
-        //                                 Expanded(
-        //                                   flex: 7,
-        //                                   child: Padding(
-        //                                     padding: const EdgeInsets.all(10.0),
-        //                                     child: Column(
-        //                                       crossAxisAlignment:
-        //                                       CrossAxisAlignment.stretch,
-        //                                       //mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //                                       children: [
-        //                                         Container(
-        //                                             height: MediaQuery.of(context)
-        //                                                 .size
-        //                                                 .height /
-        //                                                 15,
-        //                                             //color:Colors.red,
-        //                                             child: Text(
-        //                                               '${caixasebancos['NOME']}',
-        //                                               overflow: TextOverflow.fade,
-        //                                               style: TextStyle(
-        //                                                   fontSize:
-        //                                                   MediaQuery.of(context)
-        //                                                       .size
-        //                                                       .height /
-        //                                                       43,
-        //                                                   color: Colors.black54
-        //                                               ),
-        //                                             )),
-        //                                         Container(
-        //                                           //color:Colors.blue,
-        //                                             child: Row(
-        //                                               mainAxisAlignment:
-        //                                               MainAxisAlignment
-        //                                                   .spaceBetween,
-        //                                               crossAxisAlignment:
-        //                                               CrossAxisAlignment.end,
-        //                                               children: [
-        //                                                 Row(
-        //                                                   crossAxisAlignment:
-        //                                                   CrossAxisAlignment.end,
-        //                                                   children: [
-        //                                                     Padding(
-        //                                                       padding:
-        //                                                       const EdgeInsets.only(
-        //                                                           right: 5),
-        //                                                       child: Icon(
-        //                                                         Icons.monetization_on,
-        //                                                         color: caixasebancos[
-        //                                                         'SALDO'] >
-        //                                                             0
-        //                                                             ? Colors.green
-        //                                                             : Colors.red,
-        //                                                         size: MediaQuery.of(
-        //                                                             context)
-        //                                                             .size
-        //                                                             .height /
-        //                                                             42,
-        //                                                       ),
-        //                                                     ),
-        //                                                     Text(
-        //                                                       'R\$: ',
-        //                                                       style: TextStyle(
-        //                                                           color: Colors.black54,
-        //                                                           fontSize: MediaQuery.of(
-        //                                                               context)
-        //                                                               .size
-        //                                                               .height /
-        //                                                               50
-        //                                                       ),
-        //                                                     ),
-        //                                                     Text(
-        //                                                       '${ConverteReais(caixasebancos['SALDO'])}',
-        //                                                       style: TextStyle(
-        //                                                           fontSize: MediaQuery.of(context)
-        //                                                               .size.height / 42,
-        //                                                           color: Colors.black54
-        //                                                       ),
-        //                                                     ),
-        //                                                   ],
-        //                                                 ),
-        //                                               ],
-        //                                             )),
-        //                                       ],
-        //                                     ),
-        //                                   ),
-        //                                 ),
-        //                               ],
-        //                             ),
-        //                           )
-        //                         ],
-        //                       ),
-        //                     ),
-        //                   ),
-        //                   onDoubleTap: () {},
-        //                 );
-        //               },
-        //             );
-        //           },
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -491,7 +219,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.only(left: 5.0, right: 5.0),
+                                  const EdgeInsets.only(left: 10.0, right: 5.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -548,92 +276,88 @@ class _caixasEBancos extends State<CaixaEBanco> {
                           height: MediaWidth / 5,
                           width: double.infinity,
                           // color: Colors.red,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 0),
-                            child: Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8.0, right: 8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        GestureDetector(
-                                          child:
-                                              BottonTitleIconTipoFiltroCaixaeBanxo(
-                                                  'Caixa',
-                                                  Icons.move_to_inbox_outlined,
-                                                  selectedCaixa),
-                                          onTap: () {
-                                            //Todo: CAIXA
-                                            if (selectedCaixa == false) {
-                                              setState(() {
-                                                selectedCaixa = true;
-                                                selectedBanco = false;
-                                                selectNegativo = false;
-                                                _caixasEBancos();
-                                              });
-                                            } else {
-                                              setState(() {
-                                                selectedCaixa = false;
-                                                _caixasEBancos();
-                                              });
-                                            }
-                                          },
-                                        ),
-                                        GestureDetector(
-                                          child:
-                                              BottonTitleIconTipoFiltroCaixaeBanxo(
-                                                  'Banco',
-                                                  Icons
-                                                      .account_balance_outlined,
-                                                  selectedBanco),
-                                          onTap: () {
-                                            if (selectedBanco == false) {
-                                              setState(() {
-                                                selectedBanco = true;
-                                                selectedCaixa = false;
-                                                selectNegativo = false;
-                                                _caixasEBancos();
-                                              });
-                                            } else {
-                                              setState(() {
-                                                selectedBanco = false;
-                                                _caixasEBancos();
-                                              });
-                                            }
-                                          },
-                                        ),
-                                        GestureDetector(
-                                          child:
-                                              BottonTitleIconTipoFiltroCaixaeBanxo(
-                                                  'Negativo',
-                                                  Icons.remove,
-                                                  selectNegativo),
-                                          onTap: () {
-                                            if (selectNegativo == false) {
-                                              setState(() {
-                                                selectedBanco = false;
-                                                selectedCaixa = false;
-                                                selectNegativo = true;
-                                                _caixasEBancos();
-                                              });
-                                            } else {
-                                              setState(() {
-                                                selectNegativo = false;
-                                                _caixasEBancos();
-                                              });
-                                            }
-                                          },
-                                        ),
-                                      ],
-                                    ),
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      GestureDetector(
+                                        child:
+                                            BottonTitleIconTipoFiltroCaixaeBanxo(
+                                                'Caixa',
+                                                Icons.move_to_inbox_outlined,
+                                                selectedCaixa),
+                                        onTap: () {
+                                          //Todo: CAIXA
+                                          if (selectedCaixa == false) {
+                                            setState(() {
+                                              selectedCaixa = true;
+                                              selectedBanco = false;
+                                              selectNegativo = false;
+                                              _caixasEBancos();
+                                            });
+                                          } else {
+                                            setState(() {
+                                              selectedCaixa = false;
+                                              _caixasEBancos();
+                                            });
+                                          }
+                                        },
+                                      ),
+                                      GestureDetector(
+                                        child:
+                                            BottonTitleIconTipoFiltroCaixaeBanxo(
+                                                'Banco',
+                                                Icons.account_balance_outlined,
+                                                selectedBanco),
+                                        onTap: () {
+                                          if (selectedBanco == false) {
+                                            setState(() {
+                                              selectedBanco = true;
+                                              selectedCaixa = false;
+                                              selectNegativo = false;
+                                              _caixasEBancos();
+                                            });
+                                          } else {
+                                            setState(() {
+                                              selectedBanco = false;
+                                              _caixasEBancos();
+                                            });
+                                          }
+                                        },
+                                      ),
+                                      GestureDetector(
+                                        child:
+                                            BottonTitleIconTipoFiltroCaixaeBanxo(
+                                                'Negativo',
+                                                Icons.remove,
+                                                selectNegativo),
+                                        onTap: () {
+                                          if (selectNegativo == false) {
+                                            setState(() {
+                                              selectedBanco = false;
+                                              selectedCaixa = false;
+                                              selectNegativo = true;
+                                              _caixasEBancos();
+                                            });
+                                          } else {
+                                            setState(() {
+                                              selectNegativo = false;
+                                              _caixasEBancos();
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -655,15 +379,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
                             valorTotalCaixaEBanco != null
                                 ? mostrarValorTotal == true
                                     ? Text(
-                                        'R\$: ${ConverteReais(
-                                          selectedCaixa == true
-                                            ? valorTotalCaixa
-                                          :selectedBanco == true
-                                            ? valorTotalBanco
-                                          :selectNegativo == true
-                                            ? valorTotalNegativo
-                                          : valorTotalCaixaEBanco
-                                        )}')
+                                        'R\$: ${ConverteReais(selectedCaixa == true ? valorTotalCaixa : selectedBanco == true ? valorTotalBanco : selectNegativo == true ? valorTotalNegativo : valorTotalCaixaEBanco)}')
                                     : Icon(
                                         Icons.visibility_off_outlined,
                                         color: Colors.white70,
@@ -699,7 +415,9 @@ class _caixasEBancos extends State<CaixaEBanco> {
                     ? snapshotsCaixa
                     : selectedBanco == true
                         ? snapshotsBanco
-                        : snapshotsCaixaEBanco,
+                        : selectNegativo == true //TODO RUAN
+                            ? snapshotsCaixaEBancoNegativo
+                            : snapshotsCaixaEBanco,
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
@@ -747,13 +465,80 @@ class _caixasEBancos extends State<CaixaEBanco> {
                     );
                   }
 
+                  if (valorTotalCaixaEBanco == null) {
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 60,
+                        child: Center(
+                          child: Column(
+                            children: [
+                              CircularProgressIndicator(
+                                valueColor: new AlwaysStoppedAnimation<Color>(
+                                    Colors.orange),
+                              ),
+                              Text(
+                                'Carregando...',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         var caixasebancos = snapshot.data.docs[index];
 
+                        _seriesPieData =
+                            List<charts.Series<GraficoCaixaEBanco, String>>();
+                        print('Total valor ${valorTotalCaixaEBanco}');
+
+                        if (caixasebancos['SALDO'] >= 0) {
+                          _generateData(
+                            variNome: 'subtotal',
+                            variValor: caixasebancos['SALDO'],
+                            variColorgraf: Colors.green,
+                            totalNome: 'total',
+                            totalValor: selectedCaixa == true
+                                ? valorTotalCaixa - caixasebancos['SALDO']
+                                : selectedBanco == true
+                                    ? valorTotalBanco - caixasebancos['SALDO']
+                                    : selectNegativo == true
+                                        ? valorTotalNegativo
+                                        : valorTotalCaixaEBanco -
+                                            caixasebancos['SALDO'],
+                            totalColorgraf: Colors.black12,
+                          );
+                        } else {
+                          String caixaebancoNegativoString =
+                              caixasebancos['SALDO']
+                                  .toString()
+                                  .replaceAll('-', '');
+                          double caixaebancoNegativoDouble =
+                              double.parse(caixaebancoNegativoString);
+
+                          _generateData(
+                            variNome: 'subtotal',
+                            variValor: caixaebancoNegativoDouble,
+                            variColorgraf: Colors.red,
+                            totalNome: 'total',
+                            totalValor: selectedCaixa == true
+                                ? valorTotalCaixa
+                                : selectedBanco == true
+                                    ? valorTotalBanco
+                                    : selectNegativo == true
+                                        ? valorTotalNegativo -
+                                            caixasebancos['SALDO']
+                                        : valorTotalCaixaEBanco,
+                            totalColorgraf: Colors.black12,
+                          );
+                        }
+
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0, top: 4.0),
+                          padding: const EdgeInsets.all(0.0),
                           child: Column(
                             children: [
                               Container(
@@ -773,27 +558,87 @@ class _caixasEBancos extends State<CaixaEBanco> {
                                       ),
                                     ],
                                   ),
-
-
                                   child: Row(
                                     children: [
                                       Expanded(
                                         flex: 2,
-                                        child: Container(
-                                          color: Colors.white38,
-                                          child: Text('teste'),
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                                //color: Colors.red,
+                                                height: double.infinity,
+                                                child: Expanded(
+                                                  child: charts.PieChart(
+                                                    _seriesPieData,
+                                                    animate: true,
+                                                    animationDuration:
+                                                        Duration(seconds: 1),
+                                                    defaultRenderer: new charts
+                                                        .ArcRendererConfig(
+                                                      arcWidth: 8, //TODO: rosca
+                                                      //arcRendererDecorators: [
+                                                      // new charts.ArcLabelDecorator(
+                                                      //     labelPosition: charts.ArcLabelPosition.inside,
+                                                      //     insideLabelStyleSpec: charts.TextStyleSpec(
+                                                      //       fontSize: 6,
+                                                      //     )
+                                                      // )
+                                                      //]
+                                                    ),
+                                                  ),
+                                                )),
+                                            Center(
+                                              child: Text(
+                                                '10%',
+                                                style: TextStyle(
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.w800,
+                                                    fontSize: MediaWidth / 20),
+                                              ),
+                                            )
+                                          ],
                                         ),
+                                        // child: Container(
+                                        //   //color: Colors.red,
+                                        //   height: double.infinity,
+                                        //   child:   Expanded(
+                                        //     child: charts.PieChart(
+                                        //       _seriesPieData,
+                                        //       animate: true,
+                                        //       animationDuration: Duration(seconds: 1),
+                                        //       defaultRenderer: new charts.ArcRendererConfig(
+                                        //           arcWidth: 8, //TODO: rosca
+                                        //           //arcRendererDecorators: [
+                                        //             // new charts.ArcLabelDecorator(
+                                        //             //     labelPosition: charts.ArcLabelPosition.inside,
+                                        //             //     insideLabelStyleSpec: charts.TextStyleSpec(
+                                        //             //       fontSize: 6,
+                                        //             //     )
+                                        //             // )
+                                        //             //]
+                                        //       ),
+                                        //     ),
+                                        //   )
+                                        // ),
                                       ),
                                       Expanded(
                                         flex: 5,
                                         child: Container(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-                                                child: Expanded(
+                                          height: double.infinity,
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              left: BorderSide(
+                                                  width: 0.6,
+                                                  color: Colors.black54),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
                                                   flex: 3,
                                                   child: Container(
                                                     width: double.infinity,
@@ -802,36 +647,62 @@ class _caixasEBancos extends State<CaixaEBanco> {
                                                       style: TextStyle(
                                                           fontSize:
                                                               MediaWidth / 25,
-                                                          color: Colors.black87
-                                                      ),
+                                                          color:
+                                                              Colors.black87),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: Container(
-                                                  width: double.infinity,
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(left: 10.0, right: 15.0, bottom: 10),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Container(
+                                                    width: double.infinity,
                                                     child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
                                                       children: [
-
-                                                        Icon(
-                                                          caixasebancos['TIPO'] == 2
-                                                              ? Icons.account_balance_outlined
-                                                              : Icons.move_to_inbox_outlined,
-                                                          color: Colors.orange,
+                                                        Row(
+                                                          children: [
+                                                            Icon(
+                                                              caixasebancos[
+                                                                          'TIPO'] ==
+                                                                      2
+                                                                  ? Icons
+                                                                      .account_balance_outlined
+                                                                  : Icons
+                                                                      .move_to_inbox_outlined,
+                                                              color:
+                                                                  Colors.orange,
+                                                            ),
+                                                            Text(
+                                                              caixasebancos[
+                                                                          'TIPO'] ==
+                                                                      2
+                                                                  ? 'BANCO'
+                                                                  : 'CAIXA',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontSize:
+                                                                    MediaWidth /
+                                                                        29,
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                         Row(
                                                           children: [
                                                             Icon(
                                                               Icons
                                                                   .monetization_on_outlined,
-                                                              size: MediaWidth / 20,
-                                                              color: caixasebancos['SALDO'] > 0
+                                                              size: MediaWidth /
+                                                                  20,
+                                                              color: caixasebancos[
+                                                                          'SALDO'] >
+                                                                      0
                                                                   ? Colors.green
                                                                   : Colors.red,
                                                             ),
@@ -839,8 +710,10 @@ class _caixasEBancos extends State<CaixaEBanco> {
                                                               ' R\$: ${ConverteReais(caixasebancos['SALDO'])}',
                                                               style: TextStyle(
                                                                 fontSize:
-                                                                    MediaWidth / 25,
-                                                                color: Colors.black54,
+                                                                    MediaWidth /
+                                                                        25,
+                                                                color: Colors
+                                                                    .black54,
                                                               ),
                                                             ),
                                                           ],
@@ -849,8 +722,8 @@ class _caixasEBancos extends State<CaixaEBanco> {
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       )
@@ -872,8 +745,11 @@ class _caixasEBancos extends State<CaixaEBanco> {
         ));
   }
 }
-class PieData {
-  String activity;
-  double time;
-  PieData(this.activity, this.time);
+
+class GraficoCaixaEBanco {
+  String nomeCaixaEBanco;
+  double graficValue;
+  Color graficColor;
+
+  GraficoCaixaEBanco(this.nomeCaixaEBanco, this.graficValue, this.graficColor);
 }
