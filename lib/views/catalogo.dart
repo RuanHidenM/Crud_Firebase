@@ -1,11 +1,9 @@
-import 'dart:io' as Io;
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud_firebase/complements/convertereais.dart';
 import 'package:crud_firebase/complements/selectfirebase.dart';
 import 'package:crud_firebase/components/mytextfield.dart';
-import 'package:crud_firebase/models/produto/familia.dart';
 import 'package:crud_firebase/models/produto/tabeladepreco.dart';
 import 'package:crud_firebase/views/detalhesdoitem.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +17,6 @@ class Catalogo extends StatefulWidget {
 }
 
 class _catalogo extends State<Catalogo> {
-  static String tag = '/catalogo';
   get MediaWidth => MediaQuery.of(context).size.width;
   var userLogado = FirebaseAuth.instance.currentUser;
   var snapshots;
@@ -46,9 +43,9 @@ class _catalogo extends State<Catalogo> {
   }
 
   Future <List<String>> BuscandoProdutosDaEmpresa() async {
-    await BuscandoTenantIdDoUsuarioLogado().then((value) => tenanteIDDoUsuarioLogado = value);
+    await buscandoTenantIdDoUsuarioLogado().then((value) => tenanteIDDoUsuarioLogado = value);
 
-    await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
+    await buscandoCNPJdaEmpresaLogada().then((value) => setState(() {
       CNPJDaEmpresaLogada = value;
     }));
 
@@ -81,10 +78,15 @@ class _catalogo extends State<Catalogo> {
               'Catálogo',
               style: TextStyle(color: Colors.white),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: Icon(Icons.filter_list_rounded,
-                  color: Colors.white, size: 25),
+            GestureDetector(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: Icon(Icons.filter_list_rounded,
+                    color: Colors.white, size: 25),
+              ),
+              onTap: (){
+
+              },
             ),
           ],
         ),
@@ -181,8 +183,8 @@ class _catalogo extends State<Catalogo> {
                           element['Padrao'],
                           element['Nome'],
                         );
-                        tabelaDePreco.add(tabeladepreco.Preco.toStringAsFixed(2));
-                        nomeTabeladePrecoQueForSim = '${tabeladepreco.Nome}: R\$ ${ConverteReais(tabeladepreco.Preco)}';
+                        tabelaDePreco.add(tabeladepreco.preco.toStringAsFixed(2));
+                        nomeTabeladePrecoQueForSim = '${tabeladepreco.nome}: R\$ ${converteReais(tabeladepreco.preco)}';
                       }
                       var valorDoProdutoQueForSim = tabelaDePreco.toString().replaceAll('[', '').replaceAll(']', '');
 
@@ -193,7 +195,7 @@ class _catalogo extends State<Catalogo> {
                           element['Padrao'],
                           element['Nome'],
                         );
-                        NomestabelaDePreco.add('${tabeladepreco.Nome}: R\$ ${ConverteReais(tabeladepreco.Preco)}');
+                        NomestabelaDePreco.add('${tabeladepreco.nome}: R\$ ${converteReais(tabeladepreco.preco)}');
                       }
                       //TODO: BASE64 IMG
                       Uint8List bytesImg = base64Decode(produtos['IMAGEM'].toString().replaceAll('[', '').replaceAll(']', ''));
@@ -204,7 +206,7 @@ class _catalogo extends State<Catalogo> {
                             height: MediaWidth / 3,
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(5),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey,
@@ -250,14 +252,14 @@ class _catalogo extends State<Catalogo> {
                                       Expanded(
                                           flex: 7,
                                           child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
+                                            padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 5),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.stretch,
                                               //mainAxisAlignment: MainAxisAlignment.spaceAround,
                                               children: [
                                                 Container(
                                                     height: MediaQuery.of(context).size.height/ 11,
-                                                   // color:Colors.red,
+                                                    //color:Colors.red,
                                                     child: Container(
                                                       child: Padding(
                                                         padding: const EdgeInsets.only(bottom:9.0),
@@ -287,7 +289,7 @@ class _catalogo extends State<Catalogo> {
                                                               child: Icon(Icons.monetization_on, color: Colors.green, size: MediaQuery.of(context).size.height/ 40,),
                                                             ),
                                                             Text('R\$: ', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 50),),
-                                                            Text('${ConverteReais(valorDoProdutoQueForSim)}', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 45),),
+                                                            Text('${converteReais(valorDoProdutoQueForSim)}', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 45),),
                                                           ],
                                                         ),
                                                         Row(

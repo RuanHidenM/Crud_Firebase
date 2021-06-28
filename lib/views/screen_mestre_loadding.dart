@@ -1,11 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud_firebase/components/progress.dart';
-import 'package:crud_firebase/firebase/firebase_authentication.dart';
-import 'package:crud_firebase/views/drawerside.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 
 class ScreenMestreLoadding extends StatefulWidget{

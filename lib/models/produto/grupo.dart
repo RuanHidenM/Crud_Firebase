@@ -1,15 +1,15 @@
 class Grupo{
-  final int Codigo;
-  final String Id;
-  final String Nome;
+  final int codigo;
+  final String id;
+  final String nome;
 
   Grupo(
-      this.Codigo,
-      this.Id,
-      this.Nome
+      this.codigo,
+      this.id,
+      this.nome
       );
   @override
   String toString(){
-    return 'Grupo = {Codigo: $Codigo, Id: $Id, Nome: $Nome}';
+    return 'Grupo = {Codigo: $codigo, Id: $id, Nome: $nome}';
   }
 }

@@ -1,14 +1,13 @@
-import 'dart:ffi';
+
 import 'dart:typed_data';
 
 import 'package:crud_firebase/canvas/canvas_screen-login.dart';
 import 'package:crud_firebase/complements/convertedata.dart';
 import 'package:crud_firebase/complements/convertereais.dart';
-import 'package:crud_firebase/main.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class DetalhesDoItem extends StatefulWidget {
   DetalhesDoItem(
@@ -152,7 +151,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                           Row(
                             children: [
                               Text(
-                                'R\$: ${ConverteReais(widget.valor)}',
+                                'R\$: ${converteReais(widget.valor)}',
                                 style: TextStyle(
                                     color: Colors.green,
                                     fontSize: MediaWidth / 18),
@@ -324,7 +323,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                                       fontSize: MediaWidth / 22,
                                       color: Colors.black45)),
                               Text(
-                                ' ${ConverteReais(widget.custoLiquido)}',
+                                ' ${converteReais(widget.custoLiquido)}',
                                 style: TextStyle(
                                     fontSize: MediaWidth / 22,
                                     color: Colors.black87),
@@ -350,7 +349,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                                   ),
                               ),
                               Text(
-                                ' ${ConverteData(widget.cadastroData)}',
+                                ' ${converteData(widget.cadastroData)}',
                                 style: TextStyle(
                                     fontSize: MediaWidth / 22,
                                     color: Colors.black87,

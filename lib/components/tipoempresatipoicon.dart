@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-TipoEmpresaTipoIcon(int tipo) {
+tipoEmpresaTipoIcon(int tipo) {
 
   if(tipo == 1){
     return Padding(

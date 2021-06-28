@@ -179,7 +179,7 @@ class _showModalFiltro extends State<ShowModalFiltro> {
                     children: [
                       GestureDetector(
                         child: Container(
-                          child: ButtonSmallTitleIconColor(
+                          child: buttonSmallTitleIconColor(
                             name: 'Limpar',
                             corDoTexto: Colors.white,
                             corDoBotao: Colors.orange,
@@ -193,7 +193,7 @@ class _showModalFiltro extends State<ShowModalFiltro> {
                       ),
                       GestureDetector(
                         child: Container(
-                          child: ButtonAverageTitleIconColor(
+                          child: buttonAverageTitleIconColor(
                             name: 'Buscar',
                             corDoTexto: Colors.white,
                             corDoBotao: Colors.green,
@@ -206,9 +206,7 @@ class _showModalFiltro extends State<ShowModalFiltro> {
                           // print(_idadeMinController.text.toString());
                           // print(_idadeMaxController.text.toString());
                           // print(selectedSexo.toString());
-                          var nome = _nomeController.text;
-                          var idademax = _idadeMaxController.text;
-                          var idademin = _idadeMinController.text;
+
                           setState(() {
                             Catalogo();
                             //FirebaseFiltrando(nome, idademax, idademin, selectedSexo);

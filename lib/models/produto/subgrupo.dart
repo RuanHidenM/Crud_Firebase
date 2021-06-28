@@ -1,15 +1,15 @@
 class Subgrupo{
-  final int Codigo;
-  final String Id;
-  final String Nome;
+  final int codigo;
+  final String id;
+  final String nome;
 
   Subgrupo(
-      this.Codigo,
-      this.Id,
-      this.Nome
+      this.codigo,
+      this.id,
+      this.nome
       );
   @override
   String toString(){
-    return 'Subgrupo = {Codigo: $Codigo, Id: $Id, Nome: $Nome}';
+    return 'Subgrupo = {Codigo: $codigo, Id: $id, Nome: $nome}';
   }
 }

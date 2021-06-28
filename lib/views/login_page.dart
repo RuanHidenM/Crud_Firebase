@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void AlertaConectInternet(){//TODO: Alerta de aviso que esta sem internet
-    AlertaSimples(
+    alertaSimples(
         context,
         'Conexão com a Internet',
         'Para efetuar o login, o dispositivo deve estar conectado a uma internet',
@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                                             colorTextField: Color.fromRGBO(
                                                 155, 155, 155, 210)),
                                         GestureDetector(
-                                          child: ButtonSmallTitleIconColor(
+                                          child: buttonSmallTitleIconColor(
                                               name: 'Entrar',
                                               iconDoButton:
                                                   Icons.arrow_forward_ios,
@@ -224,22 +224,22 @@ class _LoginPageState extends State<LoginPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        CircularButtonMediunTitleColorIcon(
+                                        circularButtonMediunTitleColorIcon(
                                             corDobotao:
                                                 Color.fromRGBO(36, 82, 108, 1),
                                             iconDoBotao: Icons.web,
                                             corDoIcon: Colors.white),
-                                        CircularButtonMediunTitleColorIcon(
+                                        circularButtonMediunTitleColorIcon(
                                             corDobotao:
                                                 Color.fromRGBO(36, 82, 108, 1),
                                             iconDoBotao: Icons.message,
                                             corDoIcon: Colors.white),
-                                        CircularButtonMediunTitleColorIcon(
+                                        circularButtonMediunTitleColorIcon(
                                             corDobotao:
                                                 Color.fromRGBO(36, 82, 108, 1),
                                             iconDoBotao: Icons.vpn_key_outlined,
                                             corDoIcon: Colors.white),
-                                        CircularButtonMediunTitleColorIcon(
+                                        circularButtonMediunTitleColorIcon(
                                             corDobotao:
                                                 Color.fromRGBO(36, 82, 108, 1),
                                             iconDoBotao: Icons.create,

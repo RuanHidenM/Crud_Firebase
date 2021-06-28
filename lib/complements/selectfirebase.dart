@@ -1,9 +1,7 @@
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:crud_firebase/models/empresas.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 String userLogadoEmail;
 var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
@@ -15,18 +13,18 @@ var produtosDoUsuario;
 var valorPadraoDoProduto;
 final double valorDoProdutoQueForSim = 0;
 var tabelaPrecoJsonlength;
-var CNPJDaEmpresaLogada = '';
+var cNPJDaEmpresaLogada = '';
 var tenanteIDDoUsuarioLogado = '';
 
 
-Future<String> BuscandoEmailDoUsuarioLogado() async {
+Future<String> buscandoEmailDoUsuarioLogado() async {
   //Todo: Buscando o E-MAIL do usuario logado atual
-  var retornoDoEmailLogado = await FirebaseAuth.instance.currentUser.email.toString();
+  var retornoDoEmailLogado = FirebaseAuth.instance.currentUser.email.toString();
   return retornoDoEmailLogado;
 }
 
-Future<List<Empresa>> BuscandoEmpresaPadraoDoUsuario() async {
-  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
+Future<List<Empresa>> buscandoEmpresaPadraoDoUsuario() async {
+  await buscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
   final List<Empresa> empresas = List();
   for(Map<String, dynamic> element in empresasJson['Empresas']){
@@ -39,13 +37,13 @@ Future<List<Empresa>> BuscandoEmpresaPadraoDoUsuario() async {
     empresas.add(empresa);
   }
   //TODO: Buscando apenas os valores que tem tipo do do valor informado.
-  List<Empresa> EmpresaQueForTrue = empresas.where((element) => element.logada == true).toList();
+  List<Empresa> empresaQueForTrue = empresas.where((element) => element.logada == true).toList();
 
-  return EmpresaQueForTrue;
+  return empresaQueForTrue;
 }
 
-Future<String> BuscandoTenantIdDoUsuarioLogado() async {
-  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
+Future<String> buscandoTenantIdDoUsuarioLogado() async {
+  await buscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
  // final List<Empresa> empresas = List();
   var tenanteDaEmpresaLogada;
@@ -67,14 +65,14 @@ Future<String> BuscandoTenantIdDoUsuarioLogado() async {
 
 }
 
-Future<String> BuscandoNomeDoUsuario() async {
-  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
+Future<String> buscandoNomeDoUsuario() async {
+  await buscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
   return empresasJson['Nome'];
 }
 
-Future<List<String>> BuscandoEmpresasDoUsuario() async {
-  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
+Future<List<String>> buscandoEmpresasDoUsuario() async {
+  await buscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
   //final List<Empresa> empresas = List();
   final List<String> nomesEmpresas = List();
@@ -90,8 +88,8 @@ Future<List<String>> BuscandoEmpresasDoUsuario() async {
   return nomesEmpresas;
 }
 
-Future<String> BuscandoNomeEmpresaPadraoDoUsuario() async {
-  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
+Future<String> buscandoNomeEmpresaPadraoDoUsuario() async {
+  await buscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
 
   final List<String> nomesEmpresas = List();
@@ -106,14 +104,14 @@ Future<String> BuscandoNomeEmpresaPadraoDoUsuario() async {
       nomesEmpresas.add(empresa.fantasia);
     }
   }
-  String EmpresaPadaoselecionada = nomesEmpresas.toString();
-  String EmpresaPadaoselecionada1 = EmpresaPadaoselecionada.replaceAll("[", "");
-  String EmpresaPadaoselecionada2 = EmpresaPadaoselecionada1.replaceAll("]", "");
-  return EmpresaPadaoselecionada2;
+  String empresaPadaoselecionada = nomesEmpresas.toString();
+  String empresaPadaoselecionada1 = empresaPadaoselecionada.replaceAll("[", "");
+  String empresaPadaoselecionada2 = empresaPadaoselecionada1.replaceAll("]", "");
+  return empresaPadaoselecionada2;
 }
 
-Future<String> BuscandoCNPJdaEmpresaLogada () async{
-  await BuscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
+Future<String> buscandoCNPJdaEmpresaLogada () async{
+  await buscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
   final List<String> nomesEmpresas = List();
   for(Map<String, dynamic> element in empresasJson['Empresas']){
@@ -130,25 +128,25 @@ Future<String> BuscandoCNPJdaEmpresaLogada () async{
   return nomesEmpresas.toString().replaceAll("[", "").replaceAll("]", "");
 }
 
-Future<double> BuscandoValorTotalCaixaEBanco () async{
-  await BuscandoCNPJdaEmpresaLogada().then((value) =>
-    CNPJDaEmpresaLogada = value,
+Future<double> buscandoValorTotalCaixaEBanco () async{
+  await buscandoCNPJdaEmpresaLogada().then((value) =>
+  cNPJDaEmpresaLogada = value,
   );
- await BuscandoTenantIdDoUsuarioLogado().then((value) =>
+ await buscandoTenantIdDoUsuarioLogado().then((value) =>
  tenanteIDDoUsuarioLogado = value
  );
   caixaEBancoJsonLength = await FirebaseFirestore.instance
       .collection('Tenant')
       .doc(tenanteIDDoUsuarioLogado)
       .collection('Empresas')
-      .doc(CNPJDaEmpresaLogada.toString())
+      .doc(cNPJDaEmpresaLogada.toString())
       .collection('CaixaBanco').get().then((value) => value);
 
   caixaEBancoJson = await FirebaseFirestore.instance
       .collection('Tenant')
       .doc(tenanteIDDoUsuarioLogado)
       .collection('Empresas')
-      .doc(CNPJDaEmpresaLogada.toString())
+      .doc(cNPJDaEmpresaLogada.toString())
       .collection('CaixaBanco').get().then((value) => value.docs);
 
   double valortotal = 0;
@@ -161,25 +159,25 @@ Future<double> BuscandoValorTotalCaixaEBanco () async{
   return valortotal;
 }
 
-Future<double> BuscandoValorTotalCaixa () async{
-  await BuscandoCNPJdaEmpresaLogada().then((value) =>
-    CNPJDaEmpresaLogada = value,
+Future<double> buscandoValorTotalCaixa () async{
+  await buscandoCNPJdaEmpresaLogada().then((value) =>
+  cNPJDaEmpresaLogada = value,
   );
- await BuscandoTenantIdDoUsuarioLogado().then((value) =>
+ await buscandoTenantIdDoUsuarioLogado().then((value) =>
  tenanteIDDoUsuarioLogado = value
  );
   caixaEBancoJsonLength = await FirebaseFirestore.instance
       .collection('Tenant')
       .doc(tenanteIDDoUsuarioLogado)
       .collection('Empresas')
-      .doc(CNPJDaEmpresaLogada.toString())
+      .doc(cNPJDaEmpresaLogada.toString())
       .collection('CaixaBanco').get().then((value) => value);
 
   caixaEBancoJson = await FirebaseFirestore.instance
       .collection('Tenant')
       .doc(tenanteIDDoUsuarioLogado)
       .collection('Empresas')
-      .doc(CNPJDaEmpresaLogada.toString())
+      .doc(cNPJDaEmpresaLogada.toString())
       .collection('CaixaBanco').get().then((value) => value.docs);
 
   double valortotal = 0;
@@ -190,55 +188,54 @@ Future<double> BuscandoValorTotalCaixa () async{
   }
   return valortotal;
 }
-Future<double> BuscandoValorTotalBanco () async{
-  await BuscandoCNPJdaEmpresaLogada().then((value) =>
-    CNPJDaEmpresaLogada = value,
+Future<double> buscandoValorTotalBanco () async{
+  await buscandoCNPJdaEmpresaLogada().then((value) =>
+  cNPJDaEmpresaLogada = value,
   );
- await BuscandoTenantIdDoUsuarioLogado().then((value) =>
+ await buscandoTenantIdDoUsuarioLogado().then((value) =>
  tenanteIDDoUsuarioLogado = value
  );
   caixaEBancoJsonLength = await FirebaseFirestore.instance
       .collection('Tenant')
       .doc(tenanteIDDoUsuarioLogado)
       .collection('Empresas')
-      .doc(CNPJDaEmpresaLogada.toString())
+      .doc(cNPJDaEmpresaLogada.toString())
       .collection('CaixaBanco').get().then((value) => value);
 
   caixaEBancoJson = await FirebaseFirestore.instance
       .collection('Tenant')
       .doc(tenanteIDDoUsuarioLogado)
       .collection('Empresas')
-      .doc(CNPJDaEmpresaLogada.toString())
+      .doc(cNPJDaEmpresaLogada.toString())
       .collection('CaixaBanco').get().then((value) => value.docs);
 
   double valortotal = 0;
   for(int i = 0; caixaEBancoJsonLength.docs.length > i; i++){
     if(caixaEBancoJson[i]['TIPO'] == 2 && caixaEBancoJson[i]['SALDO'] >= 0){
       valortotal = valortotal + caixaEBancoJson[i]['SALDO'];
-      print(' $i valortotal :$valortotal');
     }
   }
   return valortotal;
 }
-Future<double> BuscandoValorTotalSaldoNegativo () async{
-  await BuscandoCNPJdaEmpresaLogada().then((value) =>
-    CNPJDaEmpresaLogada = value,
+Future<double> buscandoValorTotalSaldoNegativo () async{
+  await buscandoCNPJdaEmpresaLogada().then((value) =>
+  cNPJDaEmpresaLogada = value,
   );
- await BuscandoTenantIdDoUsuarioLogado().then((value) =>
+ await buscandoTenantIdDoUsuarioLogado().then((value) =>
  tenanteIDDoUsuarioLogado = value
  );
   caixaEBancoJsonLength = await FirebaseFirestore.instance
       .collection('Tenant')
       .doc(tenanteIDDoUsuarioLogado)
       .collection('Empresas')
-      .doc(CNPJDaEmpresaLogada.toString())
+      .doc(cNPJDaEmpresaLogada.toString())
       .collection('CaixaBanco').get().then((value) => value);
 
   caixaEBancoJson = await FirebaseFirestore.instance
       .collection('Tenant')
       .doc(tenanteIDDoUsuarioLogado)
       .collection('Empresas')
-      .doc(CNPJDaEmpresaLogada.toString())
+      .doc(cNPJDaEmpresaLogada.toString())
       .collection('CaixaBanco').get().then((value) => value.docs);
 
   double valortotal = 0;

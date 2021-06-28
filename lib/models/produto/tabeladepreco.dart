@@ -1,16 +1,16 @@
 class TabelaDePreco{
-  final double Preco;
-  final String Padrao;
-  final String Nome;
+  final double preco;
+  final String padrao;
+  final String nome;
 
   TabelaDePreco(
-      this.Preco,
-      this.Padrao,
-      this.Nome
+      this.preco,
+      this.padrao,
+      this.nome
       );
 
   @override
   String toString(){
-    return 'Tabela de Preco {Preco: $Preco, Padrão: $Padrao, Nome: $Nome}';
+    return 'Tabela de Preco {Preco: $preco, Padrão: $padrao, Nome: $nome}';
   }
 }

@@ -1,15 +1,15 @@
 class Unidadedemedida{
-  final int Codigo;
-  final String Id;
-  final String Nome;
+  final int codigo;
+  final String id;
+  final String nome;
 
   Unidadedemedida(
-      this.Codigo,
-      this.Id,
-      this.Nome
+      this.codigo,
+      this.id,
+      this.nome
       );
   @override
   String toString(){
-    return 'Unidadedemedida = {Codigo: $Codigo, Id: $Id, Nome: $Nome}';
+    return 'Unidadedemedida = {Codigo: $codigo, Id: $id, Nome: $nome}';
   }
 }

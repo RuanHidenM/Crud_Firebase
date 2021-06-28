@@ -1,6 +1,5 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crud_firebase/complements/selectfirebase.dart';
 import 'package:crud_firebase/views/drawerside.dart';
 import 'package:crud_firebase/views/screen_erro_login.dart';
 import 'package:crud_firebase/views/screen_mestre_loadding.dart';
@@ -26,8 +25,10 @@ class _homePage extends State<HomePage>{
 
   _generateDate(){
     var pieData = [
-      new GraficoCaixaEBanco('Total', 357827.34 , Colors.blue),
-      new GraficoCaixaEBanco('Eat', 23968.51, Colors.orange),
+      new GraficoCaixaEBanco('01', 30000.34 , Colors.blue),
+      new GraficoCaixaEBanco('02', 20000.51, Colors.orange),
+      new GraficoCaixaEBanco('03', 10000.51, Colors.green),
+      new GraficoCaixaEBanco('04', 500.51, Colors.black),
     ];
 
     _seriesPieData.add(
@@ -48,7 +49,7 @@ class _homePage extends State<HomePage>{
     _generateDate();
     setState(() {
       userLogadoEmail = FirebaseAuth.instance.currentUser.email.toString();
-         VerificaEmailLogadoComEmailCadastrado(userLogadoEmail);
+      verificaEmailLogadoComEmailCadastrado(userLogadoEmail);
          //snapshots = dbUsuario.where('Email', isEqualTo: userLogadoEmail).snapshots();
          snapshots = dbUsuario.snapshots();
         //BuscandoEmpresaPadraoDoUsuario().then((empresas) => print('Lista de empresas $empresas'));
@@ -57,7 +58,7 @@ class _homePage extends State<HomePage>{
   }
 
   @override
-  void VerificaEmailLogadoComEmailCadastrado(String userLogadoEmail) async {
+  void verificaEmailLogadoComEmailCadastrado(String userLogadoEmail) async {
     var resultado = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
     resultado == null ? EmailIdentificado = 'invalido': EmailIdentificado = 'valido';
     setState(() {
@@ -79,7 +80,7 @@ class _homePage extends State<HomePage>{
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Home', style: TextStyle(color: Colors.white),),
+              Text('Dashboard', style: TextStyle(color: Colors.white),),
             ],
           ),
         ),
@@ -88,93 +89,82 @@ class _homePage extends State<HomePage>{
             Expanded(
               flex: 1,
                 child: Container(
-                  height: 350,
-                  width: 350,
                   child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-
-                          Stack(
-                            children: <Widget>[
-
-
-
-                            ],
-                          ),
-
-
-
-                          Expanded(
-                            child: charts.PieChart(
-                              _seriesPieData,
-                              animate: true,
-                              animationDuration: Duration(seconds: 1),
-
-                              behaviors: [
-                                new charts.DatumLegend(
-                                  outsideJustification: charts.OutsideJustification.endDrawArea,
-                                  horizontalFirst: true,
-                                  desiredMaxRows: 2,
-                                  cellPadding: new EdgeInsets.only(right: 5.0, bottom: 4.0),
-                                  entryTextStyle: charts.TextStyleSpec(
-                                    color:charts.MaterialPalette.purple.shadeDefault,
-                                    fontFamily: 'Georgia',
-                                    fontSize: 11
-                                  ),
-                                ),
-                              ],
-
-                              defaultRenderer: new charts.ArcRendererConfig(
-                                arcWidth: 50,//TODO: rosca
-                                arcRendererDecorators: [
-                                  new charts.ArcLabelDecorator(
-                                    labelPosition: charts.ArcLabelPosition.outside,
-                                    insideLabelStyleSpec: charts.TextStyleSpec(
-                                      fontSize: 60,
-                                    )
-                                  )
-                                ]
-                              ),
+                          Text(
+                            'DASHBOARD',
+                            style: TextStyle(
+                                color: Colors.black12,
+                                fontSize: MediaWidth / 10
                             ),
-                          )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                          // Text(
-                          //   'DASHBOARD',
-                          //   style: TextStyle(
-                          //     color: Colors.black12,
-                          //     fontSize: MediaWidth / 10
+                          ),
+                          Text(
+                            'O dashboard esta vazio',
+                            style: TextStyle(
+                                color: Colors.black12,
+                                fontSize: MediaWidth / 25
+                            ),
+                          ),
+                          // Expanded(
+                          //   child: charts.PieChart(
+                          //     _seriesPieData,
+                          //     animate: true,
+                          //     animationDuration: Duration(seconds: 1),
+                          //
+                          //     behaviors: [
+                          //       new charts.DatumLegend(
+                          //         outsideJustification: charts.OutsideJustification.endDrawArea,
+                          //         horizontalFirst: true,
+                          //         desiredMaxRows: 2,
+                          //         cellPadding: new EdgeInsets.only(right: 5.0, bottom: 4.0),
+                          //         entryTextStyle: charts.TextStyleSpec(
+                          //           color:charts.MaterialPalette.purple.shadeDefault,
+                          //           fontFamily: 'Georgia',
+                          //           fontSize: 11
+                          //         ),
+                          //       ),
+                          //     ],
+                          //
+                          //     defaultRenderer: new charts.ArcRendererConfig(
+                          //       arcWidth: 50,//TODO: rosca
+                          //       arcRendererDecorators: [
+                          //         new charts.ArcLabelDecorator(
+                          //           labelPosition: charts.ArcLabelPosition.outside,
+                          //           insideLabelStyleSpec: charts.TextStyleSpec(
+                          //             fontSize: 60,
+                          //           )
+                          //         )
+                          //       ]
+                          //     ),
                           //   ),
-                          // ),
-                          // Text(
-                          //   'O dashboard esta vazio',
-                          //   style: TextStyle(
-                          //     color: Colors.black12,
-                          //     fontSize: MediaWidth / 25
-                          //   ),
-                          // ),
+                          // )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         ],
                       ),
                   ),

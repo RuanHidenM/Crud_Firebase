@@ -1,12 +1,11 @@
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
   //Todo Converte o valor informado em formato de Reais
-ConverteReais(valor){
+converteReais(valor){
   //Todo: Se o valor.runtimeType for igual a 'String', sera Convertido para double.
    if(valor.runtimeType.toString() == 'String'){
      valor = double.parse(valor);
    }
-
   var valorComVirgulaEInvertido = valor.toStringAsFixed(2).replaceAll('.',',').split('').reversed.join();
   //Todo Definindo dois valore depois da virgula
   //Todo Invertendo todo o calor

@@ -1,11 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:crud_firebase/models/empresas.dart';
 
 //TODO: Um alerta de tamanho pequeno, apenas para informa o usuario, sem função
-void AlertaTrocaDeEmpresa(context, String nomeEmpresa) {
+void alertaTrocaDeEmpresa(context, String nomeEmpresa) {
 
   // final String userLogadoEmail = FirebaseAuth.instance.currentUser.email.toString();
   // var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
@@ -54,12 +51,12 @@ void AlertaTrocaDeEmpresa(context, String nomeEmpresa) {
             ),
           ),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text("Não", style: TextStyle(fontSize: MediaQuery.of(context).size.height / 43),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-            ), FlatButton(
+            ), TextButton(
               child: Text("Sim", style: TextStyle(fontSize: MediaQuery.of(context).size.height / 43),),
               onPressed: () {
                 Navigator.of(context).pop();

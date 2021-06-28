@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
   @override
-  Widget ButtonBigTitleIconColor
+  Widget buttonBigTitleIconColor
   ({
     String name = 'Button',
     IconData iconDoButton = Icons.warning_amber_outlined,

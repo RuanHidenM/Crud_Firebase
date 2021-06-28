@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
   @override
-  Widget ButtonAverageTitleIconColor
+  Widget buttonAverageTitleIconColor
   ({
     String name = 'Button',
     IconData iconDoButton = Icons.warning_amber_outlined,

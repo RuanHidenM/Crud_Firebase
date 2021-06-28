@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-  Widget CircularButtonBiglTitleColorIcon ({
+  Widget circularButtonBiglTitleColorIcon ({
   Color corDobotao = Colors.white,
   IconData iconDoBotao = Icons.warning_amber_outlined,
   Color corDoIcon = Colors.black

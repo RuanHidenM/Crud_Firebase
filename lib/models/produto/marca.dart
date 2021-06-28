@@ -1,15 +1,15 @@
 class Marca{
-  final int Codigo;
-  final String Id;
-  final String Nome;
+  final int codigo;
+  final String id;
+  final String nome;
 
   Marca(
-      this.Codigo,
-      this.Id,
-      this.Nome
+      this.codigo,
+      this.id,
+      this.nome
       );
   @override
   String toString(){
-    return 'Marca = {Codigo: $Codigo, Id: $Id, Nome: $Nome}';
+    return 'Marca = {Codigo: $codigo, Id: $id, Nome: $nome}';
   }
 }

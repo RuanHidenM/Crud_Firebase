@@ -1,16 +1,16 @@
 class Familia{
-  final double Codigo;
-  final String Id;
-  final String Nome;
+  final double codigo;
+  final String id;
+  final String nome;
 
   Familia(
-    this.Codigo,
-    this.Id,
-    this.Nome
+    this.codigo,
+    this.id,
+    this.nome
   );
 
   @override
   String toString(){
-    return 'Familia = {Codigo: $Codigo, Id: $Id, Nome: $Nome}';
+    return 'Familia = {Codigo: $codigo, Id: $id, Nome: $nome}';
   }
 }

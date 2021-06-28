@@ -79,8 +79,6 @@ class BackgroundSignInDetahlesDoProduto extends CustomPainter {
     paint.color = Color.fromRGBO(245, 134, 52, 1);
     canvas.drawPath(orangeWave, paint);
 
-
-
     Path blueMestreWave = Path();
     blueMestreWave.lineTo(sw, 0);
     blueMestreWave.lineTo(sw, sh * 1);
@@ -97,8 +95,6 @@ class BackgroundSignInDetahlesDoProduto extends CustomPainter {
     //paint.color = Color.fromRGBO(36,82,108,1);
     paint.color = Colors.white;
     canvas.drawPath(blueMestreWave, paint);
-
-
 
     Path whiteWave = Path();
     whiteWave.lineTo(sw, 0);

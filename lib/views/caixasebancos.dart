@@ -1,13 +1,12 @@
+import 'package:crud_firebase/complements/calculaporcentagementredoisvalores.dart';
 import 'package:crud_firebase/complements/convertereais.dart';
 import 'package:crud_firebase/complements/selectfirebase.dart';
 import 'package:crud_firebase/components/botton_title_icon_tipo_filtro_caixaebanco.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:crud_firebase/globals.dart' as globals;
 
 class CaixaEBanco extends StatefulWidget {
   @override
@@ -16,22 +15,22 @@ class CaixaEBanco extends StatefulWidget {
 
 class _caixasEBancos extends State<CaixaEBanco> {
   get MediaWidth => MediaQuery.of(context).size.width;
-  var snapshotsCaixaEBanco;
-  var snapshotsCaixa;
-  var snapshotsBanco;
-  var snapshotsCaixaEBancoNegativo;
-  var valorTotalCaixaEBanco;
+  var snapshotsCaixaEBanco; //TODO: Select do CaixaeBanco
+  var snapshotsCaixa; //TODO: Select do Caixa
+  var snapshotsBanco; //TODO: Select do Banco
+  var snapshotsCaixaEBancoNegativo; //TODO: Select Negativo
 
-  var valorTotalCaixa;
-  var valorTotalBanco;
-  var valorTotalNegativo;
+  var valorTotalCaixaEBanco; //TODO Valor total CaixaeBanco
+  var valorTotalCaixa; //TODO: Valor total Caixa
+  var valorTotalBanco; //TODO: Valor total BANCO
+  var valorTotalNegativo; //TODO: Valor total NEGATIVO
 
-  var CNPJDaEmpresaLogada = '';
+  var CNPJDaEmpresaLogada = ''; //TODO: CNPJ da empresa logada para os selects
 
   bool mostrarValorTotal;
-  bool selectedCaixa; //TODO: FILTROS
-  bool selectedBanco; //TODO: FILTROS
-  bool selectNegativo; //TODO: NEGATIVO
+  bool selectedCaixa; //TODO: Botão filtro CAIXA
+  bool selectedBanco; //TODO: Botão filtro BANCO
+  bool selectNegativo; //TODO: Botão filtro NEGATIVO
   List<charts.Series<GraficoCaixaEBanco, String>> _seriesPieData;
 
   _generateData({
@@ -61,7 +60,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
   }
 
   _caixasEBancos() {
-    BuscandoCaixaEBancoDaEmpresa().then((value) => setState(() {
+    buscandoCaixaEBancoDaEmpresa().then((value) => setState(() {
           snapshotsCaixaEBanco = value;
         }));
     BuscandoCaixaDaEmpresa().then((value) => setState(() {
@@ -70,16 +69,16 @@ class _caixasEBancos extends State<CaixaEBanco> {
     BuscandoBancoDaEmpresa().then((value) => setState(() {
           snapshotsBanco = value;
         }));
-    BuscandoValorTotalCaixaEBanco().then((value) => setState(() {
+    buscandoValorTotalCaixaEBanco().then((value) => setState(() {
           valorTotalCaixaEBanco = value;
         }));
-    BuscandoValorTotalCaixa().then((value) => setState(() {
+    buscandoValorTotalCaixa().then((value) => setState(() {
           valorTotalCaixa = value;
         }));
-    BuscandoValorTotalBanco().then((value) => setState(() {
+    buscandoValorTotalBanco().then((value) => setState(() {
           valorTotalBanco = value;
         }));
-    BuscandoValorTotalSaldoNegativo().then((value) => setState(() {
+    buscandoValorTotalSaldoNegativo().then((value) => setState(() {
           valorTotalNegativo = value;
         }));
     BuscandoCaixaEBancoNegativoDaEmpresa().then((value) => setState(() {
@@ -90,22 +89,17 @@ class _caixasEBancos extends State<CaixaEBanco> {
   @override
   void initState() {
     super.initState();
-    //_seriesPieData = List<charts.Series<GraficoCaixaEBanco, String>>();
-    //_generateData(nome: 'dale', valor: 500.0);
-
-    mostrarValorTotal = true;
     setState(() {
-      //_generateData();
       selectedCaixa = false;
       selectedBanco = false;
     });
   }
 
-  Future<List<String>> BuscandoCaixaEBancoDaEmpresa() async {
-    await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
+  Future<List<String>> buscandoCaixaEBancoDaEmpresa() async {
+    await buscandoCNPJdaEmpresaLogada().then((value) => setState(() {
           CNPJDaEmpresaLogada = value;
         }));
-    await BuscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
+    await buscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
           tenanteIDDoUsuarioLogado = value;
         }));
     snapshotsCaixaEBanco = await FirebaseFirestore.instance
@@ -120,10 +114,10 @@ class _caixasEBancos extends State<CaixaEBanco> {
   }
 
   Future<List<String>> BuscandoCaixaDaEmpresa() async {
-    await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
+    await buscandoCNPJdaEmpresaLogada().then((value) => setState(() {
           CNPJDaEmpresaLogada = value;
         }));
-    await BuscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
+    await buscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
           tenanteIDDoUsuarioLogado = value;
         }));
     snapshotsCaixa = await FirebaseFirestore.instance
@@ -139,10 +133,10 @@ class _caixasEBancos extends State<CaixaEBanco> {
   }
 
   Future<List<String>> BuscandoBancoDaEmpresa() async {
-    await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
+    await buscandoCNPJdaEmpresaLogada().then((value) => setState(() {
           CNPJDaEmpresaLogada = value;
         }));
-    await BuscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
+    await buscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
           tenanteIDDoUsuarioLogado = value;
         }));
     snapshotsBanco = await FirebaseFirestore.instance
@@ -158,10 +152,10 @@ class _caixasEBancos extends State<CaixaEBanco> {
   }
 
   Future<List<String>> BuscandoCaixaEBancoNegativoDaEmpresa() async {
-    await BuscandoCNPJdaEmpresaLogada().then((value) => setState(() {
+    await buscandoCNPJdaEmpresaLogada().then((value) => setState(() {
           CNPJDaEmpresaLogada = value;
         }));
-    await BuscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
+    await buscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
           tenanteIDDoUsuarioLogado = value;
         }));
     snapshotsCaixaEBancoNegativo = await FirebaseFirestore.instance
@@ -177,6 +171,11 @@ class _caixasEBancos extends State<CaixaEBanco> {
   }
 
   Widget build(BuildContext context) {
+    if (globals.mostrarValorTotal == null) {
+      setState(() {
+        globals.mostrarValorTotal = true;
+      });
+    }
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
@@ -240,20 +239,20 @@ class _caixasEBancos extends State<CaixaEBanco> {
                                   ),
                                   GestureDetector(
                                     child: Icon(
-                                      mostrarValorTotal == true
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
+                                      globals.mostrarValorTotal != true
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
                                       color: Colors.white70,
                                       size: MediaWidth / 16,
                                     ),
                                     onTap: () {
-                                      if (mostrarValorTotal == true) {
+                                      if (globals.mostrarValorTotal == true) {
                                         setState(() {
-                                          mostrarValorTotal = false;
+                                          globals.mostrarValorTotal = false;
                                         });
                                       } else {
                                         setState(() {
-                                          mostrarValorTotal = true;
+                                          globals.mostrarValorTotal = true;
                                         });
                                       }
                                     },
@@ -377,32 +376,33 @@ class _caixasEBancos extends State<CaixaEBanco> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             valorTotalCaixaEBanco != null
-                                ? mostrarValorTotal == true
-                                    ? Text(
-                                        'R\$: ${ConverteReais(selectedCaixa == true ? valorTotalCaixa : selectedBanco == true ? valorTotalBanco : selectNegativo == true ? valorTotalNegativo : valorTotalCaixaEBanco)}')
-                                    : Icon(
+                                ? globals.mostrarValorTotal != true
+                                    ? Icon(
                                         Icons.visibility_off_outlined,
                                         color: Colors.white70,
                                         size: MediaWidth / 15,
                                       )
+                                    : Text(
+                                        'R\$: ${converteReais(selectedCaixa == true ? valorTotalCaixa : selectedBanco == true ? valorTotalBanco : selectNegativo == true ? valorTotalNegativo : valorTotalCaixaEBanco)}')
                                 : Container(
                                     height: 10,
                                     width: 10,
                                     child: CircularProgressIndicator(
-                                      backgroundColor: Colors.orange,
+                                      backgroundColor:
+                                          Color.fromRGBO(245, 134, 52, 1),
                                       strokeWidth: 2,
                                     ),
                                   )
                           ],
                         ),
                         onTap: () {
-                          if (mostrarValorTotal == true) {
+                          if (globals.mostrarValorTotal == true) {
                             setState(() {
-                              mostrarValorTotal = false;
+                              globals.mostrarValorTotal = false;
                             });
                           } else {
                             setState(() {
-                              mostrarValorTotal = true;
+                              globals.mostrarValorTotal = true;
                             });
                           }
                         },
@@ -440,7 +440,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
                             children: [
                               CircularProgressIndicator(
                                 valueColor: new AlwaysStoppedAnimation<Color>(
-                                    Colors.orange),
+                                    Color.fromRGBO(245, 134, 52, 1)),
                               ),
                               Text(
                                 'Carregando...',
@@ -474,7 +474,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
                             children: [
                               CircularProgressIndicator(
                                 valueColor: new AlwaysStoppedAnimation<Color>(
-                                    Colors.orange),
+                                    Color.fromRGBO(245, 134, 52, 1)),
                               ),
                               Text(
                                 'Carregando...',
@@ -486,16 +486,13 @@ class _caixasEBancos extends State<CaixaEBanco> {
                       ),
                     );
                   }
-
-                  return SliverList(
+                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         var caixasebancos = snapshot.data.docs[index];
 
                         _seriesPieData =
                             List<charts.Series<GraficoCaixaEBanco, String>>();
-                        print('Total valor ${valorTotalCaixaEBanco}');
-
                         if (caixasebancos['SALDO'] >= 0) {
                           _generateData(
                             variNome: 'subtotal',
@@ -528,7 +525,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
                             totalValor: selectedCaixa == true
                                 ? valorTotalCaixa
                                 : selectedBanco == true
-                                    ? valorTotalBanco
+                                    ? valorTotalBanco - caixasebancos['SALDO']
                                     : selectNegativo == true
                                         ? valorTotalNegativo -
                                             caixasebancos['SALDO']
@@ -567,59 +564,41 @@ class _caixasEBancos extends State<CaixaEBanco> {
                                             Container(
                                                 //color: Colors.red,
                                                 height: double.infinity,
-                                                child: Expanded(
-                                                  child: charts.PieChart(
-                                                    _seriesPieData,
-                                                    animate: true,
-                                                    animationDuration:
-                                                        Duration(seconds: 1),
-                                                    defaultRenderer: new charts
-                                                        .ArcRendererConfig(
-                                                      arcWidth: 8, //TODO: rosca
-                                                      //arcRendererDecorators: [
-                                                      // new charts.ArcLabelDecorator(
-                                                      //     labelPosition: charts.ArcLabelPosition.inside,
-                                                      //     insideLabelStyleSpec: charts.TextStyleSpec(
-                                                      //       fontSize: 6,
-                                                      //     )
-                                                      // )
-                                                      //]
+                                                child: Column(
+                                                  children: [
+                                                    Expanded(
+                                                      child: charts.PieChart(
+                                                        _seriesPieData,
+                                                        animate: true,
+                                                        animationDuration:
+                                                            Duration(seconds: 1),
+                                                        defaultRenderer: new charts
+                                                            .ArcRendererConfig(
+                                                          arcWidth: 7, //TODO: rosca
+                                                          //arcRendererDecorators: [
+                                                          // new charts.ArcLabelDecorator(
+                                                          //     labelPosition: charts.ArcLabelPosition.inside,
+                                                          //     insideLabelStyleSpec: charts.TextStyleSpec(
+                                                          //       fontSize: 6,
+                                                          //     )
+                                                          // )
+                                                          //]
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
+                                                  ],
                                                 )),
                                             Center(
                                               child: Text(
-                                                '10%',
+                                                '${calcularPorcentagemEntreDoisValores(subValor: caixasebancos['SALDO'], total: selectedCaixa == true ? valorTotalCaixa : selectedBanco == true ? valorTotalBanco : selectNegativo == true ? valorTotalNegativo : valorTotalCaixaEBanco)}%',
                                                 style: TextStyle(
-                                                    color: Colors.green,
+                                                    color: Colors.black54,
                                                     fontWeight: FontWeight.w800,
-                                                    fontSize: MediaWidth / 20),
+                                                    fontSize: MediaWidth / 25),
                                               ),
                                             )
                                           ],
                                         ),
-                                        // child: Container(
-                                        //   //color: Colors.red,
-                                        //   height: double.infinity,
-                                        //   child:   Expanded(
-                                        //     child: charts.PieChart(
-                                        //       _seriesPieData,
-                                        //       animate: true,
-                                        //       animationDuration: Duration(seconds: 1),
-                                        //       defaultRenderer: new charts.ArcRendererConfig(
-                                        //           arcWidth: 8, //TODO: rosca
-                                        //           //arcRendererDecorators: [
-                                        //             // new charts.ArcLabelDecorator(
-                                        //             //     labelPosition: charts.ArcLabelPosition.inside,
-                                        //             //     insideLabelStyleSpec: charts.TextStyleSpec(
-                                        //             //       fontSize: 6,
-                                        //             //     )
-                                        //             // )
-                                        //             //]
-                                        //       ),
-                                        //     ),
-                                        //   )
-                                        // ),
                                       ),
                                       Expanded(
                                         flex: 5,
@@ -707,7 +686,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
                                                                   : Colors.red,
                                                             ),
                                                             Text(
-                                                              ' R\$: ${ConverteReais(caixasebancos['SALDO'])}',
+                                                              ' R\$: ${converteReais(caixasebancos['SALDO'])}',
                                                               style: TextStyle(
                                                                 fontSize:
                                                                     MediaWidth /

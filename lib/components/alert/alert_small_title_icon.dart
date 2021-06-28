@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 
 //TODO: Um alerta de tamanho pequeno, apenas para informa o usuario, sem função
-void AlertaSimples(context,String nameTitle, String message, IconData iconDeAlert, Color coricon) {
+void alertaSimples(context,String nameTitle, String message, IconData iconDeAlert, Color coricon) {
 
   showDialog(
       context: context,
@@ -25,7 +25,7 @@ void AlertaSimples(context,String nameTitle, String message, IconData iconDeAler
             ),
           ),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -37,7 +37,7 @@ void AlertaSimples(context,String nameTitle, String message, IconData iconDeAler
       });
 }
 
-void AlertaSuccess(context,String nameTitle, String message, IconData iconDeAlert) {
+void alertaSuccess(context,String nameTitle, String message, IconData iconDeAlert) {
 
   showDialog(
       context: context,
@@ -56,7 +56,7 @@ void AlertaSuccess(context,String nameTitle, String message, IconData iconDeAler
             ),
           ),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();

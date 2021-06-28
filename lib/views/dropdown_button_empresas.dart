@@ -1,5 +1,4 @@
 import 'package:crud_firebase/complements/selectfirebase.dart';
-import 'package:crud_firebase/components/alert/alert_small_title_icon.dart';
 import 'package:crud_firebase/components/alert/alert_small_troca_empresa.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +13,10 @@ class _dropdownButtonEmpresas extends State<DropdownButtonEmpresas> {
   String selectedEmpresa = ''; //TODO: items do dropdown das empresas
 
   _dropdownButtonEmpresas() {
-    BuscandoNomeEmpresaPadraoDoUsuario().then((valor) => setState(() {
+    buscandoNomeEmpresaPadraoDoUsuario().then((valor) => setState(() {
           selectedEmpresa = valor;
         }));
-    BuscandoEmpresasDoUsuario().then((valor) => setState(() {
+    buscandoEmpresasDoUsuario().then((valor) => setState(() {
           items = valor;
         }));
   }
@@ -47,7 +46,7 @@ class _dropdownButtonEmpresas extends State<DropdownButtonEmpresas> {
       value: selectedEmpresa,
       onChanged: (String string) => setState(() {
         selectedEmpresa = string;
-        AlertaTrocaDeEmpresa(context, selectedEmpresa);
+        alertaTrocaDeEmpresa(context, selectedEmpresa);
       }),
       selectedItemBuilder: (BuildContext context) {
         return items.map<Widget>((String item) {
