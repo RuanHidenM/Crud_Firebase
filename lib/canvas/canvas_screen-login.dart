@@ -118,4 +118,4 @@ class BackgroundSignInDetahlesDoProduto extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return oldDelegate != this;
   }
-}
+} // não utilizado

@@ -241,7 +241,8 @@ Future<double> buscandoValorTotalSaldoNegativo () async{
   double valortotal = 0;
   for(int i = 0; caixaEBancoJsonLength.docs.length > i; i++){
     if(caixaEBancoJson[i]['SALDO'] < 0 ){
-      valortotal = valortotal + caixaEBancoJson[i]['SALDO'];}
+      valortotal = valortotal + caixaEBancoJson[i]['SALDO'];
+    }
   }
   return valortotal;
 }

@@ -236,7 +236,7 @@ class _catalogo extends State<Catalogo> {
                                                       height: 100,
                                                         decoration: BoxDecoration(
                                                             image: DecorationImage(
-                                                                image: MemoryImage(bytesImg)
+                                                                image: MemoryImage(bytesImg),
                                                             )
                                                         )
                                                     )
@@ -296,7 +296,7 @@ class _catalogo extends State<Catalogo> {
                                                           children: [
                                                             Padding(
                                                             padding: const EdgeInsets.only(right: 5),
-                                                            child: Icon(Icons.widgets, color: Color.fromRGBO(36, 82, 108, 60), size: MediaQuery.of(context).size.height/ 42,),
+                                                            child: Icon(Icons.widgets, color: Color.fromRGBO(36, 82, 108, 60), size: MediaQuery.of(context).size.height/ 44,),
                                                           ),
                                                             Text('Estoque: ', style: TextStyle(color: Colors.grey, fontSize: MediaQuery.of(context).size.height/ 50),),
                                                             Text('${produtos['ESTOQUE'].round()}',
