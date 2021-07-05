@@ -7,6 +7,7 @@ import 'package:crud_firebase/views/catalogo.dart';
 import 'package:crud_firebase/views/config.dart';
 import 'package:crud_firebase/views/dropdown_button_empresas.dart';
 import 'package:crud_firebase/views/home.dart';
+import 'package:crud_firebase/views/screenteste.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart';
@@ -277,7 +278,10 @@ class _drawerSide extends State<DrawerSide> {
                   ),
                 ],
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ScreenTeste()));
+              },
             ),
             ListTile(
               title: Row(

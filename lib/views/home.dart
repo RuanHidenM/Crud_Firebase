@@ -1,9 +1,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crud_firebase/complements/trocaempresaselecionada.dart';
+import 'package:crud_firebase/components/button/button_average_title_icon_color.dart';
 import 'package:crud_firebase/views/drawerside.dart';
 import 'package:crud_firebase/views/screen_erro_login.dart';
 import 'package:crud_firebase/views/screen_mestre_loadding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -18,7 +21,6 @@ class _homePage extends State<HomePage>{
   String EmailIdentificado;
   var resultado;
   var Empresas2;
-  //var empresas = new List<Empresa>();
   var userLogadoEmail;
   var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
   List<charts.Series<GraficoCaixaEBanco, String>> _seriesPieData;
@@ -94,6 +96,20 @@ class _homePage extends State<HomePage>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+
+                          GestureDetector(
+                            child: buttonAverageTitleIconColor(
+                              corDoBotao: Colors.orange,
+                              corDoIcon: Colors.white,
+                              corDoTexto: Colors.white,
+                              iconDoButton: Icons.wifi_protected_setup,
+                              name: 'Trocar empresa'
+                            ),
+                            onTap: (){
+                              TrocaEmpresaSelecionada();
+                            },
+                          ),
+
                           Text(
                             'DASHBOARD',
                             style: TextStyle(

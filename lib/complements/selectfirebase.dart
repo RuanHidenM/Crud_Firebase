@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:crud_firebase/models/empresas.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 String userLogadoEmail;
 var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
@@ -20,6 +21,8 @@ var tenanteIDDoUsuarioLogado = '';
 Future<String> buscandoEmailDoUsuarioLogado() async {
   //Todo: Buscando o E-MAIL do usuario logado atual
   var retornoDoEmailLogado = FirebaseAuth.instance.currentUser.email.toString();
+  // var x = await FirebaseAuth.instance.currentUser;
+  // print('id token change: $x ');
   return retornoDoEmailLogado;
 }
 
@@ -62,7 +65,6 @@ Future<String> buscandoTenantIdDoUsuarioLogado() async {
   //TODO: Buscando apenas os valores que tem tipo do do valor informado.
   //List<Empresa> EmpresaQueForTrue = empresas.where((element) => element.logada == true).toList();
   return tenanteDaEmpresaLogada;
-
 }
 
 Future<String> buscandoNomeDoUsuario() async {
