@@ -12,10 +12,8 @@ converteReais(valor){
      if(valor.runtimeType.toString() == 'String'){
        valor = double.parse(valor);
      }
-
-
-    var valorComVirgulaEInvertido = valor.toStringAsFixed(2).replaceAll('.',',').split('').reversed.join();
     //Todo Definindo dois valore depois da virgula
+    var valorComVirgulaEInvertido = valor.toStringAsFixed(2).replaceAll('.',',').split('').reversed.join();
     //Todo Invertendo todo o calor
     var maskValorMoney = new MaskTextInputFormatter(mask: '##,###.###.###.###.###.###.###.###', filter:  { "#": RegExp(r'[0-9]') });
     //Todo Criando a mascara

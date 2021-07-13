@@ -9,6 +9,7 @@ var dbUsuario = FirebaseFirestore.instance.collection('Usuario');
 var empresasJson;
 var caixaEBancoJson;
 var caixaEBancoJsonLength;
+var familias;
 var prod;
 var produtosDoUsuario;
 var valorPadraoDoProduto;
@@ -76,7 +77,6 @@ Future<String> buscandoNomeDoUsuario() async {
 Future<List<String>> buscandoEmpresasDoUsuario() async {
   await buscandoEmailDoUsuarioLogado().then((value) => userLogadoEmail = value);
   empresasJson = await dbUsuario.doc(userLogadoEmail).get().then((value) => value.data());
-  //final List<Empresa> empresas = List();
   final List<String> nomesEmpresas = List();
   for(Map<String, dynamic> element in empresasJson['Empresas']){
     final Empresa empresa = Empresa(
@@ -219,12 +219,34 @@ Future<double> buscandoValorTotalBanco () async{
   }
   return valortotal;
 }
+
+Future<List<String>> buscandoTodasAsFamilias () async{
+  await buscandoTenantIdDoUsuarioLogado().then((value) =>
+  tenanteIDDoUsuarioLogado = value
+  );
+  familias = await FirebaseFirestore.instance
+      .collection('Tenant')
+      .doc(tenanteIDDoUsuarioLogado)
+      .collection('Familias').get().then((value) => value.docs);
+
+ var familiasLength = await FirebaseFirestore.instance
+      .collection('Tenant')
+      .doc(tenanteIDDoUsuarioLogado)
+      .collection('Familias').get().then((value) => value.docs.length);
+
+ final List<String> nomesDasFamilias = List();
+ for(int i = 0; i < familiasLength; i++ ){
+   nomesDasFamilias.add(familias[i]['NOME']);
+ }
+  return nomesDasFamilias;
+}
+
 Future<double> buscandoValorTotalSaldoNegativo () async{
   await buscandoCNPJdaEmpresaLogada().then((value) =>
   cNPJDaEmpresaLogada = value,
   );
  await buscandoTenantIdDoUsuarioLogado().then((value) =>
- tenanteIDDoUsuarioLogado = value
+    tenanteIDDoUsuarioLogado = value
  );
   caixaEBancoJsonLength = await FirebaseFirestore.instance
       .collection('Tenant')
@@ -248,6 +270,8 @@ Future<double> buscandoValorTotalSaldoNegativo () async{
   }
   return valortotal;
 }
+
+
 
 
 // Future<String> BuscandoValorDoProduto(produto) async {

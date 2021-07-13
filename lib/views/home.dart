@@ -74,7 +74,10 @@ class _homePage extends State<HomePage>{
     }
     if(EmailIdentificado == 'valido'){//TODO: Se o usuario for verificado, ele ira se manter nessa tela !!
       return Scaffold(
+
         drawer:DrawerSide(),
+        drawerEdgeDragWidth: MediaWidth / 3 ,
+        drawerScrimColor: Colors.black26,
         appBar: AppBar(
           shadowColor: Color.fromRGBO(36, 82, 108, 250),
           //Todo: cor da borda shadow, para ficar mesclado com o widget de filtro a baixo
@@ -157,28 +160,6 @@ class _homePage extends State<HomePage>{
                           //     ),
                           //   ),
                           // )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                         ],

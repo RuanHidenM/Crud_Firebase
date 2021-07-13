@@ -1,3 +1,4 @@
+import 'package:crud_firebase/views/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -27,17 +28,17 @@ class _configScreen extends State<ConfigScreen> {
         ),
         // Text('Produtos', style: TextStyle(color: Colors.white)),
       ),
-      body:Container(
+      body: Container(
         child: Center(
-            child: Text(
-                'Configurações',
-                style: TextStyle(
-                color: Colors.black12,
-                fontSize: MediaWidth / 15
-            ),
+          child: Text(
+              'Configurações',
+              style: TextStyle(
+                fontSize: MediaWidth / 10,
+                color: Colors.black12
+              ),
           ),
         ),
-      ),
+      )
     );
   }
 }

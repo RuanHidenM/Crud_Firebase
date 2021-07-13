@@ -112,7 +112,6 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                                   ? Container(
                                       height: 100,
                                       decoration: BoxDecoration(
-                                        //color: Colors.red,
                                         image: DecorationImage(
                                           image: MemoryImage(widget.imgProduto),
                                         ),
@@ -462,7 +461,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                     child: Column(
                       children: [
                         Container(
@@ -471,13 +470,13 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                           color: Colors.black12,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.only(left: 0),
                           child: Container(
                             width: MediaWidth,
                             child: Text(
-                              'Tabela de preços:',
+                              'Tabela de preços',
                               style:
-                                  TextStyle(fontSize: 15, color: Colors.black45),
+                                  TextStyle(fontSize: 18, color: Colors.black45),
                             ),
                           ),
                         ),
@@ -517,7 +516,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                                       padding: const EdgeInsets.only(left: 10),
                                       child: Center(
                                         child: Text(
-                                          '       $item',
+                                          '$item',
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             color: Colors.black87,
@@ -535,12 +534,12 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                                   child: Column(
                                     children: [
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment:MainAxisAlignment.center,
                                         children: [
                                           Container(
                                             width: MediaWidth / 1.1,
                                             height: 45,
+                                            //color: Colors.green,
                                             child: Center(
                                               child: Text(
                                                 '$item',
@@ -557,7 +556,7 @@ class _detalhesDoItem extends State<DetalhesDoItem> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                          top: 5,
+                                          top: 15,
                                           bottom: 5,
                                         ),
                                         child: Container(

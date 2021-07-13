@@ -23,7 +23,7 @@ class _dropdownButtonEmpresas extends State<DropdownButtonEmpresas> {
 
   @override
   Widget build(BuildContext context) {
-    if (selectedEmpresa == null && items == null) {
+    if (selectedEmpresa == null || items == null) {
       return Container(
           child: Center(
               child: CircularProgressIndicator(

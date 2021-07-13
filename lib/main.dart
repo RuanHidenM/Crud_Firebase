@@ -25,14 +25,18 @@ class MyApp extends StatelessWidget {
   MyApp({this.empresa});
 
   FirebaseDatabase database;
-
-
-
   @override
   Widget build(BuildContext context) {
+    //TODO Declarando que o sistema off-line do firebase deve ser ativado
     database = FirebaseDatabase.instance;
     database.setPersistenceEnabled(true);
-    database.setPersistenceCacheSizeBytes(100000000);
+    //TODO Declarando que o tamanho do cache deve ser de '200000000'.
+    database.setPersistenceCacheSizeBytes(5000000000);
+    //TODO Declarando que o descarte do cache mais antigo esta desativado
+    //FirebaseFirestore.instance.settings = Settings(cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
+
+    ///Todo Limpando todo o cache do firestore, até esse momento
+    //FirebaseFirestore.instance.clearPersistence();
 
     return MultiProvider(
       providers: [

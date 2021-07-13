@@ -24,6 +24,8 @@ class _caixasEBancos extends State<CaixaEBanco> {
   var snapshotsBanco; //TODO: Select do Banco
   var snapshotsCaixaEBancoNegativo; //TODO: Select Negativo
 
+  var teste;
+
   var valorTotalCaixaEBanco; //TODO Valor total CaixaeBanco
   var valorTotalCaixa; //TODO: Valor total Caixa
   var valorTotalBanco; //TODO: Valor total BANCO
@@ -88,7 +90,6 @@ class _caixasEBancos extends State<CaixaEBanco> {
     buscandoValorTotalSaldoNegativo().then((value) => setState(() {
           valorTotalNegativo = value;
     }));
-
   }
 
   @override
@@ -100,7 +101,6 @@ class _caixasEBancos extends State<CaixaEBanco> {
     });
   }
 
-
   Future<List<String>> buscandoCaixaEBancoDaEmpresa() async {
     await buscandoCNPJdaEmpresaLogada().then((value) => setState(() {
           CNPJDaEmpresaLogada = value;
@@ -108,6 +108,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
     await buscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
           tenanteIDDoUsuarioLogado = value;
         }));
+
     snapshotsCaixaEBanco = await FirebaseFirestore.instance
         .collection('Tenant')
         .doc(tenanteIDDoUsuarioLogado.toString())
@@ -117,34 +118,35 @@ class _caixasEBancos extends State<CaixaEBanco> {
         .orderBy('SALDO', descending: true)
         .snapshots();
 
-    //print('teste :');
 
-    // snapshotsCaixaEBancoLength = await FirebaseFirestore.instance
+      // teste = await FirebaseFirestore.instance
+      //   .collection('Tenant')
+      //   .doc(tenanteIDDoUsuarioLogado.toString())
+      //   .collection('Empresas')
+      //   .doc(CNPJDaEmpresaLogada.toString())
+      //   .collection('CaixaBanco').limit(1);
+
+    // var x = await FirebaseFirestore.instance
     //     .collection('Tenant')
     //     .doc(tenanteIDDoUsuarioLogado.toString())
     //     .collection('Empresas')
     //     .doc(CNPJDaEmpresaLogada.toString())
-    //     .collection('CaixaBanco')
-    //     .orderBy('SALDO', descending: true)
-    //     .snapshots();
+    //     .collection('Produtos').get().then((value) => value);
+    // print('teste: ${value}')
 
-    // var x = await snapshotsCaixaEBanco({'server'});
-    // print(x);
-    // for(int i = 0; i < snapshotsCaixaEBancoLength.docs.length; i++){
-    //   print('--------------------------------');
-    //   //DocumentSnapshot doc = snapshotsCaixaEBanco.data.documents.elementAt(i);
-    //   print("NOT FROM NETWORK FROM NETWORK");
-    // }
     return snapshotsCaixaEBanco;
   }
 
   Future<List<String>> BuscandoCaixaDaEmpresa() async {
+
     await buscandoCNPJdaEmpresaLogada().then((value) => setState(() {
           CNPJDaEmpresaLogada = value;
         }));
     await buscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
           tenanteIDDoUsuarioLogado = value;
         }));
+
+
     snapshotsCaixa = await FirebaseFirestore.instance
         .collection('Tenant')
         .doc(tenanteIDDoUsuarioLogado.toString())
@@ -154,6 +156,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
         .where('TIPO', isEqualTo: 1)
         .orderBy('SALDO', descending: true)
         .snapshots();
+
     return snapshotsCaixa;
   }
 
@@ -164,6 +167,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
     await buscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
           tenanteIDDoUsuarioLogado = value;
         }));
+
     snapshotsBanco = await FirebaseFirestore.instance
         .collection('Tenant')
         .doc(tenanteIDDoUsuarioLogado.toString())
@@ -173,6 +177,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
         .where('TIPO', isEqualTo: 2)
         .orderBy('SALDO', descending: true)
         .snapshots();
+
     return snapshotsBanco;
   }
 
@@ -183,6 +188,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
     await buscandoTenantIdDoUsuarioLogado().then((value) => setState(() {
           tenanteIDDoUsuarioLogado = value;
         }));
+
     snapshotsCaixaEBancoNegativo = await FirebaseFirestore.instance
         .collection('Tenant')
         .doc(tenanteIDDoUsuarioLogado.toString())
@@ -190,8 +196,9 @@ class _caixasEBancos extends State<CaixaEBanco> {
         .doc(CNPJDaEmpresaLogada.toString())
         .collection('CaixaBanco')
         .where('SALDO', isLessThanOrEqualTo: 0)
-        .orderBy('SALDO', descending: false)
+        .orderBy('SALDO', descending: false).limit(1)
         .snapshots();
+
     return snapshotsCaixaEBancoNegativo;
   }
 
@@ -644,7 +651,7 @@ class _caixasEBancos extends State<CaixaEBanco> {
                                           decoration: const BoxDecoration(
                                             border: Border(
                                               left: BorderSide(
-                                                  width: 0.6,
+                                                  width: 0.3,
                                                   color: Colors.black54),
                                             ),
                                           ),
